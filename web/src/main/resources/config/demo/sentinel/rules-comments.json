@@ -1,0 +1,51 @@
+{
+  //https://github.com/alibaba/Sentinel/wiki/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8
+  //Rule version, optional
+  "ruleVersion":"1.0.0",
+  //System rule for all resources, optional
+  "systemRule":{"highestSystemLoad":"-1", "avgRt":"-1", "maxThread":"-1", "qps":"-1"},
+  //Define rule groups
+  "ruleGroups":{
+    //Rule for slow transactions
+    "slow":{
+      //Required: count=int, grade=THREAD/QPS
+      //Optional: limitApp=String, strategy=DIRECT/RELATE/CHAIN, controlBehavior=DEFAULT/WARM_UP/RATE_LIMITER/WARM_UP_RATE_LIMITER
+      "flowRules":[
+        //Max 10 threads
+        {"count":"10", "grade":"THREAD", "limitApp":"default", "strategy":"DIRECT", "controlBehavior":"DEFAULT"},
+        //Max 20 QPS
+        {"count":"20", "grade":"QPS", "limitApp":"default", "strategy":"DIRECT", "controlBehavior":"DEFAULT"}
+      ],
+      //Required: count=RT:ms|EXCEPTION_RATIO:0.0-0.1|EXCEPTION_COUNT:int, timeWindow=seconds, grade=RT/EXCEPTION_RATIO/EXCEPTION_COUNT
+      //Optional: limitApp=String
+      "degradeRules": [
+        //Degrade if exception ratio > 50% for 60s
+        {"count":"0.5", "timeWindow":"60", "grade":"EXCEPTION_RATIO", "limitApp":"default"}
+      ]
+    },
+    //Rule for fast transactions
+    "fast":{
+      //Required: count=int, grade=THREAD/QPS
+      //Optional: limitApp=String, strategy=DIRECT/RELATE/CHAIN, controlBehavior=DEFAULT/WARM_UP/RATE_LIMITER/WARM_UP_RATE_LIMITER
+      "flowRules":[
+        //Max 100 threads
+        {"count":"100", "grade":"THREAD", "limitApp":"default", "strategy":"DIRECT", "controlBehavior":"DEFAULT"},
+        //Max 200 QPS
+        {"count":"200", "grade":"QPS", "limitApp":"default", "strategy":"DIRECT", "controlBehavior":"DEFAULT"}
+      ],
+      //Required: count=RT:ms|EXCEPTION_RATIO:0.0-0.1|EXCEPTION_COUNT:int, timeWindow=seconds, grade=RT/EXCEPTION_RATIO/EXCEPTION_COUNT
+      //Optional: limitApp=String
+      "degradeRules": [
+        //Degrade if RT > 4000ms for 60s (count must be less than 4900 unless you set parameter csp.sentinel.statistic.max.rt)
+        {"count":"4000", "timeWindow":"60", "grade":"RT", "limitApp":"default"},
+        //Degrade if exception ratio > 50% for 60s
+        {"count":"0.5", "timeWindow":"60", "grade":"EXCEPTION_RATIO", "limitApp":"default"}
+      ]
+    }
+  },
+  //ResourceName -> ruleGroup
+  "resourceRules":{
+    "test-annotation":"fast",
+    "test-api":"slow"
+  }
+}

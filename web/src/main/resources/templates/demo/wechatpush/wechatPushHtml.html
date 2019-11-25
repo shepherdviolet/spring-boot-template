@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Demo</title>
+</head>
+<body>
+<form name="pushForm" action="/wechatpush/push" method="post">
+    OpenId:<br/>
+    <input style="width:800px;height:30px" id="openid" name="openid" type="text"/><br/>
+    Text:<br/>
+    <input style="width:800px;height:600px" id="content" name="content" type="text"/><br/>
+</form>
+<button style="width:800px;height:60px" id="submitButton" onclick="onSubmit()">Submit</button><br/>
+<!--Result:<br/>-->
+<!--<textarea id="result" style="width:800px;height:600px"></textarea><br/>-->
+<script type="text/javascript">
+    function onSubmit() {
+        var pushFormData = new FormData(document.forms.namedItem("pushForm"));
+        var xmlHttpRequest = new XMLHttpRequest();
+        xmlHttpRequest.open('post', '/wechatpush/push');
+        xmlHttpRequest.onload = function (progressEvent) {
+            if (xmlHttpRequest.status === 200) {
+                alert('Response: ' + xmlHttpRequest.responseText);
+            } else {
+                alert('Reject: ' + xmlHttpRequest.status);
+            }
+        };
+        xmlHttpRequest.send(pushFormData);
+
+        // var openid = document.getElementById('openid').value;
+        // var content = document.getElementById('content').value;
+        // var request = {
+        //     openid: openid,
+        //     content: content
+        // };
+        // var xmlHttpRequest = new XMLHttpRequest();
+        // xmlHttpRequest.open('post', '/wechatpush/push');
+        // xmlHttpRequest.setRequestHeader('content-type', 'application/json');
+        // xmlHttpRequest.onload = function (progressEvent) {
+        //     if (xmlHttpRequest.status === 200) {
+        //         var response = JSON.parse(xmlHttpRequest.responseText);
+        //         document.getElementById('result').value = response.code;
+        //     } else {
+        //         alert('Reject: ' + xmlHttpRequest.status);
+        //     }
+        // };
+        // xmlHttpRequest.send(JSON.stringify(request));
+    }
+</script>
+</body>
+</html>

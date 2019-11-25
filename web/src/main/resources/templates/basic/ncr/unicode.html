@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>编码转换:NCR Unicode</title>
+</head>
+<body>
+    原文<br/>
+    <input style="width:1200px;height:300px" id="raw" type="text" name="raw"/><br/>
+    NCR Unicode 例如: &amp;#25105;<br/>
+    <input style="width:1200px;height:300px" id="unicode" type="text" name="unicode"/><br/>
+    <button style="width:800px;height:60px" id="toUnicodeButton" onclick="toUnicode()">转为NCR Unicode</button><br/>
+    <button style="width:800px;height:60px" id="toRawButton" onclick="toRaw()">转为原文</button><br/>
+<script type="text/javascript">
+    function toUnicode() {
+        var raw = document.getElementById('raw').value;
+        if (!raw) {
+            alert('原文为空');
+            return;
+        }
+        document.getElementById('unicode').value = '';
+        for (var i = 0; i < raw.length; i++) {
+            document.getElementById('unicode').value = document.getElementById('unicode').value + '&#' + raw.charCodeAt(i) + ';';
+        }
+    }
+    function toRaw() {
+        var unicode = document.getElementById('unicode').value.match(/&#(\d+);/g);
+        if (!unicode) {
+            alert('NCR Unicode格式错误');
+            return;
+        }
+        document.getElementById('raw').value = '';
+        for (var i = 0; i < unicode.length; i++) {
+            document.getElementById('raw').value = document.getElementById('raw').value + String.fromCharCode(unicode[i].replace(/[&#;]/g, ''));
+        }
+    }
+</script>
+</body>
+</html>

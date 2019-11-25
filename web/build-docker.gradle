@@ -1,0 +1,44 @@
+
+//官方文档:https://bmuschko.github.io/gradle-docker-plugin/
+//其他文档:https://segmentfault.com/a/1190000014102281
+
+//http://127.0.0.1:5000/v2/_catalog
+//http://127.0.0.1:5000/v2/<imagename>/tags/list
+
+/*
+ * [二选一] 创建SpringBoot镜像, 是第二种方式的高度封装版本, 简化了配置
+ */
+
+apply plugin: 'com.bmuschko.docker-spring-boot-application'
+
+docker {
+    //私有库地址
+    url = "$docker_daemon"
+    
+    //私有库授权证书
+    //这个目录下要有ca.pem cert.pem key.pem, 这个目录等同于Docker客户端TLS连接时的环境变量DOCKER_CERT_PATH
+//    certPath = new File(System.properties['user.home'], '.docker')
+
+    //共有库认证信息
+//    registryCredentials {
+//        url = 'https://index.docker.io/v1/'
+//        username = 'username'
+//        password = 'password'
+//        email = 'username@163.com'
+//    }
+    
+    //Spring Boot 镜像创建参数
+    springBootApplication {
+        baseImage = "$docker_private_registry/$docker_base_image"
+        ports = [8080]
+        tag = "$docker_private_registry/$docker_image_prefix/$project.name:$project.version"
+        jvmArgs = ['-Dspring.profiles.active=linux', '-Xmx1024m']
+    }
+}
+
+
+/*
+ * [二选一] 创建通用镜像, 等效于编写DockerFile
+ */
+
+//apply plugin: 'com.bmuschko.docker-remote-api'

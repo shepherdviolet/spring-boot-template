@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>编码转换:NCR UTF-8</title>
+</head>
+<body>
+    原文<br/>
+    <input style="width:1200px;height:300px" id="raw" type="text" name="raw"/><br/>
+    NCR UTF-8 例如: &amp;#x6211;<br/>
+    <input style="width:1200px;height:300px" id="utf8" type="text" name="utf8"/><br/>
+    <button style="width:800px;height:60px" id="toUtf8Button" onclick="toUTF8()">转为NCR UTF-8</button><br/>
+    <button style="width:800px;height:60px" id="toRawButton" onclick="toRaw()">转为原文</button><br/>
+<script type="text/javascript">
+    function toUTF8() {
+        var raw = document.getElementById('raw').value;
+        if (!raw) {
+            alert('原文为空');
+            return;
+        }
+        document.getElementById('utf8').value = raw.replace(/[^\u0000-\u00FF]/g, function ($0) { return escape($0).replace(/(%u)(\w{4})/gi, "&#x$2;") })
+    }
+    function toRaw() {
+        var utf8 = document.getElementById('utf8').value;
+        if (!utf8) {
+            alert('NCR UTF-8为空');
+            return;
+        }
+        document.getElementById('raw').value = unescape(utf8.replace(/&#x/g, '%u').replace(/;/g, ''));
+    }
+</script>
+</body>
+</html>

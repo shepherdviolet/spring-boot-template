@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--可以配置插件等, 但已经在MyBatisConfiguration中配置-->
+    <!--<plugins>-->
+        <!--<plugin interceptor="sviolet.slate.common.helper.mybatis.monitor.MybatisTxTimerPlugin">-->
+            <!--<property name="groupName" value="MyBatis"/>-->
+        <!--</plugin>-->
+    <!--</plugins>-->
+</configuration>

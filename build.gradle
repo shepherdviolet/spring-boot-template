@@ -1,0 +1,55 @@
+
+//构建脚本配置
+buildscript {
+	//装载其他配置文件
+	ext {
+        //gradle-version.properties
+		def customProperties = new Properties()
+		file("gradle-version.properties").withInputStream { stream -> customProperties.load(stream) }
+		customProperties.each {
+			project.extensions.add("$it.key",it.value)
+		}
+        //gradle-local.properties
+        customProperties = new Properties()
+        file("gradle-local.properties").withInputStream { stream -> customProperties.load(stream) }
+        customProperties.each {
+            project.extensions.add("$it.key",it.value)
+        }
+	}
+	repositories {
+		maven { url 'file:C:/m2repository/repository' }
+		mavenCentral()
+		jcenter()
+		maven { url 'https://jitpack.io' }
+//		maven { url 'http://repo.spring.io/plugins-release/' }
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:$version_spring_boot")
+		classpath("com.bmuschko:gradle-docker-plugin:$version_docker")//Docker
+	}
+}
+
+allprojects {
+
+}
+
+subprojects {
+
+	//可选: 测试案例随机并发跑
+	tasks.withType(Test) {
+		maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+	}
+
+	//可选: 编译进程Fork(对大工程有益)
+	tasks.withType(JavaCompile) {
+		options.fork = true
+	}
+
+	repositories {
+		maven { url 'file:C:/m2repository/repository' }
+		mavenCentral()
+		jcenter()
+        maven { url 'https://jitpack.io' }
+//		maven { url 'http://repo.spring.io/plugins-release/' }
+	}
+}

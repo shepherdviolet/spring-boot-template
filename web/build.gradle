@@ -1,0 +1,144 @@
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+
+group project_group_id
+version project_version
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+//encoding
+[compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
+
+//config of jar
+jar {
+    version = project_version
+    manifest {
+        attributes  "Manifest-Version": 1.0,
+                    'Main-Class': main_class
+    }
+}
+
+//config of bootJar
+springBoot {
+    mainClassName = main_class
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+// build时把依赖复制到指定目录下, 如果用这种多jar包的方式, 依赖可以用implementation
+//task copyLibs(type: Copy) {
+//    from configurations.runtime
+//    into 'build/libs'
+//}
+//build.dependsOn copyLibs
+/////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////
+// 将启动脚本和JAR包压缩成一个ZIP
+// 复制启动脚本
+//task copyScripts(type: Copy, group: 'assembly', dependsOn: build) {
+//    from 'src/main/resources/shell'
+//    into 'build/libs/bin'
+//}
+// 压缩成一个JAR包
+//task assembleAll(type: Zip, group: 'assembly', dependsOn: copyScripts) {
+//    from 'build/libs'
+//    destinationDir file('build/assembly')
+//}
+/////////////////////////////////////////////////////////////////////////////////////
+
+//全局排除依赖
+configurations {
+    //排除tomcat的依赖
+//    all*.exclude group:'org.springframework.boot', module:'spring-boot-starter-tomcat'
+}
+
+dependencies {
+
+    //这里要用compile, 用implementation的话, bootJar不会把依赖的代码打包到一个jar包中去
+
+    //Log/////////////////////////////////////////////////////////////////////////////////////////////
+
+    //Log, jcl-over-slf4j用于把commons-logging的日志交给slf4j输出
+    compile "ch.qos.logback:logback-classic:$version_logback"
+    compile "org.slf4j:jcl-over-slf4j:$version_slf4j"
+
+    //Spring///////////////////////////////////////////////////////////////////////////////////////////
+
+    //Common web
+    compile "org.springframework.boot:spring-boot-starter-web:$version_spring_boot"
+
+    //Common no web
+    //如果是非WEB项目, 注掉上面的spring-boot-starter-web改用下面的依赖, 删除Controller与其他web相关的代码即可
+    //compile "org.springframework.boot:spring-boot-starter:$version_spring_boot"
+
+    //Web container : Undertow (替换undertow还要把tomcat的依赖排除掉)
+//    compile "org.springframework.boot:spring-boot-starter-undertow:$version_spring_boot"
+
+    //Spring boot others
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf:$version_spring_boot"
+    compile "org.springframework.boot:spring-boot-starter-aop:$version_spring_boot"
+    compile "org.springframework.boot:spring-boot-starter-actuator:$version_spring_boot"
+
+    //Optional 3rd library/////////////////////////////////////////////////////////////////////////////
+
+    compile ("com.github.shepherdviolet:slate-http-client:$version_slate") {exclude group: 'org.springframework'}
+    compile "com.alibaba:hessian-lite:$version_hessian_lite"
+    compile "com.google.code.gson:gson:$version_gson"
+    compile ("com.alibaba:fastjson:$version_fastjson") { force = true }//Fix security bugs of fastjson
+
+    //DB//////////////////////////////////////////////////////////////////////////////////////////////
+
+    compile "org.springframework.boot:spring-boot-starter-jdbc:$version_spring_boot"
+    compile ("org.mybatis.spring.boot:mybatis-spring-boot-starter:$version_mybatis") {exclude group: 'org.springframework.boot'}
+    compile ("com.github.pagehelper:pagehelper-spring-boot-starter:$version_pagehelper") {exclude group: 'org.mybatis.spring.boot'}
+    compile 'com.h2database:h2:1.4.197'//H2, 配合Datasource 1
+//    compile 'mysql:mysql-connector-java:5.1.46'//mysql, 配合Datasource 2
+//    compile 'com.oracle:ojdbc6:11.2.0.3'//oracle, 在jcenter有, 配合Datasource 3 / 4
+//    compile 'org.apache.tomcat:tomcat-jdbc:9.0.17'//tomcat连接池, 配合Datasource 4
+
+    //MQ//////////////////////////////////////////////////////////////////////////////////////////////
+
+    compile ("org.apache.rocketmq:rocketmq-client:$version_rocketmq") {
+        //特殊情况: 在这里SpringBootAdmin和RocketMQ的netty包有冲突, 要启用Admin得先把RocketMQ依赖的netty排除掉(错误:java.lang.NoSuchMethodError: io.netty.bootstrap.Bootstrap.config)
+//        exclude group: "io.netty"
+    }
+//    compile "org.apache.rocketmq:rocketmq-spring-boot-starter:$version_rocketmq_spring"//官方的工具库, 可选
+
+    //Apollo///////////////////////////////////////////////////////////////////////////////////////////
+
+    //Apollo client ( -Denv=dev is required )
+//    compile "com.ctrip.framework.apollo:apollo-client:$version_apollo"
+
+    //APM//////////////////////////////////////////////////////////////////////////////////////////////
+
+    compile "io.micrometer:micrometer-registry-prometheus:$version_micrometer"
+
+    //Flow control, Circuit breaking//////////////////////////////////////////////////////////////////
+
+    compile "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel:$version_sentinel"
+
+    //Spring Boot Admin///////////////////////////////////////////////////////////////////////////////
+
+    //Spring Boot Admin server (控制台服务端, 容器需改为Tomcat, http://localhost:8080)
+    //特殊情况: 在这里SpringBootAdmin和RocketMQ的netty包有冲突, 要启用这个先把RocketMQ依赖的netty排除掉(错误:java.lang.NoSuchMethodError: io.netty.bootstrap.Bootstrap.config)
+//    compile "de.codecentric:spring-boot-admin-starter-server:$version_spring_boot_admin"
+    //Spring Boot Admin client (控制台客户端)
+//    compile "de.codecentric:spring-boot-admin-starter-client:$version_spring_boot_admin"
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    //annotationProcessor//////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:$version_spring_boot"
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    //Test/////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test:$version_spring_boot"
+
+}
+
+//Docker
+apply from: 'build-docker.gradle'

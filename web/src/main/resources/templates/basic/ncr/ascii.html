@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>编码转换:NCR ASCII</title>
+</head>
+<body>
+    原文<br/>
+    <input style="width:1200px;height:300px" id="raw" type="text" name="raw"/><br/>
+    NCR ASCII 例如: \u6211<br/>
+    <input style="width:1200px;height:300px" id="ascii" type="text" name="ascii"/><br/>
+    <button style="width:800px;height:60px" id="toAsciiButton" onclick="toAscii()">转为NCR ASCII(不转换字母数字)</button><br/>
+    <button style="width:800px;height:60px" id="toAsciiAllButton" onclick="toAsciiAll()">转为NCR ASCII(转换字母数字)</button><br/>
+    <button style="width:800px;height:60px" id="toRawButton" onclick="toRaw()">转为原文</button><br/>
+<script type="text/javascript">
+    function toAscii() {
+        var character = document.getElementById("raw").value.split("");
+        var ascii = "";
+        for (var i = 0; i < character.length; i++) {
+            var code = Number(character[i].charCodeAt(0));
+            if (code > 127) {
+                var charAscii = code.toString(16);
+                charAscii = new String("0000").substring(charAscii.length, 4) + charAscii;
+                ascii += "\\u" + charAscii;
+            }
+            else {
+                ascii += character[i];
+            }
+        }
+        document.getElementById("ascii").value = ascii;
+    }
+    function toAsciiAll() {
+        var character = document.getElementById("raw").value.split("");
+        var ascii = "";
+        for (var i = 0; i < character.length; i++) {
+            var code = Number(character[i].charCodeAt(0));
+            var charAscii = code.toString(16);
+            charAscii = new String("0000").substring(charAscii.length, 4) + charAscii;
+            ascii += "\\u" + charAscii;
+        }
+        document.getElementById("ascii").value = ascii;
+    }
+    function toRaw() {
+        var character = document.getElementById("ascii").value.split("\\u");
+        var raw = character[0];
+        for (var i = 1; i < character.length; i++) {
+            var code = character[i];
+            raw += String.fromCharCode(parseInt("0x" + code.substring(0, 4)));
+            if (code.length > 4) {
+                raw += code.substring(4, code.length);
+            }
+        }
+        document.getElementById("raw").value = raw;
+    }
+</script>
+</body>
+</html>

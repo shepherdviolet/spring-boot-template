@@ -1,0 +1,30 @@
+{
+"ruleVersion":"1.0.0",
+"systemRule":{"highestSystemLoad":"-1", "avgRt":"-1", "maxThread":"-1", "qps":"-1"},
+"ruleGroups":{
+"slow":{
+  "flowRules":[
+    {"count":"10", "grade":"THREAD"},
+    {"count":"20", "grade":"QPS"}
+  ],
+  "degradeRules": [
+    {"count":"0.5", "timeWindow":"60", "grade":"EXCEPTION_RATIO"}
+  ]
+},
+"fast":{
+  "flowRules":[
+    {"count":"100", "grade":"THREAD"},
+    {"count":"200", "grade":"QPS"}
+  ],
+  "degradeRules": [
+    {"count":"4000", "timeWindow":"60", "grade":"RT"},
+    {"count":"0.5", "timeWindow":"60", "grade":"EXCEPTION_RATIO"}
+  ]
+}
+},
+"resourceRules":{
+  //comment
+  "test-annotation":"fast",
+  "test-api":"slow"
+}
+}

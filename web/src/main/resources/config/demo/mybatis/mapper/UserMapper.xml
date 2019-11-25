@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="template.demo.mybatis.dao.UserDao">
+
+    <insert id="insert" parameterType="template.demo.mybatis.entity.User">
+        INSERT INTO
+        users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            userName, password,
+            <if test="phone != null">
+                phone,
+            </if>
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            #{userName, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR},
+            <if test="phone != null">
+                #{phone, jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="select" resultType="template.demo.mybatis.entity.User">
+        SELECT
+        userName, password, phone
+        FROM
+        users
+    </select>
+
+</mapper>

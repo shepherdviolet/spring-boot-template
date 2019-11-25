@@ -1,0 +1,16 @@
+
+# yml加载示例
+
+demo:
+  properties:
+    yaml:
+      list:
+        - http://localhost:8001
+        - http://localhost:8002
+      map:
+        item1:
+          url: /service1
+          version: 1.0.0
+        item2:
+          url: /service2
+          version: 1.0.1

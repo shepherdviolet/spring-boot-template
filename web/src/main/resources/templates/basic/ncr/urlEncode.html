@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>编码转换:URLEncode</title>
+</head>
+<body>
+    原文<br/>
+    <input style="width:1200px;height:300px" id="raw" type="text" name="raw"/><br/>
+    URLEncode 例如: %E6%88%91<br/>
+    <input style="width:1200px;height:300px" id="url" type="text" name="url"/><br/>
+    <button style="width:800px;height:60px" id="toUrlButton" onclick="toUrl()">转为URLEncode</button><br/>
+    <button style="width:800px;height:60px" id="toRawButton" onclick="toRaw()">转为原文</button><br/>
+<script type="text/javascript">
+    function toUrl() {
+        document.getElementById("url").value = encodeURIComponent(document.getElementById("raw").value);
+        // document.getElementById("url").value = encodeURI(document.getElementById("raw").value);
+    }
+    function toRaw() {
+        document.getElementById("raw").value = decodeURIComponent(document.getElementById("url").value);
+        // document.getElementById("raw").value = decodeURI(document.getElementById("url").value);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+
+include ':web'
+
+/////////////////////////////////////////////////////////////////////////////
+// 子工程突破一层限制示例
+// Gradle默认只支持一层结构, 即子工程只能在根目录下. 这个方法能够突破限制.
+// 示例中, 我们引入了directory/project1和directory/project2两个子工程.
+
+//[
+//        'project1',
+//        'project2',
+//].forEach{
+//    include "$it"
+//    project(":$it").projectDir = file("directory/$it")
+//}
