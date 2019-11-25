@@ -1,0 +1,369 @@
+
+/** ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ [工具说明]
+
+ 子工程创建器: 在工程内部, 根据原型子工程创建新的子工程.
+
+ [使用方法]
+
+ 1.将[配置示例]复制到工程根目录下的build.gradle末尾, 然后根据注释修改配置
+ 2.执行任务: gradlew createProject
+
+ [注意事项]
+
+ 1.目前原型目录下必须都是可读的文本文件
+ 2.创建完毕后, 建议删除build.gradle中的"ext.project_creator"和"apply from: 'gradle/utils/project-creator.gradle'"
+
+
+*//** //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ [配置示例]
+
+// 子工程创建器配置
+ext.project_creator = [
+		// 需要创建的子工程清单
+		'projects': [
+				// [KEY修改] 子工程路径
+				'web/web-new': [
+						// [VALUE修改] 原型路径
+						'archetype_path': 'web/web-archetype',
+						'replace_context': [
+								// [KEY/VALUE修改] 自定义参数
+								'java_package': 'com.test.webnew',
+								'application_class': 'WebNewApplication',
+								'app_id': 'web-new'
+						]
+				],
+				// [KEY修改] 子工程路径
+				'module/module-new': [
+						// [VALUE修改] 原型路径
+						'archetype_path': 'module/module-archetype',
+						'replace_context': [
+								// [KEY/VALUE修改] 自定义参数
+								'java_package': 'com.test.modulenew'
+						]
+				]
+		],
+		// 字符集
+		'charset': 'UTF-8'
+]
+
+// [必须] 引入创建子工程的Gradle脚本
+apply from: 'gradle/utils/project-creator.gradle'
+
+
+*//** //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ [替换标识]
+
+ "替换标识"是用来标记这个地方在生成时需要被替换成其他内容的, 总共有几种用法:
+
+ 1) 替换下一行内容:
+
+    格式1: // <replace-by> 要替换的内容
+    格式2: # <replace-by> 要替换的内容
+    占位符: ${}
+
+    示例说明: 生成时把第二行内容改成"package 指定包路径;", 其中"指定包路径"会替换为"replace_context"中配置的"java_package"的值.
+
+        // <replace-by> package ${java_package};
+        package __java_package__;
+
+    特殊情况: 如果遇到${...}, 但是不希望它被处理掉, 需要保持原样, 请在$前输入转义符\, 最终下一行会被替换为"@Value('${property-name:default}')"
+
+        // <replace-by> @Value('\${property-name:default}')
+        ......
+
+ 2) 替换目录名(文件名):
+
+    格式: __key__
+
+    示例说明: 生成时目录名称会变成src/main/java/指定目录名/Foo.class, 其中"指定目录名"会替换为"replace_context"中配置的"java_package"的值.
+    注意: 示例中的"java_package"值当中的"."会被转换成"/", 比如"com.test.appname"会变"com/test/appname", 如果一定要保留".", 要配置成"com<D_o_T>test<D_o_T>appname"
+
+        src/main/java/__java_package__/Foo.class
+
+
+*//** //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ [错误笔记]
+
+ 1. 这个Key值(示例中的package)是特殊关键字, 改成别的即可, 比如java_package
+
+ > Failed to parse template script (your template may contain an error or be trying to use expressions not currently supported): startup failed:
+   GStringTemplateScript6.groovy: 2: unexpected token: package @ line 2, column 58.
+       { out -> out << """package ${package};"
+
+
+
+
+
+
+*//** //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+DO NOT MODIFY THE SCRIPT BELOW       DO NOT MODIFY THE SCRIPT BELOW       DO NOT MODIFY THE SCRIPT BELOW
+请勿修改下面的脚本     请勿修改下面的脚本     请勿修改下面的脚本     请勿修改下面的脚本     请勿修改下面的脚本
+DO NOT MODIFY THE SCRIPT BELOW       DO NOT MODIFY THE SCRIPT BELOW       DO NOT MODIFY THE SCRIPT BELOW
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+
+/**
+ * 设置 'ext.project_creator = [:]' 启用 project-creator
+ * Set 'ext.project_creator = [:]' to enable project-creator
+ */
+if (!ext.has('project_creator') || !(ext.project_creator instanceof Map)) {
+    return
+}
+
+//import
+import groovy.text.GStringTemplateEngine
+
+//constants
+def ENGINE = new GStringTemplateEngine()
+def REPLACE_BY_FLAG1 = '// <replace-by> '
+def REPLACE_BY_FLAG2 = '# <replace-by> '
+def DOT_ESCAPE = '<D_o_T>'
+def PATH_REPLACE_FLAG = '__'
+def PATH_REPLACE_FLAG_LENGTH = PATH_REPLACE_FLAG.length()
+def ARCHETYPE_IGNORES = ['/out/', '\\out\\', '/build/', '\\build\\']
+
+//vars
+def manifest = ext.project_creator
+def charset = manifest.charset != null ? manifest.charset : 'UTF-8'
+def projectRootPath = "$rootProject.rootDir.absolutePath"
+
+/**
+ * 覆盖file方法, 防止操作工程外的文件
+ * 参数(路径)
+ */
+def file = { path ->
+    def thisFile = file("$projectRootPath/$path")
+    if (!"$thisFile.absolutePath".startsWith(projectRootPath)) {
+        /*
+         * 错误: project-creator.gradle不允许操作工程以外的文件
+         * 为了防止误操作覆盖了电脑上的其他文件, 所以做了保护
+         */
+        throw new GroovyRuntimeException("project-creator.gradle cannot operate the given directory ($thisFile.absolutePath), it is out of project root ($projectRootPath)")
+    }
+    return thisFile
+}
+
+/**
+ * 删除字符串左边的空格
+ * 参数(字符串)
+ */
+def trimLeft = { String string ->
+    def chars = string.chars
+    int length = chars.length;
+    int start = 0;
+    // ' ' = 32
+    while ((start < length) && (chars[start] <= 32)) {
+        start++;
+    }
+    return start > 0 ? string.substring(start) : string;
+}
+
+/**
+ * 遍历处理原型路径下的所有文件
+ * 参数(原型路径, 闭包)
+ */
+def handleEachFilesIn = { thisDirectory, closure ->
+    if (!thisDirectory.isDirectory()) {
+        /*
+         * 错误: 指定的原型路径不是一个目录(文件夹)
+         * 原型路径必须是一个目录
+         */
+        throw new GroovyRuntimeException("Archetype path '$thisDirectory.absolutePath' is not a directory")
+    }
+
+    //原型根路径长度
+    def directoryLength = thisDirectory.absolutePath.length()
+
+    //遍历所有文件(递归)
+    thisDirectory.eachFileRecurse groovy.io.FileType.FILES, {
+        //参数1 文件 参数2 相对于原型根路径的相对路径
+        closure(it, it.absolutePath.substring(directoryLength))
+    }
+}
+
+/**
+ * 检查ext.project_creator.projects
+ */
+def checkProjects = { newProjects ->
+    if (newProjects == null) {
+        /*
+         * 错误: ext.project_creator里没有projects
+         * 请参考文档配置ext.project_creator
+         */
+        throw new GroovyRuntimeException("Illegal format in 'ext.project_creator', Map element 'projects' is required in 'ext.project_creator'")
+    }
+    if (!(newProjects instanceof Map) || newProjects.size() <= 0) {
+        /*
+         * 错误: ext.project_creator里的projects是空的(或者不是Map)
+         * 请参考文档配置ext.project_creator
+         */
+        throw new GroovyRuntimeException("Illegal format in 'ext.project_creator', Empty map element 'projects' in 'ext.project_creator'")
+    }
+}
+
+/**
+ * 检查ext.project_creator.projects.*
+ */
+def checkMetaInfo = { targetPath, metaInfo ->
+    def targetPathFile = file("$targetPath")
+    if (targetPathFile.exists()) {
+        /*
+         * 错误: 目标目录已经存在
+         * 为了防止误操作覆盖原有子工程或文件, 所以做了保护, 如果确实要继续, 请删除目标目录
+         */
+        throw new GroovyRuntimeException("TargetPath '$targetPathFile.absolutePath' is already exists, delete it if you want to overwrite it")
+    }
+    if (targetPathFile.absolutePath.startsWith(file("$metaInfo.archetype_path").absolutePath)) {
+        /*
+         * 错误: 目标路径不能在原型路径中
+         * 不能让原型自己修改自己的文件啊
+         */
+        throw new GroovyRuntimeException("Illegal format in 'ext.project_creator', The targetPath ($targetPath) cannot be inside the archetype_path ($metaInfo.archetype_path))")
+    }
+    if (metaInfo == null || !(metaInfo instanceof Map)) {
+        /*
+         * 错误: ext.project_creator.projects里有个Value不是Map类型
+         * 请参考文档配置ext.project_creator
+         */
+        throw new GroovyRuntimeException("Illegal format in 'ext.project_creator', Value of 'ext.project_creator.projects.$targetPath' is not a Map")
+    }
+    if (metaInfo.archetype_path == null) {
+        /*
+         * 错误: ext.project_creator.projects里有个Value不是Map类型
+         * 请参考文档配置ext.project_creator
+         */
+        throw new GroovyRuntimeException("Illegal format in 'ext.project_creator', 'ext.project_creator.projects.${targetPath}.archetype_path' is required")
+    }
+}
+
+/**
+ * 将路径中'__key__'标记的地方用replace_context映射
+ * 参数(需要被处理的相对路径, 替换映射表, 目标路径(用来打错误日志))
+ */
+def replaceRelativePath = { relativePath, replace_context, targetPath ->
+    def currPath = relativePath
+    def start = 0
+    // 找__
+    while ((start = currPath.indexOf(PATH_REPLACE_FLAG, start) + PATH_REPLACE_FLAG_LENGTH) >= PATH_REPLACE_FLAG_LENGTH) {
+        // 找下一个__
+        def end = currPath.indexOf(PATH_REPLACE_FLAG, start)
+        // 找不到下一个__就退出
+        if (end <= start) {
+            break
+        }
+        def prefix = currPath.substring(0, start - PATH_REPLACE_FLAG_LENGTH);
+        def suffix = currPath.substring(end + PATH_REPLACE_FLAG_LENGTH)
+        def replaceable = currPath.substring(start, end)
+        def replaced = replace_context[replaceable]
+        if (replaced == null) {
+            /*
+             * 错误: ext.project_creator.projects.*.replace_context里没有配置需要的替换项
+             * 请检查原型目录下所有的文件夹, 遇到__key__标识的文件夹, 必须在replace_context里配置对应的映射值
+             */
+            throw new GroovyRuntimeException("Missing replace property '$replaceable', You must configure it in the replace_context 'ext.project_creator.projects.${targetPath}.replace_context'")
+        }
+        // . -> /
+        replaced = replaced.replaceAll('\\.', '/')
+        // <D_o_T> -> .
+        replaced = replaced.replaceAll(DOT_ESCAPE, '.')
+        currPath = "$prefix$replaced$suffix"
+    }
+    return currPath
+}
+
+/**
+ * 根据原型创建一个子工程
+ * 参数(目标路径, 原型路径, 替换上下文)
+ */
+def createOne = { targetPath, metaInfo ->
+
+    def archetype_path = metaInfo.archetype_path
+    def replace_context = metaInfo.replace_context != null ? metaInfo.replace_context : [:]
+
+    //遍历处理原型路径下的所有文件
+    handleEachFilesIn file("$archetype_path"), { thisFile, relativePath ->
+
+        //忽略原型中的一些目录(/out/ /build/等)
+        for (String ignore : ARCHETYPE_IGNORES) {
+            if (relativePath.startsWith(ignore)) {
+                return
+            }
+        }
+
+        //处理相对路径的__key__占位符
+        relativePath = replaceRelativePath(relativePath, replace_context, targetPath)
+
+        //目标文件
+        def targetFile = file("$targetPath$relativePath")
+
+        //日志
+        println "$thisFile --> $targetFile"
+
+        //目标路径创建
+        targetFile.parentFile.mkdirs()
+
+        //从原型文件读取, 写入目标文件
+        thisFile.withReader(charset) { reader ->
+            targetFile.withWriter(charset) { writer ->
+
+                def lineString
+                def replaceBy = null
+
+                //处理每一行
+                while ((lineString = reader.readLine()) != null) {
+                    //删除字符串左边的空格
+                    def trimmedLineString = trimLeft("$lineString")
+                    if (replaceBy != null) {
+                        //如果上一行是替换标识, 就替换这行字符串
+                        writer.writeLine("$replaceBy")
+                        replaceBy = null
+                    } else if (trimmedLineString.startsWith(REPLACE_BY_FLAG1)) {
+                        //如果遇到替换标识, 就解析替换表达式, 并准备替换下一行
+                        replaceBy = ENGINE.createTemplate(trimmedLineString.substring(REPLACE_BY_FLAG1.length()))
+                                .make(replace_context as Map)
+                        // <D_o_T> -> .
+                        replaceBy = replaceBy.toString().replaceAll(DOT_ESCAPE, '.')
+                    } else if (trimmedLineString.startsWith(REPLACE_BY_FLAG2)) {
+                        //如果遇到替换标识, 就解析替换表达式, 并准备替换下一行
+                        replaceBy = ENGINE.createTemplate(trimmedLineString.substring(REPLACE_BY_FLAG2.length()))
+                                .make(replace_context as Map)
+                        // <D_o_T> -> .
+                        replaceBy = replaceBy.toString().replaceAll(DOT_ESCAPE, '.')
+                    } else {
+                        //写入普通行
+                        writer.writeLine("$lineString")
+                    }
+                }
+
+            }
+        }
+
+    }
+}
+
+/**
+ * 任务
+ */
+task createProject(group: 'utils') {
+    doLast {
+
+        //ext.project_creator.projects
+        def newProjects = manifest.projects
+        //检查
+        checkProjects(newProjects)
+
+        //遍历ext.project_creator.projects
+        newProjects.forEach { targetPath, metaInfo ->
+            //检查
+            checkMetaInfo(targetPath, metaInfo)
+            //创建一个子工程
+            createOne(targetPath, metaInfo)
+        }
+
+    }
+}

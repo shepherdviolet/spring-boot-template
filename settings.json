@@ -1,5 +1,9 @@
 {
   "web": [
-    "template"
+    "web-demo",
+    "web-archetype"
+  ],
+  "module": [
+    "module-archetype"
   ]
 }

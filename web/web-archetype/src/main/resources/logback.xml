@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+
+    <jmxConfigurator/>
+
+    <!--logback只能获得启动参数和指定配置文件中的参数, 不能获得springPlaceHolder中的参数-->
+    <!--指定配置文件的参数优先级比启动参数高, 启动参数不能覆盖配置文件里的参数-->
+    <!--加载application.properties(与spring共享基本参数)-->
+    <property resource="application.properties"/>
+    <!--加载logback-profile.properties-->
+    <property resource="logback-${spring.profiles.active:-win}.properties"/>
+
+    <!-- -Dlog.pattern 修改日志格式 (40控制的是类名长度) -->
+    <property name="logging.pattern" value="${log.pattern:-%d %p %t %c{40} %X{_trace_id_}: %m%n}"/>
+    <!-- -Dlog.path 修改日志路径 -->
+    <property name="logging.path" value="${log.path:-${logging.path:-/tmp}}"/>
+    <property name="logging.archive" value="${logging.path}/archive"/>
+
+    <contextName>${app.id}</contextName>
+
+    <appender name="ConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${logging.pattern}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${logging.level.console:-ON}</level>
+        </filter>
+    </appender>
+
+    <appender name="CommonFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logging.path}/${app.id}.log</file>
+        <encoder>
+            <pattern>${logging.pattern}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logging.archive}/${app.id}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <!--<maxHistory>20</maxHistory>-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>200MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="ErrorFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logging.path}/${app.id}.err</file>
+        <encoder>
+            <pattern>${logging.pattern}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>error</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logging.archive}/${app.id}.err.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <!--<maxHistory>20</maxHistory>-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>200MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+
+
+
+    <logger name="sviolet" level="${logging.level.sviolet:-INFO}" />
+    <logger name="com.github.shepherdviolet" level="${logging.level.sviolet:-INFO}" />
+
+
+
+
+    <root level="${logging.level.root:-INFO}">
+        <appender-ref ref="ConsoleAppender" />
+        <appender-ref ref="ErrorFileAppender" />
+        <appender-ref ref="CommonFileAppender" />
+    </root>
+
+</configuration>

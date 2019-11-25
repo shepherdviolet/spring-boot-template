@@ -1,0 +1,115 @@
+
+// 依赖, java工程只能用implementation, java-library工程能用api和implementation
+dependencies {
+
+    //Import BOM/////////////////////////////////////////////////////////////////////////////////////////////
+
+//    implementation platform(project(':my-bom'))
+//    implementation platform("com.github.shepherdviolet.slate20:slate-bom:$version_slate")
+//    implementation enforcedPlatform("com.github.shepherdviolet.slate20:slate-bom:$version_slate")//强制覆盖手动依赖的版本
+
+    //Log/////////////////////////////////////////////////////////////////////////////////////////////
+
+    //Log, jcl-over-slf4j用于把commons-logging的日志交给slf4j输出
+    implementation "ch.qos.logback:logback-classic:$version_logback"
+    implementation "org.slf4j:jcl-over-slf4j:$version_slf4j"
+
+    //Spring///////////////////////////////////////////////////////////////////////////////////////////
+
+    //Common web
+    implementation "org.springframework.boot:spring-boot-starter-web:$version_spring_boot"
+
+    //Common no web
+    //如果是非WEB项目, 注掉上面的spring-boot-starter-web改用下面的依赖, 删除Controller与其他web相关的代码即可
+    //implementation "org.springframework.boot:spring-boot-starter:$version_spring_boot"
+
+    //Web container : Undertow (替换undertow还要把tomcat的依赖排除掉)
+//    implementation "org.springframework.boot:spring-boot-starter-undertow:$version_spring_boot"
+
+    //Spring boot others
+    implementation "org.springframework.boot:spring-boot-starter-thymeleaf:$version_spring_boot"
+    implementation "org.springframework.boot:spring-boot-starter-aop:$version_spring_boot"
+    implementation "org.springframework.boot:spring-boot-starter-actuator:$version_spring_boot"
+
+    //Optional 3rd library/////////////////////////////////////////////////////////////////////////////
+
+    implementation ("com.github.shepherdviolet.slate20:slate-http-client:$version_slate") {exclude group: 'org.springframework'}
+    implementation "com.alibaba:hessian-lite:$version_hessian_lite"
+    implementation "com.google.code.gson:gson:$version_gson"
+    implementation ("com.alibaba:fastjson:$version_fastjson") { force = true }//Fix security bugs of fastjson
+
+    //DB//////////////////////////////////////////////////////////////////////////////////////////////
+
+    implementation "org.springframework.boot:spring-boot-starter-jdbc:$version_spring_boot"
+    implementation ("org.mybatis.spring.boot:mybatis-spring-boot-starter:$version_mybatis") {exclude group: 'org.springframework.boot'}
+    implementation ("com.github.pagehelper:pagehelper-spring-boot-starter:$version_pagehelper") {exclude group: 'org.mybatis.spring.boot'}
+    implementation 'com.h2database:h2:1.4.197'//H2, 配合Datasource 1
+//    implementation 'mysql:mysql-connector-java:5.1.46'//mysql, 配合Datasource 2
+//    implementation 'com.oracle:ojdbc6:11.2.0.3'//oracle, 在jcenter有, 配合Datasource 3 / 4
+//    implementation 'org.apache.tomcat:tomcat-jdbc:9.0.17'//tomcat连接池, 配合Datasource 4
+
+    //MQ//////////////////////////////////////////////////////////////////////////////////////////////
+
+    implementation ("org.apache.rocketmq:rocketmq-client:$version_rocketmq") {
+        //特殊情况: 在这里SpringBootAdmin和RocketMQ的netty包有冲突, 要启用Admin得先把RocketMQ依赖的netty排除掉(错误:java.lang.NoSuchMethodError: io.netty.bootstrap.Bootstrap.config)
+//        exclude group: "io.netty"
+    }
+//    implementation "org.apache.rocketmq:rocketmq-spring-boot-starter:$version_rocketmq_spring"//官方的工具库, 可选
+
+    //Apollo///////////////////////////////////////////////////////////////////////////////////////////
+
+    //Apollo client ( -Denv=dev is required )
+//    implementation "com.ctrip.framework.apollo:apollo-client:$version_apollo"
+
+    //APM//////////////////////////////////////////////////////////////////////////////////////////////
+
+    implementation "io.micrometer:micrometer-registry-prometheus:$version_micrometer"
+
+    //Flow control, Circuit breaking//////////////////////////////////////////////////////////////////
+
+    implementation "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel:$version_sentinel"
+
+    //Spring Boot Admin///////////////////////////////////////////////////////////////////////////////
+
+    //Spring Boot Admin server (控制台服务端, 容器需改为Tomcat, http://localhost:8080)
+    //特殊情况: 在这里SpringBootAdmin和RocketMQ的netty包有冲突, 要启用这个先把RocketMQ依赖的netty排除掉(错误:java.lang.NoSuchMethodError: io.netty.bootstrap.Bootstrap.config)
+//    implementation "de.codecentric:spring-boot-admin-starter-server:$version_spring_boot_admin"
+    //Spring Boot Admin client (控制台客户端)
+//    implementation "de.codecentric:spring-boot-admin-starter-client:$version_spring_boot_admin"
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    //annotationProcessor//////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:$version_spring_boot"
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    //Test/////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test:$version_spring_boot"
+
+}
+
+// 全局排除依赖
+//configurations {
+//    // 排除tomcat的依赖
+//    all*.exclude group:'org.springframework.boot', module:'spring-boot-starter-tomcat'
+//}
+
+// Mybatis Generator
+//apply from: "build-mybatis.gradle"
+
+// 源码集合配置
+//sourceSets {
+//    main {
+//        java {
+//            // 增加一个src/main/java2目录作为Java代码目录, 默认目录仍旧有效
+//            srcDirs 'src/main/java2'
+//        }
+//        resources {
+//            // 增加一个src/main/resources2目录作为资源目录, 默认目录仍旧有效
+//            srcDirs 'src/main/resources2'
+//        }
+//    }
+//}

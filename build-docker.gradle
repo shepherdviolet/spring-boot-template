@@ -1,6 +1,6 @@
 
 /*
- * Docker镜像发布
+ * Docker镜像发布: gradlew dockerPushImage
  *
  * 插件官方文档: https://bmuschko.github.io/gradle-docker-plugin/
  *

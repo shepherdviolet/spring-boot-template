@@ -18,7 +18,7 @@ dependencies {
 
 * 修改BootApplication
 * 注释掉exclude
-* 将"template.demo.mybatis.config"加入扫包路径
+* 将"com.github.shepherdviolet.webdemo.demo.mybatis.config"加入扫包路径
 
 ```text
 @SpringBootApplication(
@@ -29,7 +29,7 @@ dependencies {
 @ComponentScan(
         {
                 ......
-                "template.demo.mybatis.config",
+                "com.github.shepherdviolet.webdemo.demo.mybatis.config",
         }
 )
 ```

@@ -1,0 +1,12 @@
+
+server:
+  port: 8080
+  address: 0.0.0.0
+  tomcat:
+    ## TODO [重要]指定tomcat的basedir, 用于临时文件, 该目录需要创建. 避免运行十天出现The temporary upload location...的异常
+    basedir: ./tmp
+    max-threads: 200
+    accept-count: 200
+    max-connections: 2000
+    min-spare-threads: 10
+    max-http-post-size: 10485760

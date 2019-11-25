@@ -3,23 +3,6 @@
 // 配置
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-// 所有子工程通用配置
-subprojects {
-
-    // 基本参数
-    group project_group_id
-    version project_version
-
-    // 工程的依赖仓库
-    repositories {
-        maven { url 'file:C:/m2repository/repository' }
-        mavenCentral()
-        jcenter()
-//        maven { url 'https://jitpack.io' }
-    }
-
-}
-
 // WEB工程通用配置 (根据组别筛选)
 configure(subprojects.findAll { it.PROJECT_GROUP == 'web' }) {
 
@@ -48,37 +31,37 @@ configure(subprojects.findAll { it.PROJECT_GROUP == 'web' }) {
 //    dependencies {
 //        // Import BOMs
 //        implementation platform(project(':my-bom'))
-//        implementation platform("com.github.shepherdviolet:slate-bom:$version_slate")
-//        implementation enforcedPlatform("com.github.shepherdviolet:slate-bom:$version_slate")//强制覆盖手动依赖的版本
+//        implementation platform("com.github.shepherdviolet.slate20:slate-bom:$version_slate")
+//        implementation enforcedPlatform("com.github.shepherdviolet.slate20:slate-bom:$version_slate")//强制覆盖手动依赖的版本
 //        // Common dependencies
-//        implementation "com.github.shepherdviolet:slate-common:$version_slate"
+//        implementation "com.github.shepherdviolet.slate20:slate-common:$version_slate"
 //    }
 
 }
 
 // 示例: 库工程通用配置 (根据组别筛选)
-//configure(subprojects.findAll { it.PROJECT_GROUP in ['library'] }) {
-//
-//    apply plugin: 'java-library' // JAVA库(能用implementation和api依赖方法)
-//
-//    // jdk version
-//    sourceCompatibility = 1.8
-//    targetCompatibility = 1.8
-//
-//    // encoding
-//    [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
-//
-//    // 示例: 库工程通用依赖
-////    dependencies {
-////        // Import BOMs
-////        api platform(project(':my-bom'))
-////        api platform("com.github.shepherdviolet:slate-bom:$version_slate")
-////        api enforcedPlatform("com.github.shepherdviolet:slate-bom:$version_slate")//强制覆盖手动依赖的版本
-////        // Common dependencies
-////        api "com.github.shepherdviolet:slate-common:$version_slate"
-////    }
-//
-//}
+configure(subprojects.findAll { it.PROJECT_GROUP in ['module'] }) {
+
+    apply plugin: 'java-library' // JAVA库(能用implementation和api依赖方法)
+
+    // jdk version
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    // encoding
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
+
+    // 示例: 库工程通用依赖
+//    dependencies {
+//        // Import BOMs
+//        api platform(project(':my-bom'))
+//        api platform("com.github.shepherdviolet.slate20:slate-bom:$version_slate")
+//        api enforcedPlatform("com.github.shepherdviolet.slate20:slate-bom:$version_slate")//强制覆盖手动依赖的版本
+//        // Common dependencies
+//        api "com.github.shepherdviolet.slate20:slate-common:$version_slate"
+//    }
+
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // 示例
@@ -87,10 +70,15 @@ configure(subprojects.findAll { it.PROJECT_GROUP == 'web' }) {
 // 示例: 所有工程通用配置(包括Root工程)
 //allprojects {
 //
-//    // 示例: Gradle6.0开始默认生成module文件(类似于Maven的POM), 关闭方法如下
-//    tasks.withType(GenerateModuleMetadata) {
-//        enabled = false
+//    // 示例: 如果子工程的gradle.properties里配了参数"flag", 就执行
+//    if (project.hasProperty("flag")) {
+//        ...
 //    }
+//
+//}
+
+// 示例: 所有子工程通用配置
+//subprojects {
 //
 //}
 
@@ -99,7 +87,9 @@ configure(subprojects.findAll { it.PROJECT_GROUP == 'web' }) {
 //
 //}
 
-// 示例: 加速
+/*
+ * 示例: 加速
+ */
 //subprojects {
 //
 //    // 示例: 测试案例随机并发跑(对大工程有益)
@@ -193,9 +183,9 @@ configure(subprojects.findAll { it.PROJECT_GROUP == 'web' }) {
 //
 //    dependencies {
 //        // 可选: 如果需要BOM, 则需要专门为scriptJar引入
-//        //scriptJar platform('com.github.shepherdviolet:thistle-bom:14.9-SNAPSHOT')
+//        //scriptJar platform('com.github.shepherdviolet.thistle20:thistle-bom:14.9-SNAPSHOT')
 //        // 文件所在JAR包
-//        scriptJar ('com.github.shepherdviolet:thistle-common:14.9-SNAPSHOT') { transitive = false }
+//        scriptJar ('com.github.shepherdviolet.thistle20:thistle-common:14.9-SNAPSHOT') { transitive = false }
 //    }
 //
 //    task copyScriptsFromJar(type: Copy) {
