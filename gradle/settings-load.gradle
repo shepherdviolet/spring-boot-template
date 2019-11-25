@@ -1,0 +1,53 @@
+
+/*
+ * [请勿修改] 在'settings.gradle'中, 解析'settings.json'中声明的子工程清单, 将它们加入gradle构建.
+ *
+ * 本脚本增加了组别的概念, 能够在Gradle脚本中指定组别进行通用配置(参考build-common.gradle). 另外, 本脚本支持子工程多层目录
+ * 结构(Gradle默认子工程只能在根目录下). 当设置flatMode=true时, 子工程平铺在根目录下, 例如: project1/ project2/ project3/.
+ * 当设置flatMode=false时, 子工程放在以组别命名的目录下, group1/project1 group1/project2 group2/project3. 这里要注意的是,
+ * 子工程名全局唯一, 即使在不同的组别中, 也不允许重复.
+ */
+
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+// 子工程清单
+def projects = [:]
+// '工程->组别'映射表
+def projectGroupMap = [:]
+
+// 读取settings.json
+try {
+    file("../settings.json").withInputStream { stream -> projects = new JsonSlurper().parse(stream as InputStream) }
+} catch (Exception e) {
+    throw new GroovyRuntimeException("Illegal JSON format in `settings.json`\n" + e.getMessage(), e)
+}
+
+// 遍历, 将子工程加入gradle构建
+projects.forEach({ groupKey, group ->
+    group.forEach({ module ->
+
+        // 子工程的名称全局唯一, 即使在不同的组别中, 也不允许重复
+        if (projectGroupMap.containsKey(module)) {
+            throw new GroovyRuntimeException("Duplicate project name '$module' in 'settings.json'")
+        }
+
+        // 将子工程加入gradle构建
+        include "$module"
+
+        // 记录'工程->组别'映射关系
+        projectGroupMap["$module"] = groupKey
+
+        // Gradle默认只支持一层结构, 即子工程只能在根目录下. 这个方法能够突破限制, 修改子工程位置.
+        if (!ext.flatMode) {
+            project(":$module").projectDir = file("../$groupKey/$module")
+        }
+
+    })
+})
+
+// 将projectProperties包装成可变Map, 否则gradlew脚本执行时会因为projectProperties是不可变类型报错
+gradle.startParameter.projectProperties = new HashMap(gradle.startParameter.projectProperties)
+
+// 将'工程->组别'映射关系传递给'build.gradle', 因为这里project实例还没创建, 所以只能用这种办法传递, 不能用ext
+gradle.startParameter.projectProperties.PROJECT_GROUP_MAP = new JsonOutput().toJson(projectGroupMap)

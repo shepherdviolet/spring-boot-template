@@ -1,55 +1,54 @@
 
-//构建脚本配置
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 脚本
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// [请勿修改] 'build.gradle'的初始化脚本
+apply from: 'gradle/build-init.gradle'
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 配置
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Gradle构建脚本本身的配置
 buildscript {
-	//装载其他配置文件
+
+	// 加载自定义properties文件
 	ext {
-        //gradle-version.properties
+		// 读取配置文件
 		def customProperties = new Properties()
 		file("gradle-version.properties").withInputStream { stream -> customProperties.load(stream) }
+//		file("gradle-local.properties").withInputStream { stream -> customProperties.load(stream) }
+
+		// 将配置放入公共配置, 在gradle中可直接引用
 		customProperties.each {
-			project.extensions.add("$it.key",it.value)
+			rootProject.extensions.add("$it.key", it.value)
 		}
-        //gradle-local.properties
-        customProperties = new Properties()
-        file("gradle-local.properties").withInputStream { stream -> customProperties.load(stream) }
-        customProperties.each {
-            project.extensions.add("$it.key",it.value)
-        }
 	}
+
+	// 构建脚本用的依赖仓库
 	repositories {
 		maven { url 'file:C:/m2repository/repository' }
+		maven { url 'https://plugins.gradle.org/m2/' }
 		mavenCentral()
-		jcenter()
-		maven { url 'https://jitpack.io' }
+//		jcenter()
+//		maven { url 'https://jitpack.io' }
 //		maven { url 'http://repo.spring.io/plugins-release/' }
 	}
+
+	// 构建脚本用的依赖(插件)
 	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:$version_spring_boot")
-		classpath("com.bmuschko:gradle-docker-plugin:$version_docker")//Docker
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:$version_spring_boot"
+		classpath "com.bmuschko:gradle-docker-plugin:$version_docker"// Docker
+//		classpath "gradle.plugin.com.thinkimi.gradle:mybatis-generator-plugin:2.1.2"// Mybatis Generator
 	}
+
 }
 
-allprojects {
+// 子工程通用配置
+apply from: 'build-common.gradle'
 
-}
-
-subprojects {
-
-	//可选: 测试案例随机并发跑
-	tasks.withType(Test) {
-		maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
-	}
-
-	//可选: 编译进程Fork(对大工程有益)
-	tasks.withType(JavaCompile) {
-		options.fork = true
-	}
-
-	repositories {
-		maven { url 'file:C:/m2repository/repository' }
-		mavenCentral()
-		jcenter()
-        maven { url 'https://jitpack.io' }
-//		maven { url 'http://repo.spring.io/plugins-release/' }
-	}
-}
+// Docker镜像发布配置
+apply from: 'build-docker.gradle'

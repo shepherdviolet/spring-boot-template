@@ -1,0 +1,16 @@
+
+/*
+ * [请勿修改] 'build.gradle'的初始化脚本
+ */
+
+/*
+ * 1.在'build.gradle'中接收'settings.gradle'传来的'工程->组别'映射表
+ */
+
+import groovy.json.JsonSlurper
+
+//在'build.gradle'中接收'settings.gradle'传来的'工程->组别'映射表
+def PROJECT_GROUP_MAP = new JsonSlurper().parseText(gradle.startParameter.projectProperties.PROJECT_GROUP_MAP)
+
+//将组别装配到project对象中, 可以在project中直接用`PROJECT_GROUP`获取, 或者用`project.PROJECT_GROUP`获取
+subprojects.forEach { it.ext.PROJECT_GROUP = PROJECT_GROUP_MAP["$it.name"] }

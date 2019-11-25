@@ -1,0 +1,211 @@
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+// 配置
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+// 所有子工程通用配置
+subprojects {
+
+    // 基本参数
+    group project_group_id
+    version project_version
+
+    // 工程的依赖仓库
+    repositories {
+        maven { url 'file:C:/m2repository/repository' }
+        mavenCentral()
+        jcenter()
+//        maven { url 'https://jitpack.io' }
+    }
+
+}
+
+// WEB工程通用配置 (根据组别筛选)
+configure(subprojects.findAll { it.PROJECT_GROUP == 'web' }) {
+
+    apply plugin: 'java' // JAVA应用(只能用implementation依赖方法)
+    apply plugin: 'org.springframework.boot' // 文档: https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/gradle-plugin/reference/html/
+
+    // jdk version
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    // encoding
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
+
+    // config of bootJar
+    bootJar {
+        // main class
+        mainClassName = main_class // 配在web/*/gradle.properties里
+
+        // 可选: 生成一个Unix可执行文件(在jar包头部有shell脚本), 文档: https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/deployment-install.html
+        //launchScript {
+            //properties 'logFilename': 'example-app.log'
+        //}
+    }
+
+    // 示例: WEB工程通用依赖
+//    dependencies {
+//        // Import BOMs
+//        implementation platform(project(':my-bom'))
+//        implementation platform("com.github.shepherdviolet:slate-bom:$version_slate")
+//        implementation enforcedPlatform("com.github.shepherdviolet:slate-bom:$version_slate")//强制覆盖手动依赖的版本
+//        // Common dependencies
+//        implementation "com.github.shepherdviolet:slate-common:$version_slate"
+//    }
+
+}
+
+// 示例: 库工程通用配置 (根据组别筛选)
+//configure(subprojects.findAll { it.PROJECT_GROUP in ['library'] }) {
+//
+//    apply plugin: 'java-library' // JAVA库(能用implementation和api依赖方法)
+//
+//    // jdk version
+//    sourceCompatibility = 1.8
+//    targetCompatibility = 1.8
+//
+//    // encoding
+//    [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
+//
+//    // 示例: 库工程通用依赖
+////    dependencies {
+////        // Import BOMs
+////        api platform(project(':my-bom'))
+////        api platform("com.github.shepherdviolet:slate-bom:$version_slate")
+////        api enforcedPlatform("com.github.shepherdviolet:slate-bom:$version_slate")//强制覆盖手动依赖的版本
+////        // Common dependencies
+////        api "com.github.shepherdviolet:slate-common:$version_slate"
+////    }
+//
+//}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+// 示例
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+// 示例: 所有工程通用配置(包括Root工程)
+//allprojects {
+//
+//    // 示例: Gradle6.0开始默认生成module文件(类似于Maven的POM), 关闭方法如下
+//    tasks.withType(GenerateModuleMetadata) {
+//        enabled = false
+//    }
+//
+//}
+
+// 示例: 部分工程通用配置: 名称筛选
+//configure(subprojects.findAll { it.name.startsWith('prefix-') }) {
+//
+//}
+
+// 示例: 加速
+//subprojects {
+//
+//    // 示例: 测试案例随机并发跑(对大工程有益)
+//    tasks.withType(Test) {
+//        maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+//        // 慎用: 当测试案例非常多而且非常繁重时启用, 每X个测试Fork一个VM出来(注意这个值不可以设置太小, Fork开销很大)
+//        //forkEvery = 100
+//        // 可选: 关闭测试报告
+//        //reports.html.enabled = false
+//        //reports.junitXml.enabled = false
+//    }
+//
+//    // 示例: 编译进程Fork(对大工程有益)
+//    tasks.withType(JavaCompile) {
+//        options.fork = true
+//    }
+//}
+
+/*
+ * 示例: 不打包成可执行的fatJar, 打包成一堆原始jar包.
+ *
+ * org.springframework.boot插件在识别到有jar任务时, 默认会禁用它, 即不生成工程原始的jar包, 会生成一个可执行的fatJar.
+ * 通过禁用bootJar, 启用jar, 自定义依赖复制和压缩任务, 可以实现将工程打包成一堆原始jar包+脚本的压缩包.
+ *
+ * 参考文档: https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/gradle-plugin/reference/html/
+ */
+//configure(subprojects.findAll { it.PROJECT_GROUP == 'web' }) {
+//
+//    //插件引入和基本配置这里省略了, 请自行加上
+//
+//    // 启用jar任务
+//    jar {
+//        enabled = true
+//        version project_version
+//        manifest {
+//            attributes "Manifest-Version": 1.0, 'Main-Class': main_class // 配在web/*/gradle.properties里
+//        }
+//    }
+//
+//    // 禁用bootJar任务
+//    bootJar {
+//        enabled = false
+//    }
+//
+//    // 简单示例: 打包:build时把依赖复制到指定目录下, 如果用这种多jar包的方式, 依赖可以用implementation
+//    //task copyLibs(type: Copy) {
+//        //from configurations.runtime
+//        //into 'build/libs'
+//    //}
+//    //build.dependsOn copyLibs
+//
+//    // 高级示例: 打包:将工程jar包/依赖jar包/启动脚本集合打包成一个ZIP
+//    task cleanTmp(type: Delete, group: 'assembly', dependsOn: build) {
+//        delete 'build/assembly/tmp/'
+//    }
+//    task copyLib(type: Copy, group: 'assembly', dependsOn: cleanTmp) {
+//        from 'build/libs'
+//        into "build/assembly/tmp/$project.name/lib"
+//    }
+//    task copyLibs(type: Copy, group: 'assembly', dependsOn: cleanTmp) {
+//        // 新版本Gradle用runtimeClasspath(老版本用runtime?)
+//        from configurations.runtimeClasspath
+//        into "build/assembly/tmp/$project.name/lib"
+//    }
+//    task copyScripts(type: Copy, group: 'assembly', dependsOn: cleanTmp) {
+//        from 'src/main/resources/shell'
+//        into "build/assembly/tmp/$project.name/bin"
+//    }
+//    task assembleAll(type: Zip, group: 'assembly', dependsOn: [copyLib, copyScripts, copyLibs]) {
+//        from 'build/assembly/tmp'
+//        destinationDir file('build/assembly')
+//        //archiveBaseName = "$project.name-assembly"
+//    }
+//    //task assembleAll(type: Tar, group: 'assembly', dependsOn: [build, copyLib, copyScripts, copyLibs]) {
+//        //from "build/assembly/tmp"
+//        //destinationDir file("$rootProject.rootDir/assembly")
+//        //archiveFileName = "${project.name}-${project.version}.tar.gz"
+//        //compression = Compression.GZIP
+//    //}
+//
+//}
+
+/*
+ * 示例: 从依赖的JAR包中提取文件
+ */
+//configure(subprojects.findAll { it.PROJECT_GROUP == 'web' }) {
+//
+//    configurations {
+//        scriptJar
+//    }
+//
+//    dependencies {
+//        // 可选: 如果需要BOM, 则需要专门为scriptJar引入
+//        //scriptJar platform('com.github.shepherdviolet:thistle-bom:14.9-SNAPSHOT')
+//        // 文件所在JAR包
+//        scriptJar ('com.github.shepherdviolet:thistle-common:14.9-SNAPSHOT') { transitive = false }
+//    }
+//
+//    task copyScriptsFromJar(type: Copy) {
+//        // 备注: 如果开启多线程编译(org.gradle.parallel), 这里会有个警告, 因多线程对配置同时操作导致, 可以忽略
+//        from zipTree(configurations.scriptJar.singleFile).matching {
+//            // 匹配路径和文件名
+//            include 'sviolet/thistle/util/**'
+//        }
+//        // 注意, 脚本会复制到build/assembly/script/sviolet/thistle/util下, 暂时没找到办法改路径, 只能再用一个COPY任务
+//        into 'build/assembly/script'
+//    }
+//
+//}

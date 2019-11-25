@@ -1,0 +1,68 @@
+
+/*
+ * Docker镜像发布
+ *
+ * 插件官方文档: https://bmuschko.github.io/gradle-docker-plugin/
+ *
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ * 方案一: 高级DSL, 简易地实现SpringBoot镜像发布
+ *
+ * apply plugin: 'com.bmuschko.docker-spring-boot-application'
+ *
+ * 本工程采用高级DSL实现镜像发布, 具体方法见下面的Gradle脚本
+ *
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ * 方案二: 低级API, 实现通用镜像发布, 等同于编写DockerFile.
+ *
+ * apply plugin: 'com.bmuschko.docker-remote-api'
+ *
+ * 具体方法请参考官方文档, 或: https://segmentfault.com/a/1190000014102281
+ *
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ * Docker 私有库(Registry)查询镜像
+ *
+ * http://127.0.0.1:5000/v2/_catalog
+ * http://127.0.0.1:5000/v2/<imagename>/tags/list
+ *
+ */
+
+// 当子工程的gradle.properties中配置了docker_daemon参数, 则启用Docker发布
+configure(subprojects.findAll { it.hasProperty('docker_daemon') }) {
+
+    // 高级插件
+    apply plugin: 'com.bmuschko.docker-spring-boot-application'
+
+    docker {
+
+        // Docker私有库地址
+        url = "$docker_daemon"
+
+        // Spring Boot 镜像创建
+        springBootApplication {
+            // 基础镜像
+            baseImage = "$docker_private_registry/$docker_base_image"
+            // 推送的镜像的名称
+            tag = "$docker_private_registry/$docker_image_prefix/$project.name:$project.version"
+            // 监听端口
+            ports = [docker_listen_port as int]
+            // 镜像启动时的JVM参数
+            jvmArgs = [
+                    '-Dspring.profiles.active=linux',
+                    '-Xmx1024m',
+            ]
+        }
+
+        // 私有库认证证书, 此目录下要有ca.pem/cert.pem/key.pem, 这个目录等同于Docker客户端TLS连接时的环境变量DOCKER_CERT_PATH
+//        certPath = new File(System.properties['user.home'], '.docker')
+
+        // 共有库认证信息
+//        registryCredentials {
+//            url = 'https://index.docker.io/v1/'
+//            username = 'username'
+//            password = 'password'
+//            email = 'username@163.com'
+//        }
+
+    }
+
+}

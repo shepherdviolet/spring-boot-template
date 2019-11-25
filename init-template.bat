@@ -1,9 +1,11 @@
 @echo off
 echo ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 echo Spring Boot gradle project template initialize tool
-echo 1.Set group and name in gradle.properties
-echo 2.Delete .git / .idea / *.iml
+echo 1.Set group id in gradle.properties
+echo 2.Set module name in settings.json
+echo 3.Delete .git / .idea / *.iml ...
 echo ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 echo %cd%|findstr "spring\-boot\-template" >nul
 if %errorlevel% equ 0 ( 
 	echo ERROR
@@ -23,15 +25,28 @@ if exist "i-am-spring-boot-template" (
 	exit
 )
 
-set /p groupId=Set module groupId:
+set /p groupId=Set group id:
 set /p name=Set module name:
+
 echo ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 echo writing "gradle.properties" ...
 echo project_group_id=%groupId%>gradle.properties
-echo writing "settings.gradle" ...
-echo include ':%name%'>settings.gradle
+echo=>>gradle.properties
+echo # build args>>gradle.properties
+echo org.gradle.jvmargs=-Xms1g -Xmx2g>>gradle.properties
+echo #org.gradle.parallel=true>>gradle.properties
+
+echo writing "settings.json" ...
+echo {>settings.json
+echo   "web": [>>settings.json
+echo     "%name%">>settings.json
+echo   ]>>settings.json
+echo }>>settings.json
+
 echo rename module ...
-ren web %name%
+ren web\template %name%
+
 echo deleting ".git" ...
 rd /q /s .git
 echo deleting ".idea" ...
@@ -42,6 +57,7 @@ echo deleting "*.iml" ...
 del "*.iml" /f /s /q /a
 echo deleting "i-am-spring-boot-template" ...
 del i-am-spring-boot-template
+
 echo Complete!
 
 pause
