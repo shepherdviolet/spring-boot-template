@@ -8,10 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * within()示例
+ * within()示例, 匹配指定类型内的方法执行
  */
-@Component
-@Aspect
+@Component//这个必须
+@Aspect//这个必须
+//@Order(0)//同一个方法被多次切面时, 优先度越高(数字越小)的切面越先执行(越外层), 默认优先度最低(Integer.MAX_VALUE)
 public class WithinAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(WithinAspect.class);

@@ -30,6 +30,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-thymeleaf:$version_spring_boot"
     implementation "org.springframework.boot:spring-boot-starter-aop:$version_spring_boot"
     implementation "org.springframework.boot:spring-boot-starter-actuator:$version_spring_boot"
+    implementation "org.springframework.boot:spring-boot-starter-validation:$version_spring_boot" //Spring 2.3.3+ required
 
     //Optional 3rd library/////////////////////////////////////////////////////////////////////////////
 

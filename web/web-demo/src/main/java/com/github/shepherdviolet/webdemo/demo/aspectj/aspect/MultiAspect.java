@@ -11,8 +11,9 @@ import org.springframework.stereotype.Component;
  * 多切点条件示例
  * args()示例
  */
-@Component
-@Aspect
+@Component//这个必须
+@Aspect//这个必须
+//@Order(0)//同一个方法被多次切面时, 优先度越高(数字越小)的切面越先执行(越外层), 默认优先度最低(Integer.MAX_VALUE)
 public class MultiAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(MultiAspect.class);

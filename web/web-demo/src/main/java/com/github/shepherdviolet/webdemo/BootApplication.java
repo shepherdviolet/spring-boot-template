@@ -1,12 +1,15 @@
 package com.github.shepherdviolet.webdemo;
 
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
+import org.apache.tomcat.util.descriptor.web.SecurityCollection;
+import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.embedded.tomcat.ConfigurableTomcatWebServerFactory;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import sviolet.slate.common.util.common.LambdaBuildable;
 
 /**
  * 入口
@@ -40,7 +43,7 @@ import org.springframework.context.annotation.ComponentScan;
 })
 //Spring Boot Admin server (控制台服务端, 容器需改为Tomcat, 控制台地址: http://localhost:8000/admin, 改过URL(默认没/admin), 见application.yaml)
 @EnableAdminServer
-public class BootApplication {
+public class BootApplication implements LambdaBuildable {
 
 //    private static volatile boolean shutdown = false;
 //    private static final Logger logger = LoggerFactory.getLogger(BootApplication.class);
@@ -94,16 +97,38 @@ public class BootApplication {
      * Tomcat调优
      */
     @Bean
-    public WebServerFactoryCustomizer<ConfigurableTomcatWebServerFactory> webServerFactoryCustomizer() {
+    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> webServerFactoryCustomizer() {
         return factory -> {
+            //[安全]禁用不安全的HTTP方法, 测试:curl -v -X TRACE http://localhost:8000/
+            factory.addContextCustomizers(context -> {
+                context.addConstraint(buildObject(() -> {
+                    SecurityConstraint securityConstraint = new SecurityConstraint();
+                    securityConstraint.setUserConstraint("CONFIDENTIAL");
+                    securityConstraint.addCollection(buildObject(() -> {
+                        SecurityCollection securities = new SecurityCollection();
+                        securities.addPattern("/*");
+                        securities.addMethod("TRACE");
+                        securities.addMethod("HEAD");
+                        securities.addMethod("DELETE");
+                        securities.addMethod("SEARCH");
+                        securities.addMethod("PROPFIND");
+                        securities.addMethod("COPY");
+                        securities.addMethod("OPTIONS");
+                        securities.addMethod("PUT");
+                        return securities;
+                    }));
+                    return securityConstraint;
+                }));
+            });
+            //调整连接参数
             factory.addConnectorCustomizers(connector -> {
-                connector.setAttribute("acceptorThreadCount", "2");
-                connector.setAttribute("connectionTimeout", "30000");
-                connector.setAttribute("asyncTimeout", "30000");
-                connector.setAttribute("enableLookups", "false");
-                connector.setAttribute("compression", "on");
-                connector.setAttribute("compressionMinSize", "2048");
-                connector.setAttribute("redirectPort", "8443");
+                connector.setProperty("acceptorThreadCount", "2");
+                connector.setProperty("connectionTimeout", "30000");
+                connector.setProperty("asyncTimeout", "30000");
+                connector.setProperty("enableLookups", "false");
+                connector.setProperty("compression", "on");
+                connector.setProperty("compressionMinSize", "2048");
+                connector.setProperty("redirectPort", "8443");
             });
         };
     }
@@ -112,15 +137,22 @@ public class BootApplication {
      * Undertow调优
      */
 //    @Bean
-//    public WebServerFactoryCustomizer<ConfigurableUndertowWebServerFactory> webServerFactoryCustomizer() {
+//    public WebServerFactoryCustomizer<UndertowServletWebServerFactory> webServerFactoryCustomizer() {
 //        return factory -> {
 //            factory.addDeploymentInfoCustomizers(deploymentInfo -> {
-//                //禁用HTTP TRACE, 测试:curl -v -X TRACE http://localhost:8000/
+//                //[安全]禁用不安全的HTTP方法, 测试:curl -v -X TRACE http://localhost:8000/
 //                deploymentInfo.addSecurityConstraint(new SecurityConstraint()
 //                        .addWebResourceCollection(
 //                                new WebResourceCollection()
 //                                        .addUrlPattern("/*")
-//                                        .addHttpMethod(HttpMethod.TRACE.toString())
+//                                        .addHttpMethod("TRACE")
+//                                        .addHttpMethod("HEAD")
+//                                        .addHttpMethod("DELETE")
+//                                        .addHttpMethod("SEARCH")
+//                                        .addHttpMethod("PROPFIND")
+//                                        .addHttpMethod("COPY")
+//                                        .addHttpMethod("OPTIONS")
+//                                        .addHttpMethod("PUT")
 //                        )
 //                );
 //            });
