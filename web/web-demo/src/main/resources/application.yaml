@@ -7,6 +7,10 @@ spring:
   ## default profile
   profiles:
     active: win
+  ## Misc config
+#  main:
+#    allow-bean-definition-overriding: true
+#    lazy-initialization: true
   ## Jackson config
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss

@@ -11,7 +11,7 @@
     <property resource="logback-${spring.profiles.active:-win}.properties"/>
 
     <!-- -Dlog.pattern 日志格式: %c{40}控制类名长度, %-5p让级别等宽5 -->
-    <property name="logging.pattern" value="${log.pattern:-%d %p %t %c{40} %X{_trace_id_}: %m%n}"/>
+    <property name="logging.pattern" value="${log.pattern:-%d %X{_trace_id_:-0000000000000000000000} %-5p %t %c{40} %L: %m%n}"/>
     <!-- -Dlog.path 日志路径 -->
     <property name="logging.path" value="${log.path:-${logging.path:-/tmp}}"/>
     <property name="logging.archive" value="${logging.path}/archive"/>

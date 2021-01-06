@@ -18,7 +18,7 @@ public class BasicController {
 
     /**
      * Thymeleaf Sample
-     * http://localhost:8000/home
+     * http://localhost:8080/home
      */
     @RequestMapping("/home")
     public String home() {

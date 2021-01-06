@@ -21,6 +21,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/basic")
+//@CrossOrigin(origins = {"*"})//允许指定域名跨域本服务, 如果要上送cookie, 必须指定域名
 public class BasicRestController {
 
     private Logger logger = LoggerFactory.getLogger(getClass());

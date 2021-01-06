@@ -24,7 +24,7 @@ public class BasicRestController {
 
     /**
      * Rest Sample
-     * http://localhost:8000?param=hello
+     * http://localhost:8080?param=hello
      */
     @RequestMapping({"", "/"})
     public Map<String, Object> get(@RequestParam(required = false) String param) {

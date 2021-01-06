@@ -9,17 +9,46 @@ server:
   tomcat:
     ## TODO [重要]指定tomcat的basedir, 用于临时文件, 该目录需要创建.
     basedir: E:/__Temp/tomcat/tmp
-    max-threads: 200
     accept-count: 200
     max-connections: 2000
-    min-spare-threads: 10
-    max-http-post-size: 10485760
+    max-http-form-post-size: 10485760
+    threads:
+      max: 200
+      min-spare: 10
+#  compression:
+#    enabled: true
+#    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+#    min-response-size: 2048
+
+## tomcat for springboot 2.2-
+#server:
+#  port: 8000
+#  address: 0.0.0.0
+#  tomcat:
+#    basedir: E:/__Temp/tomcat/tmp
+#    max-threads: 200
+#    accept-count: 200
+#    max-connections: 2000
+#    min-spare-threads: 10
+#    max-http-post-size: 10485760
 #  compression:
 #    enabled: true
 #    mime-types: application/json,application/xml,text/html,text/xml,text/plain
 #    min-response-size: 2048
 
 ## undertow
+#server:
+#  port: 8000
+#  address: 0.0.0.0
+#  undertow:
+#    buffer-size: 4096
+#    direct-buffers: true
+#    max-http-post-size: 10485760
+#    threads:
+#      io: 4
+#      worker: 256
+
+## undertow for springboot 2.2-
 #server:
 #  port: 8000
 #  address: 0.0.0.0
