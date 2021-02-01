@@ -113,7 +113,7 @@ public class BootApplication implements LambdaBuildable {
                         securities.addMethod("SEARCH");
                         securities.addMethod("PROPFIND");
                         securities.addMethod("COPY");
-                        securities.addMethod("OPTIONS");
+                        securities.addMethod("OPTIONS"); // CORS 跨域有用
                         securities.addMethod("PUT");
                         return securities;
                     }));
@@ -151,7 +151,7 @@ public class BootApplication implements LambdaBuildable {
 //                                        .addHttpMethod("SEARCH")
 //                                        .addHttpMethod("PROPFIND")
 //                                        .addHttpMethod("COPY")
-//                                        .addHttpMethod("OPTIONS")
+//                                        .addHttpMethod("OPTIONS") // CORS 跨域有用
 //                                        .addHttpMethod("PUT")
 //                        )
 //                );

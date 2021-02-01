@@ -44,7 +44,7 @@ public class __application_class__ implements LambdaBuildable {
                         securities.addMethod("SEARCH");
                         securities.addMethod("PROPFIND");
                         securities.addMethod("COPY");
-                        securities.addMethod("OPTIONS");
+                        securities.addMethod("OPTIONS"); // CORS 跨域有用
                         securities.addMethod("PUT");
                         return securities;
                     }));
