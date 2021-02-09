@@ -1,5 +1,6 @@
 package com.github.shepherdviolet.webdemo;
 
+import com.alicp.jetcache.autoconfigure.JetCacheAutoConfiguration;
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
@@ -18,9 +19,10 @@ import sviolet.slate.common.util.common.LambdaBuildable;
  */
 @SpringBootApplication(
         //这个方法只能排除spring.factories里声明的自动配置类, 对@Import导入或者@Enable注解启用的无效!
-//        exclude = {
-//                DataSourceAutoConfiguration.class//排除数据库配置(可选)
-//        }
+        exclude = {
+                JetCacheAutoConfiguration.class, // 排除JetCache自动配置, 因为依赖了JetCache却不设置它, 启动会报错(而且我们自定义了GlobalCacheConfig也用不上它)
+//                DataSourceAutoConfiguration.class, // 排除数据库配置(可选)
+        }
 )
 //扫包路径, 等同于XML中的<context:component-scan base-package="com.aaa.**.xxx;com.bbb.**.xxx"/>
 @ComponentScan({
@@ -37,6 +39,7 @@ import sviolet.slate.common.util.common.LambdaBuildable;
         "com.github.shepherdviolet.webdemo.demo.mybatis.config",
         "com.github.shepherdviolet.webdemo.demo.micrometer.config",
         "com.github.shepherdviolet.webdemo.demo.schedule.config",
+        "com.github.shepherdviolet.webdemo.demo.redis.config",
 //        "com.github.shepherdviolet.webdemo.demo.sentinel.config",
 //        "com.github.shepherdviolet.webdemo.demo.apollo.config",
 //        "com.github.shepherdviolet.webdemo.demo.rocketmq.config",
@@ -86,7 +89,7 @@ public class BootApplication implements LambdaBuildable {
 
 //    /**
 //     * 配置Slate监听器(可选)
-//     * 依赖了com.github.shepherdviolet:slate-springboot后, 无需手动配置
+//     * 依赖了com.github.shepherdviolet:slate-common后, 无需手动配置
 //     */
 //    @Bean
 //    public ServletContextListener slateServletContextListener() {

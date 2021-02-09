@@ -209,6 +209,20 @@ slate:
 
 #####################################################################
 
+## Redis config, optional
+#redis:
+#  enabled: true
+#  uri: redis://127.0.0.1:6379
+#  #uri: redis://host1:6379,redis://host2:6379,redis://host3:6379
+#  #uri: redis://password@host1:6379,redis://password@host2:6379,redis://password@host3:6379
+#  stat-interval-minutes: 15
+#  key-prefix: spring-boot-demo-
+#  local:
+#    expire-after-write-millis: -1
+#    limit: -1
+
+#####################################################################
+
 # Other configs
 debug: false
 

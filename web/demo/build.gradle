@@ -52,6 +52,11 @@ dependencies {
 //    implementation 'com.oracle:ojdbc6:11.2.0.3'//oracle, 在jcenter有, 配合Datasource 4 / 5
 //    implementation 'org.apache.tomcat:tomcat-jdbc:9.0.17'//tomcat连接池, 配合Datasource 5
 
+    //Cache//////////////////////////////////////////////////////////////////////////////////////////////
+
+    //注意: 依赖了这个如果不设置它(yaml配置或者自定义GlobalCacheConfig), 启动会报错的, 我们这里直接排除了它的自动配置类解决(见BootApplication)
+    implementation "com.alicp.jetcache:jetcache-starter-redis-lettuce:$version_jetcache"
+
     //MQ//////////////////////////////////////////////////////////////////////////////////////////////
 
     implementation ("org.apache.rocketmq:rocketmq-client:$version_rocketmq") {

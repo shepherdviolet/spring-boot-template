@@ -58,10 +58,25 @@
         </rollingPolicy>
     </appender>
 
+    <appender name="StatFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logging.path}/${app.id}.stat</file>
+        <encoder>
+            <pattern>${logging.pattern}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logging.archive}/${app.id}.stat.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <!--<maxHistory>20</maxHistory>-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>200MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
 
 
     <logger name="com.github.shepherdviolet.webdemo.basic" level="${logging.level.basic:-INFO}" />
     <logger name="com.github.shepherdviolet.webdemo.demo" level="${logging.level.demos:-INFO}" />
+
     <logger name="sviolet" level="${logging.level.sviolet:-INFO}" />
     <logger name="com.github.shepherdviolet" level="${logging.level.sviolet:-INFO}" />
 
@@ -70,8 +85,12 @@
 
 
 
+    <logger name="sviolet.slate.common.x.monitor.txtimer.def" level="${logging.level.txtimer:-INFO}" additivity="false">
+        <appender-ref ref="StatFileAppender" />
+    </logger>
+
     <!--日志输出到指定文件 additivity=false表示日志只在自己指定的打印器输出, 不在root指定的打印器输出-->
-    <!--<logger name="com.special.package" level="${loggin.level.special:-DEBUG}" additivity="false">-->
+    <!--<logger name="com.special.package" level="${logging.level.special:-DEBUG}" additivity="false">-->
         <!--<appender-ref ref="SpecialFileAppender" />-->
     <!--</logger>-->
 
