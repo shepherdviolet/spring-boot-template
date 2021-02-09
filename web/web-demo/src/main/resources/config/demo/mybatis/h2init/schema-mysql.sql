@@ -3,6 +3,10 @@
 
 --注意: 加binary使大小写敏感
 
+-- 建用户(root权限)
+-- CREATE USER 'test'@'%' IDENTIFIED BY 'test';
+-- GRANT ALL ON test.* TO 'test'@'%';
+
 CREATE DATABASE IF NOT EXISTS test DEFAULT CHARACTER SET = utf8mb4;
 USE test;
 
