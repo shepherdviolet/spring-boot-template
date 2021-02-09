@@ -25,23 +25,27 @@ ext.project_creator = [
         // 需要创建的子工程清单
         'projects': [
                 // [KEY修改] 子工程路径
-                'web/web-new': [
+                'web/app': [
                         // [VALUE修改] 原型路径
-                        'archetype_path': 'web/web-archetype',
+                        'archetype_path': 'web/archetype',
                         'replace_context': [
                                 // [KEY/VALUE修改] 自定义参数
-                                'java_package': 'com.test.webnew',
-                                'application_class': 'WebNewApplication',
-                                'app_id': 'web-new'
+                                // 包路径
+                                'java_package': 'com.company.foo.app',
+                                // 主类名
+                                'application_class': 'FooApplication',
+                                // app.id
+                                'app_id': 'foo'
                         ]
                 ],
                 // [KEY修改] 子工程路径
-                'module/module-new': [
+                'module/core': [
                         // [VALUE修改] 原型路径
-                        'archetype_path': 'module/module-archetype',
+                        'archetype_path': 'module/archetype',
                         'replace_context': [
                                 // [KEY/VALUE修改] 自定义参数
-                                'java_package': 'com.test.modulenew'
+                                // 包路径
+                                'java_package': 'com.company.foo.core'
                         ]
                 ]
         ],

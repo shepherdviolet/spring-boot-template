@@ -2,7 +2,7 @@
 // 依赖, java工程只能用implementation, java-library工程能用api和implementation
 dependencies {
 
-    // <replace-by>     //implementation project(':module-???')
+    // <replace-by>     //implementation project(':foo-core')
     implementation project(':module-archetype')
 
     implementation "ch.qos.logback:logback-classic:$version_logback"

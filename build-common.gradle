@@ -183,9 +183,9 @@ configure(subprojects.findAll { it.PROJECT_GROUP in ['module'] }) {
 //
 //    dependencies {
 //        // 可选: 如果需要BOM, 则需要专门为scriptJar引入
-//        //scriptJar platform('com.github.shepherdviolet:thistle-bom:14.9-SNAPSHOT')
+//        //scriptJar platform('com.github.shepherdviolet:thistle-bom:21.0.0')
 //        // 文件所在JAR包
-//        scriptJar ('com.github.shepherdviolet:thistle-common:14.9-SNAPSHOT') { transitive = false }
+//        scriptJar ('com.github.shepherdviolet:thistle-common:21.0.0') { transitive = false }
 //    }
 //
 //    task copyScriptsFromJar(type: Copy) {

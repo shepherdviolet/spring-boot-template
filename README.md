@@ -2,11 +2,11 @@
 
 * 用于快速创建一个SpringBoot工程
 
-| 工程名 | 说明 |
-| ------ | ----- |
-| web-demo | 大量的SpringBoot使用示例 |
-| web-archetype | WEB子工程原型(Spring Boot) |
-| module-archetype | 模块子工程原型(Java Library) |
+| 目录 | 子工程名 | 说明 |
+| ------ | ----- | ----- |
+| web/demo | spring-boot-demo | 大量的SpringBoot使用示例 |
+| web/archetype | web-archetype | WEB子工程原型(Spring Boot) |
+| module/archetype | module-archetype | 模块子工程原型(Java Library) |
 
 <br>
 <br>
@@ -31,13 +31,13 @@ Startup a SpringBoot Gradle Project
 1.Clone spring-boot-template from remote
 2.Delete the original .git
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Enter new project name:new-project-name
+Enter new project name:foo
 Processing ...
-Cloning into 'new-project-name'...
+Cloning into 'foo'...
 ......
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Finished
-Read 'new-project-name\README.md' to create sub-project automatically
+Read 'foo\README.md' to create sub-project automatically
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 请按任意键继续. . .
 ```
@@ -46,10 +46,10 @@ Read 'new-project-name\README.md' to create sub-project automatically
 
 ### Linux环境新建工程
 
-* 命令行执行如下命令, 其中`new-project-name`为新工程名称, P.S. Windows环境用cmder也可以这么做
+* 命令行执行如下命令, 其中`foo`为新工程名称, P.S. Windows环境用cmder也可以这么做
 
 ```text
-curl -L https://raw.githubusercontent.com/shepherdviolet/spring-boot-template/master/extra/quickstart/springboot-startup.sh | sh -s new-project-name
+curl -L https://raw.githubusercontent.com/shepherdviolet/spring-boot-template/master/extra/quickstart/springboot-startup.sh | sh -s foo
 ```
 
 * 输入新工程名称, 等待新工程创建完毕
@@ -57,7 +57,7 @@ curl -L https://raw.githubusercontent.com/shepherdviolet/spring-boot-template/ma
 
 ### 其他环境新建工程(手动)
 
-* 克隆: `git clone https://github.com/shepherdviolet/spring-boot-template.git new-project-name`
+* 克隆: `git clone https://github.com/shepherdviolet/spring-boot-template.git foo`
 * 删除新工程目录下的`.git`(删除原来模板工程的版本数据)
 * Done!
 
@@ -74,27 +74,27 @@ ext.project_creator = [
         // 需要创建的子工程清单
         'projects': [
                 // [KEY修改] 子工程路径
-                'web/web-new': [
+                'web/app': [
                         // [VALUE修改] 原型路径
-                        'archetype_path': 'web/web-archetype',
+                        'archetype_path': 'web/archetype',
                         'replace_context': [
                                 // [KEY/VALUE修改] 自定义参数
                                 // 包路径
-                                'java_package': 'com.test.webnew',
+                                'java_package': 'com.company.foo.app',
                                 // 主类名
-                                'application_class': 'WebNewApplication',
+                                'application_class': 'FooApplication',
                                 // app.id
-                                'app_id': 'web-new'
+                                'app_id': 'foo'
                         ]
                 ],
                 // [KEY修改] 子工程路径
-                'module/module-new': [
+                'module/core': [
                         // [VALUE修改] 原型路径
-                        'archetype_path': 'module/module-archetype',
+                        'archetype_path': 'module/archetype',
                         'replace_context': [
                                 // [KEY/VALUE修改] 自定义参数
                                 // 包路径
-                                'java_package': 'com.test.modulenew'
+                                'java_package': 'com.company.foo.core'
                         ]
                 ]
         ]
@@ -110,12 +110,12 @@ apply from: 'gradle/utils/project-creator.gradle'
 
 ```text
 {
-  "web": [
-    "web-new"
-  ],
-  "module": [
-    "module-new"
-  ]
+  "web": {
+    "foo-app": "web/app"
+  },
+  "module": {
+    "foo-core": "module/core"
+  }
 }
 ```
 
@@ -139,7 +139,7 @@ gradlew bootJar
 * 启动参数按需设置
 
 ```text
-java -Dspring.profiles.active=linux -Denv=dev -Dlog.path=/your-path/logs -Dserver.tomcat.basedir=/your-path/tmp -jar your-project-name.jar
+java -Dspring.profiles.active=linux -Denv=dev -Dlog.path=/your-path/logs -Dserver.tomcat.basedir=/your-path/tmp -jar foo.jar
 ```
 
 <br>
