@@ -1,9 +1,9 @@
 {
-  "web": [
-    "web-demo",
-    "web-archetype"
-  ],
-  "module": [
-    "module-archetype"
-  ]
+  "web": {
+    "web-demo": "web/web-demo",
+    "web-archetype": "web/web-archetype"
+  },
+  "module": {
+    "module-archetype": "module/module-archetype"
+  }
 }

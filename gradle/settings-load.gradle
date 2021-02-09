@@ -2,10 +2,91 @@
 /*
  * [请勿修改] 在'settings.gradle'中, 解析'settings.json'中声明的子工程清单, 将它们加入gradle构建.
  *
- * 本脚本增加了组别的概念, 能够在Gradle脚本中指定组别进行通用配置(参考build-common.gradle). 另外, 本脚本支持子工程多层目录
- * 结构(Gradle默认子工程只能在根目录下). 当设置flatMode=true时, 子工程平铺在根目录下, 例如: project1/ project2/ project3/.
- * 当设置flatMode=false时, 子工程放在以组别命名的目录下, group1/project1 group1/project2 group2/project3. 这里要注意的是,
- * 子工程名全局唯一, 即使在不同的组别中, 也不允许重复.
+ * #####################################################################################################
+ *
+ * 子工程请配置在settings.json中
+ *
+ * 说明:
+ * 1.本脚本增加了组别的概念, 能够在Gradle脚本中指定组别进行通用配置(参考build-common.gradle)
+ * 2.本脚本支持子工程多层目录结构(Gradle默认子工程只能在根目录下)
+ * 3.本脚本支持子工程放在任意目录下(Gradle默认子工程名称为目录名)
+ *
+ * 注意:
+ * 1.子工程名全局唯一, 即使在不同的组别中, 也不允许重复
+ * 2.子工程相互依赖时, 使用"子工程名", 而不是目录名
+ * 3.子工程上传到Maven仓库时, 构建名默认是"子工程名"
+ *
+ * #####################################################################################################
+ *
+ * 子工程请配置在settings.json中, 格式如下:
+ *
+ *  {
+ *    "组别1": {
+ *      "子工程名1":"子工程1的文件路径",
+ *      "子工程名2":"子工程2的文件路径"
+ *    },
+ *    "组别2": {
+ *      "子工程名3":"子工程3的文件路径"
+ *    }
+ *  }
+ *
+ * #####################################################################################################
+ *
+ * 示例1: 子工程都在项目根目录下, 且子工程名称与文件路径一致
+ *
+ *  {
+ *    "group1": {
+ *      "project1":"project1",
+ *      "project2":"project2"
+ *    },
+ *    "group2": {
+ *      "project3":"project3"
+ *    }
+ *  }
+ *
+ * #####################################################################################################
+ *
+ * 示例2: 子工程都在项目根目录下, 但子工程名称与文件路径不一致
+ *
+ *  {
+ *    "group1": {
+ *      "project1":"dir1",
+ *      "project2":"dir2"
+ *    },
+ *    "group2": {
+ *      "project3":"dir3"
+ *    }
+ *  }
+ *
+ * #####################################################################################################
+ *
+ * 示例3: 子工程放在以组别命名的目录下
+ *
+ *  {
+ *    "group1": {
+ *      "project1":"group1/project1",
+ *      "project2":"group1/project2"
+ *    },
+ *    "group2": {
+ *      "project3":"group2/project3"
+ *    }
+ *  }
+ *
+ * #####################################################################################################
+ *
+ * 示例4: 子工程放在任意路径下
+ *
+ *  {
+ *    "group1": {
+ *      "project1":"dir1",
+ *      "project2":"dir2/dir3"
+ *    },
+ *    "group2": {
+ *      "project3":"dir4/dir5/dir6"
+ *    }
+ *  }
+ *
+ * #####################################################################################################
  */
 
 import groovy.json.JsonSlurper
@@ -25,28 +106,21 @@ try {
 
 // 遍历, 将子工程加入gradle构建
 projects.forEach({ groupKey, group ->
-    group.forEach({ module ->
+    group.forEach({ moduleName, modulePath ->
 
         // 子工程的名称全局唯一, 即使在不同的组别中, 也不允许重复
-        if (projectGroupMap.containsKey(module)) {
-            throw new GroovyRuntimeException("Duplicate project name '$module' in 'settings.json'")
+        if (projectGroupMap.containsKey(moduleName)) {
+            throw new GroovyRuntimeException("Duplicate project name '$moduleName' in 'settings.json'")
         }
 
         // 将子工程加入gradle构建
-        include "$module"
+        include "$moduleName"
 
         // 记录'工程->组别'映射关系
-        projectGroupMap["$module"] = groupKey
+        projectGroupMap["$moduleName"] = groupKey
 
         // Gradle默认只支持一层结构, 即子工程只能在根目录下. 这个方法能够突破限制, 修改子工程位置.
-        if (!ext.flatMode) {
-            project(":$module").projectDir = file("../$groupKey/$module")
-        }
-
-        // 检查模块目录是否存在
-        if (!project(":$module").projectDir.isDirectory()) {
-            throw new GroovyRuntimeException("Module directory '" + project(":$module").projectDir + "' is not exists (or not a directory)")
-        }
+        project(":$moduleName").projectDir = file("../$modulePath")
 
     })
 })
