@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 import sviolet.thistle.x.util.trace.Trace;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,13 +27,24 @@ public class BasicHandlerInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //路径
         String uri = request.getRequestURI();
-        //生成跟踪号
+
         if (!errorPath.equals(uri)) {
+            //生成跟踪号
             Trace.start();
+            //打印请求路径
+            logger.info("New request with URI: " + uri);
+        } else {
+            //请求处理异常, 进入异常处理, 打印日志
+            logger.info("To error handler: " + uri);
         }
-        //打印路径
-        logger.info("URI: " + uri);
+
         return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        //请求处理结束, 打印日志
+        logger.info("Request handled");
     }
 
 }
