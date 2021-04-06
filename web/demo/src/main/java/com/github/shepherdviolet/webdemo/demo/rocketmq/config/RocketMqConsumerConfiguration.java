@@ -19,7 +19,7 @@ import sviolet.slate.common.helper.rocketmq.consumer.EnableRocketMqHelper;
 @ComponentScan({
         "com.github.shepherdviolet.webdemo.demo.rocketmq.consumer",
 })
-@ConditionalOnExpression("${com.github.shepherdviolet.webdemo.demo.rocketmq.consumer:true}")
+@ConditionalOnExpression("${template.demo.rocketmq.consumer:true}")
 @EnableRocketMqHelper
 public class RocketMqConsumerConfiguration {
 

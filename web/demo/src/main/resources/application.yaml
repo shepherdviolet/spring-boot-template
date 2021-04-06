@@ -216,7 +216,7 @@ slate:
 #  #uri: redis://host1:6379,redis://host2:6379,redis://host3:6379
 #  #uri: redis://password@host1:6379,redis://password@host2:6379,redis://password@host3:6379
 #  stat-interval-minutes: 15
-#  key-prefix: spring-boot-demo-
+#  key-prefix: ${app.id}-
 #  local:
 #    expire-after-write-millis: -1
 #    limit: -1

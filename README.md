@@ -1,6 +1,7 @@
 # Spring Boot Gradle 工程模板
 
 * 用于快速创建一个SpringBoot工程
+* [Github Home](https://github.com/shepherdviolet/spring-boot-template)
 
 | 目录 | 子工程名 | 说明 |
 | ------ | ----- | ----- |

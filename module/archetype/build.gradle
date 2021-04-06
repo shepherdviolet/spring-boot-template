@@ -2,6 +2,8 @@
 // 依赖, java工程只能用implementation, java-library工程能用api和implementation
 dependencies {
 
-//    api "com.github.shepherdviolet:slate-common:$version_thistle_slate"
+    // 示例
+//    api "ch.qos.logback:logback-classic:$version_logback"
+//    api "com.github.shepherdviolet:slate-common"
 
 }

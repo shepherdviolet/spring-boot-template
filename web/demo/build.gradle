@@ -4,7 +4,9 @@ dependencies {
 
     //Import BOM/////////////////////////////////////////////////////////////////////////////////////////////
 
+    // 示例
 //    implementation platform(project(':my-bom'))
+//    implementation platform("com.github.shepherdviolet:thistle-bom:$version_thistle_slate")
 //    implementation platform("com.github.shepherdviolet:slate-bom:$version_thistle_slate")
 //    implementation enforcedPlatform("com.github.shepherdviolet:slate-bom:$version_thistle_slate")//强制覆盖手动依赖的版本
 
@@ -31,15 +33,16 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-aop:$version_spring_boot"
     implementation "org.springframework.boot:spring-boot-starter-actuator:$version_spring_boot"
     implementation "org.springframework.boot:spring-boot-starter-validation:$version_spring_boot" //Spring 2.3.3+ required
+    implementation "org.springframework.boot:spring-boot-starter-webflux:$version_spring_boot" //Override version from spring-boot-admin
 
     //Optional 3rd library/////////////////////////////////////////////////////////////////////////////
 
-    implementation "com.github.shepherdviolet:slate-helper:$version_thistle_slate"
-    implementation "com.github.shepherdviolet:slate-http-client:$version_thistle_slate"
-    implementation "com.github.shepherdviolet:thistle-trace:$version_thistle_slate"
+    implementation "com.github.shepherdviolet:slate-helper"
+    implementation "com.github.shepherdviolet:slate-http-client"
+    implementation "com.github.shepherdviolet:thistle-trace"
     implementation "com.alibaba:hessian-lite:$version_hessian_lite"
     implementation "com.google.code.gson:gson:$version_gson"
-    implementation ("com.alibaba:fastjson:$version_fastjson") { force = true }//Fix security bugs of fastjson
+    implementation ("com.alibaba:fastjson:$version_fastjson") { version { strictly it.version} }//Fix security bugs of fastjson
 
     //DB//////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -56,6 +59,7 @@ dependencies {
 
     //注意: 依赖了这个如果不设置它(yaml配置或者自定义GlobalCacheConfig), 启动会报错的, 我们这里直接排除了它的自动配置类解决(见BootApplication)
     implementation "com.alicp.jetcache:jetcache-starter-redis-lettuce:$version_jetcache"
+    implementation "io.lettuce:lettuce-core:$version_lettuce" // 低版本lettuce有问题, 用新版本
 
     //MQ//////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -63,7 +67,10 @@ dependencies {
         //特殊情况: 在这里SpringBootAdmin和RocketMQ的netty包有冲突, 要启用Admin得先把RocketMQ依赖的netty排除掉(错误:java.lang.NoSuchMethodError: io.netty.bootstrap.Bootstrap.config)
         exclude group: "io.netty"
     }
-//    implementation "org.apache.rocketmq:rocketmq-spring-boot-starter:$version_rocketmq_spring"//官方的工具库, 可选
+//    implementation ("org.apache.rocketmq:rocketmq-spring-boot-starter:$version_rocketmq_spring") { //官方的工具库, 可选
+//        //特殊情况: 在这里SpringBootAdmin和RocketMQ的netty包有冲突, 要启用Admin得先把RocketMQ依赖的netty排除掉(错误:java.lang.NoSuchMethodError: io.netty.bootstrap.Bootstrap.config)
+//        exclude group: "io.netty"
+//    }
 
     //Apollo///////////////////////////////////////////////////////////////////////////////////////////
 

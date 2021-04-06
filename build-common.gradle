@@ -27,15 +27,17 @@ configure(subprojects.findAll { it.PROJECT_GROUP == 'web' }) {
         //}
     }
 
-    // 示例: WEB工程通用依赖
-//    dependencies {
+    // WEB工程通用依赖
+    dependencies {
 //        // Import BOMs
-//        implementation platform(project(':my-bom'))
-//        implementation platform("com.github.shepherdviolet:slate-bom:$version_thistle_slate")
-//        implementation enforcedPlatform("com.github.shepherdviolet:slate-bom:$version_thistle_slate")//强制覆盖手动依赖的版本
-//        // Common dependencies
-//        implementation "com.github.shepherdviolet:slate-common:$version_thistle_slate"
-//    }
+        implementation platform("com.github.shepherdviolet:thistle-bom:$version_thistle_slate")
+        implementation platform("com.github.shepherdviolet:slate-bom:$version_thistle_slate")
+//        implementation platform(project(':my-bom')) // Project BOM
+//        implementation enforcedPlatform("com.github.shepherdviolet:slate-bom:$version_thistle_slate") // 强制覆盖手动依赖的版本
+
+        // Common dependencies
+//        implementation "ch.qos.logback:logback-classic:$version_logback"
+    }
 
 }
 
@@ -51,15 +53,17 @@ configure(subprojects.findAll { it.PROJECT_GROUP in ['module'] }) {
     // encoding
     [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
 
-    // 示例: 库工程通用依赖
-//    dependencies {
+    // 库工程通用依赖
+    dependencies {
 //        // Import BOMs
-//        api platform(project(':my-bom'))
-//        api platform("com.github.shepherdviolet:slate-bom:$version_thistle_slate")
-//        api enforcedPlatform("com.github.shepherdviolet:slate-bom:$version_thistle_slate")//强制覆盖手动依赖的版本
-//        // Common dependencies
-//        api "com.github.shepherdviolet:slate-common:$version_thistle_slate"
-//    }
+        api platform("com.github.shepherdviolet:thistle-bom:$version_thistle_slate")
+        api platform("com.github.shepherdviolet:slate-bom:$version_thistle_slate")
+//        api platform(project(':my-bom')) // Project BOM
+//        api enforcedPlatform("com.github.shepherdviolet:slate-bom:$version_thistle_slate") // 强制覆盖手动依赖的版本
+
+        // Common dependencies
+//        api "ch.qos.logback:logback-classic:$version_logback"
+    }
 
 }
 

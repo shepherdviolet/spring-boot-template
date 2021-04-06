@@ -34,9 +34,8 @@ buildscript {
         maven { url 'https://maven.aliyun.com/repository/central'} // 阿里云镜像加速, 别用/nexus/content/groups/public, 可选
         maven { url 'https://plugins.gradle.org/m2/' }
         mavenCentral()
-//        jcenter()
 //        maven { url 'https://jitpack.io' }
-//        maven { url 'http://repo.spring.io/plugins-release/' }
+//        maven { url 'http://repo.spring.io/plugins-release/'; allowInsecureProtocol true }//Spring插件库, 允许不安全的协议
 
         // 示例: 某些依赖从指定仓库获取, 可选
 //        exclusiveContent {
@@ -73,7 +72,6 @@ allprojects {
         maven { url 'file:C:/m2repository/repository' } // 本地仓库, 可选
         maven { url 'https://maven.aliyun.com/repository/central'} // 阿里云镜像加速, 别用/nexus/content/groups/public, 可选
         mavenCentral() // https://repo1.maven.org/maven2/
-        jcenter() // http://jcenter.bintray.com/
         //maven { url 'https://jitpack.io' }
 
         // 示例: 某些依赖从指定仓库获取, 可选

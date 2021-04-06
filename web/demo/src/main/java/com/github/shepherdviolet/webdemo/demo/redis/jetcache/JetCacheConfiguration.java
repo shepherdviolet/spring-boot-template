@@ -88,7 +88,7 @@ public class JetCacheConfiguration {
      * Lettuce客户端
      * 避免Redis集群拓扑变化时报出错误: Connection to ?:? not allowed. This connection point is not known in the cluster view
      * 开启集群拓扑刷新(topologyRefreshOptions): 当服务端拓扑发生变化时, 短时间内还会出现连接错误, 刷新后才恢复
-     * 关闭集群节点验证(validateClusterNodeMembership): 当服务端拓扑发生变化时, 由于不验证, 能够更快恢复(但是, 官方默认开启验证, 应该是有某种原因的, 所以这里默认不用这个方案)
+     * 快速失败(disconnectedBehavior REJECT_COMMANDS): 当网络波动/服务端拓扑变化, 设置快速失败时会抛出异常, 不设置快速失败会挂起等待超时
      */
     @Bean(name = "lettuceRedisClient")
     @ConditionalOnMissingBean(name = "lettuceRedisClient")
@@ -97,20 +97,17 @@ public class JetCacheConfiguration {
         if (uriList.size() == 1) {
             RedisClient client = RedisClient.create(uriList.get(0));
             client.setOptions(ClientOptions.builder()
-                    .disconnectedBehavior(ClientOptions.DisconnectedBehavior.REJECT_COMMANDS)
+                    .disconnectedBehavior(ClientOptions.DisconnectedBehavior.REJECT_COMMANDS) // 快速失败
                     .build());
             return client;
         } else {
             RedisClusterClient client = RedisClusterClient.create(uriList);
             client.setOptions(ClusterClientOptions.builder()
-                    .disconnectedBehavior(ClientOptions.DisconnectedBehavior.REJECT_COMMANDS)
+                    .disconnectedBehavior(ClientOptions.DisconnectedBehavior.REJECT_COMMANDS) // 快速失败
                     .topologyRefreshOptions(ClusterTopologyRefreshOptions.builder()
-                            .enablePeriodicRefresh()//开启定期刷新, 默认关闭
-                            .refreshPeriod(Duration.ofSeconds(15))//刷新间隔, 15秒, 默认1分钟
-                            .enableAdaptiveRefreshTrigger()//开启拓扑刷新, 默认关闭
-                            .enableAllAdaptiveRefreshTriggers()//启用全部拓扑刷新定时器
+                            .enablePeriodicRefresh(Duration.ofSeconds(15)) // 开启定期刷新, 默认关闭; 更新间隔15秒, 默认60秒
+                            .enableAllAdaptiveRefreshTriggers() // 启用全部拓扑刷新定时器
                             .build())
-//                    .validateClusterNodeMembership(false)//直接关闭集群节点检查, 默认true(避免Redis集群拓扑变化时报出错误: Connection to ?:? not allowed. This connection point is not known in the cluster view)
                     .build());
             return client;
         }
