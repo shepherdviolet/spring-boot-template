@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>File Upload Demo</title>
+        <meta name="keywords" content="file upload,spring boot"/>
+        <meta name="description" content="File upload demo"/>
+        <meta name="content-type" content="text/html; charset=UTF-8"/>
+    </head>
+
+    <body>
+        <form enctype="multipart/form-data" method="post" action="/common/fileupload/upload">
+            文件上传:<br/>
+            <input type="file" name="file"/><br/>
+            <input type="hidden" name="param1" value="value1"/>
+            <input type="submit" value="Upload"/>
+        </form>
+    </body>
+</html>

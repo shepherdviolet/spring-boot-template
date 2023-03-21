@@ -1,0 +1,29 @@
+
+// 依赖, java工程只能用implementation, java-library工程能用api和implementation
+dependencies {
+
+    // <replace-by>     //implementation project(':foo-core')
+    implementation project(':module-archetype')
+
+    implementation "ch.qos.logback:logback-classic:$version_logback"
+    implementation "org.slf4j:jcl-over-slf4j:$version_slf4j"
+    implementation "org.springframework.boot:spring-boot-starter-web:$version_spring_boot"
+    implementation "org.springframework.boot:spring-boot-starter-thymeleaf:$version_spring_boot"
+    implementation "org.springframework.boot:spring-boot-starter-aop:$version_spring_boot"
+    implementation "org.springframework.boot:spring-boot-starter-actuator:$version_spring_boot"
+    implementation "org.springframework.boot:spring-boot-starter-validation:$version_spring_boot" //Spring 2.3.3+ required
+
+    implementation "com.github.shepherdviolet.glacimon:glacispring-common"
+    implementation "com.github.shepherdviolet.glacimon:glacijava-trace"
+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:$version_spring_boot"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test:$version_spring_boot"
+
+}
+
+// 全局排除依赖
+configurations {
+    // 排除log4j的依赖: log4j 2.0-2.14 存在严重漏洞 TB-2021-0134
+    all*.exclude group: 'org.apache.logging.log4j'
+}

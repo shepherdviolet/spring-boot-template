@@ -1,12 +1,8 @@
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 脚本
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// [请勿修改] 'build.gradle'的初始化脚本
-apply from: 'gradle/build-init.gradle'
-
-
+// Gradle Advanced Modularity | Gradle 高级模块化
+// [DO NOT MODIFY] Initialization script before build
+// [请勿修改] 构建前的初始化脚本
+apply from: 'gradle/advanced-modularity/before-build.gradle'
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 配置
@@ -15,56 +11,88 @@ apply from: 'gradle/build-init.gradle'
 // Gradle构建脚本本身的配置
 buildscript {
 
-	// 加载自定义properties文件
-	ext {
-		// 读取配置文件
-		def customProperties = new Properties()
-		file("gradle-version.properties").withInputStream { stream -> customProperties.load(stream) }
-//		file("gradle-local.properties").withInputStream { stream -> customProperties.load(stream) }
+    // 加载自定义properties文件
+    ext {
+        // 读取配置文件
+        def customProperties = new Properties()
+        file("gradle-version.properties").withInputStream { stream -> customProperties.load(stream) }
+//        file("gradle-local.properties").withInputStream { stream -> customProperties.load(stream) }
 
-		// 将配置放入公共配置, 在gradle中可直接引用
-		customProperties.each {
-			rootProject.extensions.add("$it.key", it.value)
-		}
-	}
+        // 将配置放入公共配置, 在gradle中可直接引用
+        customProperties.each {
+            rootProject.extensions.add("$it.key", it.value)
+        }
+    }
 
-	// 构建脚本用的依赖仓库
-	repositories {
-		maven { url 'file:C:/m2repository/repository' }
-		maven { url 'https://plugins.gradle.org/m2/' }
-		mavenCentral()
-//		jcenter()
-//		maven { url 'https://jitpack.io' }
-//		maven { url 'http://repo.spring.io/plugins-release/' }
-	}
+    // 构建脚本用的依赖仓库
+    repositories {
+        maven { url 'file:C:/m2repository/repository' } // 本地仓库, 可选
+        maven { url 'https://maven.aliyun.com/repository/central'} // 阿里云镜像加速, 别用/nexus/content/groups/public, 可选
+        maven { url 'https://plugins.gradle.org/m2/' }
+        mavenCentral()
+//        maven { url 'https://jitpack.io' }
+//        maven { url 'http://repo.spring.io/plugins-release/'; allowInsecureProtocol true }//Spring插件库, 允许不安全的协议
 
-	// 构建脚本用的依赖(插件)
-	dependencies {
-		classpath "org.springframework.boot:spring-boot-gradle-plugin:$version_spring_boot"
-		classpath "com.bmuschko:gradle-docker-plugin:$version_docker"// Docker
-//		classpath "gradle.plugin.com.thinkimi.gradle:mybatis-generator-plugin:2.1.2"// Mybatis Generator
-	}
+        // 示例: 某些依赖从指定仓库获取, 可选
+//        exclusiveContent {
+//            forRepository {
+//                maven {
+//                    url "http://localhost:8081/nexus/content/repositories/reponame/"
+//                }
+//            }
+//            filter {
+//                // 符合条件的依赖只从指定仓库获取, 例如公司私有仓库的私有依赖
+//                // includeGroup / includeGroupByRegex / includeModule[ByRegex] / includeVersion[ByRegex]
+//                includeGroup "com.mypackage"
+//            }
+//        }
+    }
+
+    // 构建脚本用的依赖(插件)
+    dependencies {
+        // DO NOT MODIFY
+        classpath localGroovy() // [Gradle Advanced Modularity] Depends on groovy, avoid importing groovy package errors
+        // Plugins
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$version_spring_boot"
+        classpath "com.bmuschko:gradle-docker-plugin:$version_docker"// Docker
+//        classpath "gradle.plugin.com.thinkimi.gradle:mybatis-generator-plugin:2.1.2"// Mybatis Generator
+    }
 
 }
 
 // 所有工程通用配置
 allprojects {
 
-	group project_group_id
-	version project_version
+    group project_group_id
+    version project_version
 
-	// 工程的依赖仓库
-	repositories {
-		maven { url 'file:C:/m2repository/repository' } // 本地仓库, 可选
-		mavenCentral() // https://repo1.maven.org/maven2/
-		jcenter() // http://jcenter.bintray.com/
-		//maven { url 'https://jitpack.io' }
-	}
+    // 工程的依赖仓库
+    repositories {
+        maven { url 'file:C:/m2repository/repository' } // 本地仓库, 可选
+        maven { url 'https://maven.aliyun.com/repository/central'} // 阿里云镜像加速, 别用/nexus/content/groups/public, 可选
+        mavenCentral() // https://repo1.maven.org/maven2/
+        //maven { url 'https://jitpack.io' }
+        //jcenter()
 
-	// 禁用Gradle6.0开始生成的module文件(类似于Maven的POM)
-	tasks.withType(GenerateModuleMetadata) {
-		enabled = false
-	}
+        // 示例: 某些依赖从指定仓库获取, 可选
+//        exclusiveContent {
+//            forRepository {
+//                maven {
+//                    url "http://localhost:8081/nexus/content/repositories/reponame/"
+//                }
+//            }
+//            filter {
+//                // 符合条件的依赖只从指定仓库获取, 例如公司私有仓库的私有依赖
+//                // includeGroup / includeGroupByRegex / includeModule[ByRegex] / includeVersion[ByRegex]
+//                includeGroup "com.mypackage"
+//            }
+//        }
+    }
+
+    // 禁用Gradle6.0开始生成的module文件(类似于Maven的POM)
+    tasks.withType(GenerateModuleMetadata) {
+        enabled = false
+    }
 
 }
 

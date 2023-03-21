@@ -1,0 +1,348 @@
+
+############################################################################################################
+
+## Application name & apollo app id & logback context name
+app:
+  id: spring-boot-demo
+
+## Apollo
+#apollo:
+#  bootstrap:
+#    ## Will inject 'application' namespace in spring bootstrap phase
+#    enabled: true
+#    ## Put apollo initialization before logging system initialization (e.g. logback.xml)
+#    eagerLoad:
+#      enabled: true
+#    ## Namespaces
+#    namespaces: application,mynamespace
+
+## Spring
+spring:
+  application:
+    name: ${app.id}
+  ## default profile
+  profiles:
+    active: win
+  ## Misc config
+#  main:
+#    allow-bean-definition-overriding: true
+#    lazy-initialization: true
+  ## Jackson config
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: non_null
+  ## i18n message
+  messages:
+    basename: msg/messages,msg/errors
+    encoding: UTF-8
+  ## MVC config for web app
+  mvc:
+    view:
+      prefix: /
+      suffix: .html
+  ## Security, Optional, NOTE THAT if the authorization logic is customized (see SecurityConfiguration), this config will be invalid
+#  security:
+#    user:
+#      name: "user"
+#      password: "user"
+  ## Spring Boot Admin config
+  boot:
+    admin:
+      ## Config in server, admin url adjusted from http://localhost:port to http://localhost:port/admin
+      context-path: /admin
+      ## Config in client
+      client:
+        ## The url of admin server, admin url adjusted from http://localhost:port to http://localhost:port/admin
+        url: http://localhost:${server.port:8000}/admin
+        ## The information of client
+        instance:
+          service-base-url: http://localhost:${server.port:8000}/
+          service-path: /
+  ## [Datasource 1] H2 (Do not exclude DataSourceAutoConfiguration!)
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:h2db1
+    username: sa
+    password: sa
+    schema: classpath:config/demo/mybatis/h2init/schema.sql
+    data: classpath:config/demo/mybatis/h2init/data.sql
+    initialization-mode: always
+  ## [Datasource 2] Mysql 8 (Do not exclude DataSourceAutoConfiguration!)
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    #In startup bat: spring.datasource.url="jdbc:mysql://..."
+#    url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&cachePrepStmts=false&serverTimezone=Hongkong
+#    username: test
+#    password: test
+#    initial-size: 5
+#    min-idle: 5
+#    max-idle: 50
+#    max-active: 50
+#    max-wait: 5000
+#    validation-query: SELECT 1 FROM DUAL
+  ## [Datasource 3] Mysql 5 (Do not exclude DataSourceAutoConfiguration!)
+#  datasource:
+#    driver-class-name: com.mysql.jdbc.Driver
+#    #In startup bat: spring.datasource.url="jdbc:mysql://..."
+#    url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false
+#    username: test
+#    password: test
+#    initial-size: 5
+#    min-idle: 5
+#    max-idle: 50
+#    max-active: 50
+#    max-wait: 5000
+#    validation-query: SELECT 1 FROM DUAL
+  ## [Datasource 4] Oracle (Do not exclude DataSourceAutoConfiguration!)
+#  datasource:
+#    driver-class-name: oracle.jdbc.OracleDriver
+#    url: jdbc:oracle:thin:@127.0.0.1:1521:ORCL
+#    username: sviolet
+#    password: sviolet
+#    initial-size: 5
+#    min-idle: 5
+#    max-idle: 50
+#    max-active: 50
+#    max-wait: 5000
+#    validation-query: SELECT 1 FROM DUAL
+  ## [Datasource 5] Oracle with org.apache.tomcat:tomcat-jdbc (Do not exclude DataSourceAutoConfiguration!)
+#  datasource:
+#    type: org.apache.tomcat.jdbc.pool.DataSource
+#    driver-class-name: oracle.jdbc.driver.OracleDriver
+#    url: jdbc:oracle:thin:@127.0.0.1:1521:ORCL
+#    username: sviolet
+#    password: sviolet
+#    tomcat:
+#      initial-size: 5
+#      min-idle: 5
+#      max-idle: 50
+#      max-active: 50
+#      max-wait: 10000
+#      time-between-eviction-runs-millis: 30000
+#      min-evictable-idle-time-millis: 1800000
+#      validation-query: select 1 from dual
+#      test-while-idle: true
+#      test-on-borrow: true
+  ## [Datasource 6] Mysql 8 + com.alibaba:druid-spring-boot-starter (Do not exclude DataSourceAutoConfiguration!)
+#  datasource:
+#    druid:
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+#      url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&cachePrepStmts=false&serverTimezone=Hongkong
+#      username: test
+#      password: test
+#      initial-size: 5
+#      min-idle: 5
+#      max-active: 50
+#      max-wait: 5000
+#      validation-query: SELECT 1 FROM DUAL
+#      test-on-borrow: false
+#      test-on-return: false
+#      test-while-idle: true
+#      time-between-eviction-runs-millis: 60000
+#      min-evictable-idle-time-millis: 180000
+  ## [Datasource 7] Multi-Datasource: Mysql 8 + com.alibaba:druid-spring-boot-starter (Do not exclude DataSourceAutoConfiguration!)
+  ##               See --> DruidMultiDataSourceConfiguration
+#  datasource:
+#    druid:
+#      datasource1:
+#        driver-class-name: com.mysql.cj.jdbc.Driver
+#        url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&cachePrepStmts=false&serverTimezone=Hongkong
+#        username: test
+#        password: test
+#        initial-size: 5
+#        min-idle: 5
+#        max-active: 50
+#        max-wait: 5000
+#        validation-query: SELECT 1 FROM DUAL
+#        test-on-borrow: false
+#        test-on-return: false
+#        test-while-idle: true
+#        time-between-eviction-runs-millis: 60000
+#        min-evictable-idle-time-millis: 180000
+#      datasource2:
+#        driver-class-name: com.mysql.cj.jdbc.Driver
+#        url: jdbc:mysql://127.0.0.1:3306/test2?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&cachePrepStmts=false&serverTimezone=Hongkong
+#        username: test2
+#        password: test2
+#        initial-size: 5
+#        min-idle: 5
+#        max-active: 50
+#        max-wait: 5000
+#        validation-query: SELECT 1 FROM DUAL
+#        test-on-borrow: false
+#        test-on-return: false
+#        test-while-idle: true
+#        time-between-eviction-runs-millis: 60000
+#        min-evictable-idle-time-millis: 180000
+  ## H2 Console For Test, Set 'JDBC URL' to 'jdbc:h2:mem:h2db1' when login
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2-console
+#      settings:
+#        web-allow-others: true
+  ## Force Http Encoding
+#  http:
+#    encoding:
+#      enabled: true
+#      charset: UTF-8
+#      force: true
+  ## Sentinel client, https://github.com/alibaba/spring-cloud-alibaba/wiki/Sentinel, DefaultLog: ${user.home}/logs/csp
+#  cloud:
+#    sentinel:
+#      enabled: true
+#      transport:
+#        ## dashboard address
+#        dashboard: localhost:60000
+#        ## client will listen this port to receive control command, Port conflicts will automatically avoid
+#        port: 60001
+#        ## Used to let the dashboard find itself. For Linux environment, please set the host name and host IP if you want to get the client-ip automatically.
+#        #client-ip: 127.0.0.1
+#      #metric:
+#        #file-single-size: 52428800
+#        #file-total-count: 6
+#      #log:
+#        #dir: logs/
+  ## Kafka: https://docs.spring.io/spring-kafka/docs/current/reference/html/#getting-started, 参数详见笔记
+#  kafka:
+#    bootstrap-servers: localhost:9092
+#    consumer:
+#      group-id: DemoConsumerGroup
+#      auto-offset-reset: earliest
+#      enable-auto-commit: true
+#    listener:
+#      concurrency: 1 # 默认消费者线程数, 注意Kafka不支持一个Partition被多线程并发消费, 分区数必须大于等于消费者线程数
+
+############################################################################################################
+
+## Mybatis config
+mybatis:
+  mapper-locations: classpath:config/demo/mybatis/mapper/*.xml
+  config-location: classpath:config/demo/mybatis/mybatis-config.xml
+
+## Mybatis PageHelper config (com.github.pagehelper:pagehelper-spring-boot-starter)
+pagehelper:
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+  helper-dialect: h2
+#  helper-dialect: oracle
+#  helper-dialect: mysql
+
+############################################################################################################
+
+## Actuator config, For Prometheus / Spring Boot Admin, Config in client
+## Endpoints: http://localhost:8000/actuator/{health,prometheus,...}
+management:
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    export:
+      prometheus:
+        enabled: true
+        descriptions: true
+        step: 1m
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+#        exclude: info,shutdown
+  endpoint:
+    health:
+      show-details: always
+    beans:
+      cache:
+        time-to-live: 10s
+    shutdown:
+      enabled: true
+
+## Actuator config: custom information to /actuator/info, optional
+info:
+  comment: "I'm spring boot demo"
+
+############################################################################################################
+
+## Glacispring config
+glacispring:
+  common:
+    servlet-context-listener-enabled: true
+#  helper:
+#    rocketmq:
+#      namesrv: host1:9876;host2:9876
+#      print-message-when-exception: true
+#      print-message-when-reconsume: true
+#      default-charset: UTF-8
+#    ez-sentinel:
+#      rule-data: classpath:config/demo/sentinel/rules.json
+#  httpclient:
+#    enabled: true
+#    apollo-support: true
+#  httpclients:
+#    default:
+#      hosts: http://127.0.0.1:8000,http://127.0.0.1:8001
+#      verbose-log: true
+
+############################################################################################################
+
+## RocketMQ config, rocketmq-spring-boot-starter, optional
+## https://github.com/apache/rocketmq-spring
+#rocketmq:
+#  name-server: host1:9876;host2:9876
+#  producer:
+#    group: starter-producer
+#    send-message-timeout: 30000
+#    compress-message-body-threshold: 4096
+#    max-message-size: 65535
+#    retry-times-when-send-async-failed: 0
+#    retry-next-server: true
+#    retry-times-when-send-failed: 2
+
+############################################################################################################
+
+## Redis config, optional
+#redis:
+#  enabled: true
+#  uri: redis://127.0.0.1:6379
+#  #uri: redis://host1:6379,redis://host2:6379,redis://host3:6379
+#  #uri: redis://password@host1:6379,redis://password@host2:6379,redis://password@host3:6379
+#  stat-interval-minutes: 15
+#  key-prefix: ${app.id}-
+#  local:
+#    expire-after-write-millis: -1
+#    limit: -1
+
+############################################################################################################
+
+## Log config
+## Logback指定日志配置文件 (自定义的配置文件不要叫logback-test.xml/logback.xml, 它们会用默认方式初始化, 对Spring支持不好)
+#logging:
+#  config: classpath:/logback-my.xml
+
+## Spring debug log
+debug: false
+
+############################################################################################################
+
+
+#### 关于配置文件/配置参数的优先级 #############################################################################
+### 说明 ####################################################################################################
+#  1.yaml和yml一样
+#  2.bootstrap配置文件: SpringCloud专属, 不可被覆盖; 在SpringCloud中, 有两种上下文(bootstrap父上下文/application子上下文),
+#    bootstrap文件被前者加载, application被后者加载, 前者优先级高
+### 优先级顺序 (最上面优先级最高, 同样的参数优先级高的生效) #######################################################
+#  -Dxxx=xxx (启动参数)
+#  ./config/bootstrap.yml (SpringCloud专属)
+#  ./config/application.properties
+#  ./config/application.yml
+#  ./bootstrap.yml (SpringCloud专属)
+#  ./application.properties
+#  ./application.yml
+#  classpath:config/bootstrap.yml (SpringCloud专属)
+#  classpath:config/application.properties
+#  classpath:config/application.yml (很奇怪如果放了config/application.yaml文件, IDEA会识别不了yaml, 导致编辑无提示)
+#  classpath:bootstrap.yml (SpringCloud专属)
+#  classpath:application.properties
+#  classpath:application.yml
+#  @PropertySource或PropertySourcesPlaceholderConfigurer加载的配置
+

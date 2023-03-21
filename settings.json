@@ -1,9 +1,9 @@
 {
-  "web": [
-    "web-demo",
-    "web-archetype"
-  ],
-  "module": [
-    "module-archetype"
-  ]
+  "web": {
+    "spring-boot-demo": "web/demo",
+    "web-archetype": "web/archetype"
+  },
+  "module": {
+    "module-archetype": "module/archetype"
+  }
 }

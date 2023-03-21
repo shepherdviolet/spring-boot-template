@@ -1,0 +1,106 @@
+
+## Logback (get by springProperty label in logback.xml) #############################################################
+
+
+## Log, path example: ${user.home:/tmp}/logs
+log:
+  pattern: '%d %X{_trace_id_:-0000000000000000000000} %-5p %t %c{40} %L: %m%n'
+  path: 'E:/__Temp/tomcat/logs/'
+  archive-path: '${log.path}/archive'
+  level:
+    console: 'ON'
+    root: INFO
+    basic: DEBUG
+    demos: DEBUG
+    sviolet: INFO
+    txtimer: INFO
+    httpinspect: DEBUG
+
+
+## Web Container ####################################################################################################
+
+
+# Undertow does not support static resource loading (like js img), Use Tomcat instead if you want
+# Undertow不支持静态资源加载(例如 js img), 需要的话改用Tomcat
+
+## tomcat
+server:
+  port: 8000
+  address: 0.0.0.0
+  tomcat:
+    ## TODO [重要]指定tomcat的basedir, 用于临时文件, 该目录需要创建.
+    basedir: E:/__Temp/tomcat/tmp
+    accept-count: 200
+    max-connections: 2000
+    max-http-form-post-size: 10485760
+    threads:
+      max: 200
+      min-spare: 10
+#  compression:
+#    enabled: true
+#    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+#    min-response-size: 2048
+
+## tomcat for springboot 2.2-
+#server:
+#  port: 8000
+#  address: 0.0.0.0
+#  tomcat:
+#    basedir: E:/__Temp/tomcat/tmp
+#    max-threads: 200
+#    accept-count: 200
+#    max-connections: 2000
+#    min-spare-threads: 10
+#    max-http-post-size: 10485760
+#  compression:
+#    enabled: true
+#    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+#    min-response-size: 2048
+
+## undertow
+#server:
+#  port: 8000
+#  address: 0.0.0.0
+#  undertow:
+#    buffer-size: 4096
+#    direct-buffers: true
+#    max-http-post-size: 10485760
+#    threads:
+#      io: 4
+#      worker: 256
+
+## undertow for springboot 2.2-
+#server:
+#  port: 8000
+#  address: 0.0.0.0
+#  undertow:
+#    io-threads: 4
+#    worker-threads: 256
+#    buffer-size: 4096
+#    direct-buffers: true
+#    max-http-post-size: 10485760
+
+## tomcat SSL ###############################################################################################
+## 生成私钥: openssl genrsa -out private_key.pem 2048
+## 申请证书: openssl req -new -key private_key.pem -out cert_req.csr
+## 颁发根证书: openssl x509 -req -days 3650 -in root_cert_req.csr -signkey root_private_key.pem -out root_cert.crt
+## 颁发CA/应用证书: openssl ca -days 3650 -in cert_req.csr -out cert.crt -cert root_cert.crt -keyfile root_private_key.pem
+## CA/应用证书转PEM: openssl x509 -in cert.crt -out cert.pem -outform PEM
+## PEM证书链+私钥转PKCS12: cat app-cert.pem ca-cert.pem root-cert.pem > cert-chain.pem
+##                      openssl pkcs12 -export -out keystore.pfx -inkey app-private-key.pem -in cert-chain.pem
+## PEM证书存入JKS: 可反复执行存入多张: keytool -importcert -noprompt -alias 1 -file ca_cert.pem -keystore truststore.jks -storepass 123456
+##                                  keytool -importcert -noprompt -alias 2 -file root_cert.pem -keystore truststore.jks -storepass 123456
+#############################################################################################################
+#server:
+#  ssl:
+    ## 开启单向SSL: 配置服务端证书链, key-store推荐PKCS12格式, openssl生成PEM格式后转成PKCS12. 另外, key-store-type还支持JKS格式.
+#    key-store: classpath:certs/server_keystore.pfx
+#    key-store-password: 123456
+#    key-alias: 1
+#    key-store-type: PKCS12
+    ## 开启双向SSL(验证客户端证书): need必须/want可验/none不验, 配置信任链, trust-store必须用JKS格式, openssl生成PEM格式后要用keytool存入JKS(支持多张)
+#    client-auth: need
+#    trust-store: classpath:certs/client_truststore.jks
+#    trust-store-password: 123456
+#    trust-store-type: JKS
+

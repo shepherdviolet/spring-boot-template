@@ -1,0 +1,79 @@
+
+/*
+ *
+ * *********************************************************************************************************************
+ *
+ * Gradle Advanced Modularity | Gradle 高级模块化
+ *
+ * Author: Shepherd Violet
+ * Docs:   gradle/advanced-modularity/README.md
+ *
+ * *********************************************************************************************************************
+ *
+ * [DO NOT MODIFY] Script on settings phase, execute it in the 'settings.gradle' script
+ * [请勿修改] 配置阶段的脚本, 放在 'settings.gradle' 脚本中
+ *
+ * *********************************************************************************************************************
+ *
+ * 1. In 'settings.gradle' script, parse the list of subprojects declared in 'settings.json' and add them to the gradle build.
+ *
+ * *********************************************************************************************************************
+ *
+ * 1.在 'settings.gradle' 脚本中, 解析 'settings.json' 中声明的子工程清单, 将它们加入gradle构建.
+ *
+ */
+
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
+
+// subprojects list
+// 子工程清单
+def projects = [:]
+// 'Project->Group' mapping table
+// '工程->组别' 映射表
+def projectGroupMap = [:]
+
+// Read settings.json
+// 读取 settings.json
+try {
+    file("../../settings.json").withInputStream { stream -> projects = new JsonSlurper().parse(stream as InputStream) }
+} catch (Exception e) {
+    throw new GroovyRuntimeException("Illegal JSON format in `settings.json`\n" + e.getMessage(), e)
+}
+
+// Traverse, add subprojects to gradle build
+// 遍历, 将子工程加入gradle构建
+projects.forEach({ groupKey, group ->
+    group.forEach({ moduleName, modulePath ->
+
+        // The names of sub-projects are globally unique, even in different groups, they are not allowed to be repeated
+        // 子工程的名称全局唯一, 即使在不同的组别中, 也不允许重复
+        if (projectGroupMap.containsKey(moduleName)) {
+            throw new GroovyRuntimeException("Duplicate project name '$moduleName' in 'settings.json'")
+        }
+
+        // add subproject to gradle build
+        // 将子工程加入gradle构建
+        include "$moduleName"
+
+        // Record the mapping relationship of 'Project->Group'
+        // 记录 '工程->组别' 映射关系
+        projectGroupMap["$moduleName"] = groupKey
+
+        // Gradle only supports one level of structure by default, that is, subprojects can only be in the root directory.
+        // This method can break through the restrictions and modify the location of subprojects.
+        // Gradle默认只支持一层结构, 即子工程只能在根目录下. 这个方法能够突破限制, 修改子工程位置.
+        project(":$moduleName").projectDir = file("../../$modulePath")
+
+    })
+})
+
+// Wrap projectProperties into a variable Map, otherwise an error will be reported when the gradlew script is executed
+// because projectProperties is an immutable type
+// 将projectProperties包装成可变Map, 否则gradlew脚本执行时会因为projectProperties是不可变类型报错
+gradle.startParameter.projectProperties = new HashMap(gradle.startParameter.projectProperties)
+
+// Pass the 'project->group' mapping relationship to 'build.gradle'. because the project instance has not been created
+// yet, so it can only be passed in this way, not 'ext'
+// 将'工程->组别'映射关系传递给'build.gradle', 因为这里project实例还没创建, 所以只能用这种办法传递, 不能用ext
+gradle.startParameter.projectProperties.PROJECT_GROUP_MAP = new JsonOutput().toJson(projectGroupMap)

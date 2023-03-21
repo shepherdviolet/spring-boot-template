@@ -1,0 +1,19 @@
+GET {{host}}/basic/get/json?name={{username}}&key={{password}}
+Accept: application/json
+
+###
+
+POST {{host}}/basic/post/json
+Content-Type: application/json
+
+{
+  "name": "{{username}}",
+  "id": ID{{$randomInt}}
+}
+
+###
+
+GET {{host}}/aspectj
+Accept: application/json
+
+###

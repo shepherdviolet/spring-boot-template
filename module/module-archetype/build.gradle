@@ -1,7 +1,0 @@
-
-// 依赖, java工程只能用implementation, java-library工程能用api和implementation
-dependencies {
-
-//    api "com.github.shepherdviolet.slate20:slate-http-client:$version_slate"
-
-}

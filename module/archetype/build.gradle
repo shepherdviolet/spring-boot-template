@@ -1,0 +1,9 @@
+
+// 依赖, java工程只能用implementation, java-library工程能用api和implementation
+dependencies {
+
+    // 示例
+//    api "ch.qos.logback:logback-classic:$version_logback"
+//    api "com.github.shepherdviolet.glacimon:glacispring-common"
+
+}

@@ -27,19 +27,20 @@ configure(subprojects.findAll { it.PROJECT_GROUP == 'web' }) {
         //}
     }
 
-    // 示例: WEB工程通用依赖
-//    dependencies {
+    // WEB工程通用依赖
+    dependencies {
 //        // Import BOMs
-//        implementation platform(project(':my-bom'))
-//        implementation platform("com.github.shepherdviolet.slate20:slate-bom:$version_slate")
-//        implementation enforcedPlatform("com.github.shepherdviolet.slate20:slate-bom:$version_slate")//强制覆盖手动依赖的版本
-//        // Common dependencies
-//        implementation "com.github.shepherdviolet.slate20:slate-common:$version_slate"
-//    }
+        implementation platform("com.github.shepherdviolet.glacimon:glacimon-bom:$version_glacimon")
+//        implementation platform(project(':my-bom')) // Project BOM
+//        implementation enforcedPlatform("com.github.shepherdviolet.glacimon:glacimon-bom:$version_glacimon") // 强制覆盖手动依赖的版本
+
+        // Common dependencies
+//        implementation "ch.qos.logback:logback-classic:$version_logback"
+    }
 
 }
 
-// 示例: 库工程通用配置 (根据组别筛选)
+// 库工程通用配置 (根据组别筛选)
 configure(subprojects.findAll { it.PROJECT_GROUP in ['module'] }) {
 
     apply plugin: 'java-library' // JAVA库(能用implementation和api依赖方法)
@@ -51,17 +52,48 @@ configure(subprojects.findAll { it.PROJECT_GROUP in ['module'] }) {
     // encoding
     [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
 
-    // 示例: 库工程通用依赖
-//    dependencies {
+    // 库工程通用依赖
+    dependencies {
 //        // Import BOMs
-//        api platform(project(':my-bom'))
-//        api platform("com.github.shepherdviolet.slate20:slate-bom:$version_slate")
-//        api enforcedPlatform("com.github.shepherdviolet.slate20:slate-bom:$version_slate")//强制覆盖手动依赖的版本
-//        // Common dependencies
-//        api "com.github.shepherdviolet.slate20:slate-common:$version_slate"
-//    }
+        api platform("com.github.shepherdviolet.glacimon:glacimon-bom:$version_glacimon")
+//        api platform(project(':my-bom')) // Project BOM
+//        api enforcedPlatform("com.github.shepherdviolet.glacimon:glacimon-bom:$version_glacimon") // 强制覆盖手动依赖的版本
+
+        // Common dependencies
+//        api "ch.qos.logback:logback-classic:$version_logback"
+    }
 
 }
+
+// 所有工程通用配置(包括Root工程)
+allprojects {
+
+    configurations.all {
+
+        // 全局排除依赖 (解决安全问题)
+        exclude group: 'org.apache.logging.log4j' //排除log4j依赖: 存在一堆漏洞, 例如 TB-2021-0134
+
+        // 全局指定依赖版本 (解决安全问题)
+        resolutionStrategy {
+
+            force "com.alibaba:fastjson:$version_fastjson" //Fix security issue
+            force "org.yaml:snakeyaml:$version_snakeyaml" //Fix security issue
+            force "org.apache.httpcomponents:httpclient:$version_apache_httpclient" //Fix security issue
+
+            // 全局指定某个group的依赖版本
+            eachDependency { DependencyResolveDetails details ->
+
+                if (details.requested.group == 'org.springframework') { details.useVersion "$version_spring" } //Fix security issue
+                if (details.requested.group == 'io.netty') { details.useVersion "$version_netty" } //Fix security issue
+
+            }
+
+        }
+    }
+
+}
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // 示例
@@ -183,19 +215,38 @@ configure(subprojects.findAll { it.PROJECT_GROUP in ['module'] }) {
 //
 //    dependencies {
 //        // 可选: 如果需要BOM, 则需要专门为scriptJar引入
-//        //scriptJar platform('com.github.shepherdviolet.thistle20:thistle-bom:14.9-SNAPSHOT')
+//        //scriptJar platform("com.github.shepherdviolet.glacimon:glacimon-bom:$version_glacimon")
 //        // 文件所在JAR包
-//        scriptJar ('com.github.shepherdviolet.thistle20:thistle-common:14.9-SNAPSHOT') { transitive = false }
+//        scriptJar ("com.github.shepherdviolet.glacimon:glacijava-common:$version_glacimon") { transitive = false }
 //    }
 //
 //    task copyScriptsFromJar(type: Copy) {
 //        // 备注: 如果开启多线程编译(org.gradle.parallel), 这里会有个警告, 因多线程对配置同时操作导致, 可以忽略
 //        from zipTree(configurations.scriptJar.singleFile).matching {
 //            // 匹配路径和文件名
-//            include 'sviolet/thistle/util/**'
+//            include 'com/github/shepherdviolet/glacimon/java/misc/**'
 //        }
-//        // 注意, 脚本会复制到build/assembly/script/sviolet/thistle/util下, 暂时没找到办法改路径, 只能再用一个COPY任务
+//        // 注意, 脚本会复制到build/assembly/script/com/github/shepherdviolet/glacimon/java/misc下, 暂时没找到办法改路径, 只能再用一个COPY任务
 //        into 'build/assembly/script'
 //    }
+//
+//}
+
+/*
+ * 示例: 将其他模块编译出来的jar复制到本模块jar包中
+ */
+//configure(subprojects.findAll { it.PROJECT_GROUP == 'web' }) {
+//
+//    task copyJarFromAnotherModule(type: Copy) {
+//        // 从A模块复制编译出来的jar
+//        from "../module-a/build/libs/name-${project_version}.jar"
+//        // 复制到本模块jar包的META-INF/LIBS目录中 (build/resources/main目录下的文件在后续'jar'任务时会被打包)
+//        into 'build/resources/main/META-INF/LIBS/'
+//        // 本任务依赖A模块的'jar'任务
+//        dependsOn rootProject.subprojects.find { it.name == 'module-a' }.tasks.getByName('jar')
+//    }
+//
+//    // 本模块的'jar'任务依赖copyJarFromAnotherModule任务
+//    jar.dependsOn copyJarFromAnotherModule
 //
 //}

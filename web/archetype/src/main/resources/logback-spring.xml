@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+
+    <!-- 注意: stringProperty标签请在用Spring方式初始化的Logback中使用(配置文件名不能叫logback-test.xml和logback.xml),
+    否则参数值在Spring启动初期会变成xxx_IS_UNDEFINED, 日志会打到奇怪的目录下, 启动完才会正确赋值 -->
+
+    <!-- app.id -->
+    <springProperty name="app.id" scope="context" source="app.id"/>
+
+    <!-- -Dlog.pattern 日志格式: %c{40}控制类名长度, %-5p让级别等宽5 -->
+    <springProperty name="logging.pattern" scope="context" source="log.pattern"/>
+    <!-- -Dlog.path 日志路径 -->
+    <springProperty name="logging.path" scope="context" source="log.path"/>
+    <springProperty name="logging.archive" scope="context" source="log.archive-path"/>
+
+    <!-- levels (注意在yaml中配置级别时, ON/OFF必须加上单引号, 否则会变成true/false导致级别设置无效) -->
+    <springProperty name="logging.level.root" scope="context" source="log.level.root"/>
+    <springProperty name="logging.level.console" scope="context" source="log.level.console"/>
+    <springProperty name="logging.level.sviolet" scope="context" source="log.level.sviolet"/>
+
+
+    <!-- ==================================================================================================== -->
+
+
+    <contextName>${app.id}</contextName>
+
+    <appender name="ConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${logging.pattern}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${logging.level.console:-ON}</level>
+        </filter>
+    </appender>
+
+    <appender name="CommonFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logging.path}/${app.id}.log</file>
+        <encoder>
+            <pattern>${logging.pattern}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logging.archive}/${app.id}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <!--<maxHistory>20</maxHistory>-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>200MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="ErrorFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logging.path}/${app.id}.err</file>
+        <encoder>
+            <pattern>${logging.pattern}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>error</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logging.archive}/${app.id}.err.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <!--<maxHistory>20</maxHistory>-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>200MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+
+
+
+    <logger name="com.github.shepherdviolet.glacimon" level="${logging.level.sviolet:-INFO}" />
+
+
+
+
+    <root level="${logging.level.root:-INFO}">
+        <appender-ref ref="ConsoleAppender" />
+        <appender-ref ref="ErrorFileAppender" />
+        <appender-ref ref="CommonFileAppender" />
+    </root>
+
+</configuration>

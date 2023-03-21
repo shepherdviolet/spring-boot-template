@@ -1,0 +1,34 @@
+
+/*
+ * *********************************************************************************************************************
+ *
+ * Gradle Advanced Modularity | Gradle 高级模块化
+ *
+ * Author: Shepherd Violet
+ * Docs:   gradle/advanced-modularity/README.md
+ *
+ * *********************************************************************************************************************
+ *
+ * [DO NOT MODIFY] Init script before build phase, execute it at the head of the 'build.gradle' script
+ * [请勿修改] 构建阶段前的初始化脚本, 放在 'build.gradle' 脚本的头部
+ *
+ * *********************************************************************************************************************
+ *
+ * 1.In 'build.gradle' script, receive the 'Project->Group' mapping table from 'settings.gradle'
+ *
+ * *********************************************************************************************************************
+ *
+ * 1.在 'build.gradle' 中接收 'settings.gradle' 传来的 '工程->组别' 映射表
+ *
+ * *********************************************************************************************************************
+ */
+
+import groovy.json.JsonSlurper
+
+// 1.Receive the 'Project->Group' mapping table from 'settings.gradle' in 'build.gradle'
+// 1.在 'build.gradle' 中接收 'settings.gradle' 传来的 '工程->组别' 映射表
+def PROJECT_GROUP_MAP = new JsonSlurper().parseText(gradle.startParameter.projectProperties.PROJECT_GROUP_MAP)
+
+// Assemble the group to the project object, you can directly use `PROJECT_GROUP` in the project to obtain, or use `project.PROJECT_GROUP` to obtain
+// 将组别装配到project对象中, 可以在project中直接用`PROJECT_GROUP`获取, 或者用`project.PROJECT_GROUP`获取
+subprojects.forEach { it.ext.PROJECT_GROUP = PROJECT_GROUP_MAP["$it.name"] }

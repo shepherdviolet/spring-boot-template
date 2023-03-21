@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- XML配置Bean示例 -->
+    <bean id="xmlBean1" class="com.github.shepherdviolet.webdemo.demo.common.entity.SimpleBeanImpl">
+        <property name="name" value="Xml bean 1"/>
+    </bean>
+    <bean id="xmlBean2" class="com.github.shepherdviolet.webdemo.demo.common.entity.SimpleBeanImpl">
+        <property name="name" value="Xml bean 2"/>
+    </bean>
+
+    <!-- 静态工厂方法 -->
+    <bean id="bean1FromStaticFactory" class="com.github.shepherdviolet.webdemo.demo.common.entity.SimpleBeanStaticFactory"
+          factory-method="newSimpleBean">
+        <constructor-arg index="0" value="I'm created by static factory"/>
+    </bean>
+
+    <!-- 属性级联设置 -->
+    <bean id="bean1ForCascadeConf" class="com.github.shepherdviolet.webdemo.demo.common.entity.FatBean">
+        <constructor-arg index="0">
+            <bean class="com.github.shepherdviolet.webdemo.demo.common.entity.SimpleBeanImpl"/>
+        </constructor-arg>
+        <property name="simpleBean.name" value="Set by cascade"/>
+    </bean>
+
+    <!-- Bean继承+集合merge -->
+    <bean id="bean1IsParent" abstract="true" class="com.github.shepherdviolet.webdemo.demo.common.entity.SimpleBeanImpl">
+        <property name="name" value="Bean parent and merge test"/>
+        <property name="map">
+            <map>
+                <entry key="key1" value="value1"/>
+                <entry key="key2" value="value2"/>
+            </map>
+        </property>
+    </bean>
+    <bean id="bean1IsChild" parent="bean1IsParent">
+        <property name="map">
+            <map merge="true">
+                <entry key="key2" value="value2+"/>
+                <entry key="key3" value="value3"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- lookup方法:代理getSimpleBean方法, 每次都返回新的bean1ByLookup实例(因为它是prototype型, lookup方法会每次从上下文取) -->
+    <bean id="bean1ByLookup" class="com.github.shepherdviolet.webdemo.demo.common.entity.SimpleBeanImpl" scope="prototype">
+        <property name="name" value="I'm from lookup method"/>
+    </bean>
+    <bean id="bean1WithLookup" class="com.github.shepherdviolet.webdemo.demo.common.entity.FatBean">
+        <lookup-method name="getSimpleBean" bean="bean1ByLookup"/>
+    </bean>
+
+    <!-- method-replacer -->
+    <bean id="bean1ByReplacer" class="com.github.shepherdviolet.webdemo.demo.common.entity.SimpleBeanImpl">
+        <property name="name" value="I'm from method replacer"/>
+    </bean>
+    <bean id="testMethodReplacer" class="com.github.shepherdviolet.webdemo.demo.common.entity.TestMethodReplacer"/>
+    <bean id="bean1WithReplacer" class="com.github.shepherdviolet.webdemo.demo.common.entity.FatBean">
+        <replaced-method name="getSimpleBean" replacer="testMethodReplacer"/>
+    </bean>
+
+    <!-- SpEL测试 -->
+    <bean id="bean1ForSpel" class="com.github.shepherdviolet.webdemo.demo.common.entity.SimpleBeanImpl">
+        <property name="name" value="I'am spel test #{T(java.lang.Math).PI}"/><!-- 调用静态属性/方法 -->
+    </bean>
+    <bean id="bean2ForSpel" class="com.github.shepherdviolet.webdemo.demo.common.entity.FatBean">
+        <property name="simpleBean" value="#{bean1ForSpel}"/><!-- 直接引用bean -->
+    </bean>
+    <bean id="bean3ForSpel" class="com.github.shepherdviolet.webdemo.demo.common.entity.SimpleBeanImpl">
+        <property name="name" value="#{bean1ForSpel.name}"/><!-- 引用bean的属性 -->
+    </bean>
+    <bean id="bean4ForSpel" class="com.github.shepherdviolet.webdemo.demo.common.entity.SimpleBeanImpl">
+        <property name="name" value="#{bean1ForSpel.getName()?.toUpperCase()}"/><!-- 引用Bean的方法, ?.可以避免空指针 -->
+    </bean>
+
+</beans>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+
+    <!-- =============================== Logback笔记 =============================== -->
+
+
+<!--    logback-local.xml,logback-test.xml,logback-prod.xml-->
+
+    <!-- Logback配置文件加载逻辑 -->
+    <!--   1.如果: 指定了日志配置文件, 方法: 在启动参数/properties/yaml中配置 logging.config=classpath:logback-xxx.xml -->
+    <!--     1.1.如果: 指定的配置文件是: classpath:logback-test.xml 或者 classpath:logback.xml -->
+    <!--       默认方式初始化Logback, 适用于普通Java项目, 不要用springProperty标签 -->
+    <!--     1.2.如果: 指定的配置文件是: 其他名称(包括classpath:logback-spring.xml -->
+    <!--       Spring项目会用Spring方式初始化Logback, 适用于Spring项目, 支持springProperty标签 -->
+    <!--       非Spring项目会用默认方式初始化Logback, 适用于普通Java项目, 不要用springProperty标签 -->
+    <!--   2.如果: 未指定日志配置文件 -->
+    <!--     2.1.如果: 找到配置文件: classpath:logback-test.xml -->
+    <!--       默认方式初始化Logback, 适用于普通Java项目, 不要用springProperty标签 -->
+    <!--     2.2.如果: 找到配置文件: classpath:logback.xml -->
+    <!--       默认方式初始化Logback, 适用于普通Java项目, 不要用springProperty标签 -->
+    <!--     2.3.如果: 找到配置文件: classpath:logback-spring.xml -->
+    <!--       Spring项目会用Spring方式初始化Logback, 适用于Spring项目, 支持springProperty标签 -->
+    <!--       非Spring项目会用最小化配置初始化Logback, 配置文件无效 -->
+    <!--     2.4.如果: 没找到上述配置文件 -->
+    <!--       会用最小化配置初始化Logback, 配置文件无效 -->
+
+    <!-- 注意事项 -->
+    <!-- 1. stringProperty标签请在用Spring方式初始化的Logback中使用, 否则参数值在Spring启动初期会变成xxx_IS_UNDEFINED, 日志会打到奇怪的目录下, 启动完才会正确赋值 -->
+    <!-- 2. 想用stringProperty标签加载Apollo配置中心的参数, 请设置 apollo.bootstrap.enabled=true apollo.bootstrap.eagerLoad.enabled=true -->
+    <!-- 3. SpringCloud项目的话, 各种配置都要放在bootstrap.yml中 -->
+
+
+    <!-- =============================== 载入配置参数(Spring方式) =============================== -->
+
+
+    <!-- 注意: stringProperty标签请在用Spring方式初始化的Logback中使用(见'Logback配置文件加载逻辑'), 否则参数值在Spring启动初期会变成xxx_IS_UNDEFINED, 日志会打到奇怪的目录下, 启动完才会正确赋值 -->
+
+    <!-- app.id (注意: 想用这样设置ContextName, 必须在用Spring方式初始化的Logback中使用(见'Logback配置文件加载逻辑'), 不然会报rename失败错误) -->
+    <springProperty name="app.id" scope="context" source="app.id"/>
+
+    <!-- -Dlog.pattern 日志格式: %c{40}控制类名长度, %-5p让级别等宽5 -->
+    <springProperty name="logging.pattern" scope="context" source="log.pattern"/>
+    <!-- -Dlog.path 日志路径 -->
+    <springProperty name="logging.path" scope="context" source="log.path"/>
+    <springProperty name="logging.archive" scope="context" source="log.archive-path"/>
+
+    <!-- levels (注意在yaml中配置级别时, ON/OFF必须加上单引号, 否则会变成true/false导致级别设置无效) -->
+    <springProperty name="logging.level.root" scope="context" source="log.level.root"/>
+    <springProperty name="logging.level.console" scope="context" source="log.level.console"/>
+    <springProperty name="logging.level.basic" scope="context" source="log.level.basic"/>
+    <springProperty name="logging.level.demos" scope="context" source="log.level.demos"/>
+    <springProperty name="logging.level.sviolet" scope="context" source="log.level.sviolet"/>
+    <springProperty name="logging.level.txtimer" scope="context" source="log.level.txtimer"/>
+    <springProperty name="logging.level.httpinspect" scope="context" source="log.level.httpinspect"/>
+
+
+    <!-- =============================== 载入配置参数(properties方式) =============================== -->
+
+
+    <!--这种方式(property标签)只能获得启动参数和指定配置文件中的参数, 不能获得Spring上下文中的参数-->
+    <!--指定配置文件的参数优先级比启动参数高, 启动参数不能覆盖配置文件里的参数 (可以用嵌套PlaceHolder解决这个问题, 外层供启动参数配置, 内层在properties配)-->
+
+    <!--加载application.properties(与spring共享基本参数)-->
+<!--    <property resource="application.properties"/>-->
+    <!--加载logback-???.properties-->
+<!--    <property resource="logback-${spring.profiles.active:-win}.properties"/>-->
+
+    <!-- -Dlog.pattern 配置日志格式: %c{40}控制类名长度, %-5p让级别等宽5 -->
+<!--    <property name="logging.pattern" value="${log.pattern:-%d %X{_trace_id_:-0000000000000000000000} %-5p %t %c{40} %L: %m%n}"/>-->
+    <!-- -Dlog.path 配置日志路径 -->
+<!--    <property name="logging.path" value="${log.path:-${logging.path:-${user.home:-/tmp}/logs}}"/>-->
+<!--    <property name="logging.archive" value="${log.archive-path:-${logging.path}/archive}"/>-->
+
+    <!-- 在classpath下创建logback-???.properties, 配置以下参数 -->
+    <!--    logging.path=E:/__Temp/tomcat/logs/ -->
+    <!--    logging.level.root=INFO             -->
+    <!--    logging.level.console=ON            -->
+    <!--    logging.level.basic=DEBUG           -->
+    <!--    logging.level.demos=DEBUG           -->
+    <!--    logging.level.sviolet=INFO          -->
+    <!--    logging.level.txtimer=INFO          -->
+    <!--    logging.level.httpinspect=DEBUG     -->
+
+
+    <!-- ============================================ 日志配置 ============================================ -->
+
+
+    <contextName>${app.id}</contextName>
+
+    <appender name="ConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${logging.pattern}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${logging.level.console:-ON}</level>
+        </filter>
+    </appender>
+
+    <appender name="CommonFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logging.path}/${app.id}.log</file>
+        <encoder>
+            <pattern>${logging.pattern}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logging.archive}/${app.id}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <!--<maxHistory>20</maxHistory>-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>200MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="ErrorFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logging.path}/${app.id}.err</file>
+        <encoder>
+            <pattern>${logging.pattern}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>error</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logging.archive}/${app.id}.err.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <!--<maxHistory>20</maxHistory>-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>200MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="StatFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logging.path}/${app.id}.stat</file>
+        <encoder>
+            <pattern>${logging.pattern}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logging.archive}/${app.id}.stat.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <!--<maxHistory>20</maxHistory>-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>200MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="TimingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logging.path}/${app.id}.timing</file>
+        <encoder>
+            <pattern>${logging.pattern}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logging.archive}/${app.id}.timing.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <!--<maxHistory>20</maxHistory>-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>200MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+
+
+    <logger name="com.github.shepherdviolet.webdemo.basic" level="${logging.level.basic:-INFO}" />
+    <logger name="com.github.shepherdviolet.webdemo.demo" level="${logging.level.demos:-INFO}" />
+
+    <logger name="com.github.shepherdviolet.glacimon" level="${logging.level.sviolet:-INFO}" />
+
+    <!-- 关闭Controller抛出的异常日志, 如果已经用ErrorController统一处理并打印异常了, 则可以选择关闭 -->
+<!--    <logger name="org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/].[dispatcherServlet]" level="OFF"/>-->
+
+
+
+    <logger name="com.github.shepherdviolet.glacimon.spring.x.monitor.txtimer.def" level="${logging.level.txtimer:-INFO}" additivity="false">
+        <appender-ref ref="ConsoleAppender" />
+        <appender-ref ref="StatFileAppender" />
+    </logger>
+
+    <logger name="com.github.shepherdviolet.glacimon.spring.x.net.loadbalance.LoadBalancedInspectManager" level="${logging.level.httpinspect:-DEBUG}" additivity="false">
+        <appender-ref ref="ConsoleAppender" />
+        <appender-ref ref="TimingFileAppender" />
+    </logger>
+
+    <!--日志输出到指定文件 additivity=false表示日志只在自己指定的打印器输出, 不在root指定的打印器输出-->
+    <!--<logger name="com.special.package" level="${logging.level.special:-DEBUG}" additivity="false">-->
+        <!--<appender-ref ref="SpecialFileAppender" />-->
+    <!--</logger>-->
+
+
+
+    <root level="${logging.level.root:-INFO}">
+        <appender-ref ref="ConsoleAppender" />
+        <appender-ref ref="ErrorFileAppender" />
+        <appender-ref ref="CommonFileAppender" />
+    </root>
+
+</configuration>

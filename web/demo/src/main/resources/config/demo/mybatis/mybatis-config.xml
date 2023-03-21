@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <settings>
+        <!-- 把Mybatis的SQL日志输出级别改成INFO级别 -->
+        <setting name="logImpl" value="com.github.shepherdviolet.webdemo.demo.mybatis.logenhance.EnhancedSlf4jImpl"/>
+    </settings>
+
+    <!--可以配置插件等, 但已经在MyBatisConfiguration中配置-->
+    <!--<plugins>-->
+        <!--<plugin interceptor="sviolet.slate.common.helper.mybatis.monitor.MybatisTxTimerPlugin">-->
+            <!--<property name="groupName" value="MyBatis"/>-->
+        <!--</plugin>-->
+    <!--</plugins>-->
+
+</configuration>

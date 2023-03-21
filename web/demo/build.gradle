@@ -1,0 +1,156 @@
+
+// 依赖, java工程只能用implementation, java-library工程能用api和implementation
+dependencies {
+
+    //Import BOM/////////////////////////////////////////////////////////////////////////////////////////////
+
+    // 示例
+//    implementation platform(project(':my-bom'))
+//    implementation platform("com.github.shepherdviolet.glacimon:glacimon-bom:$version_glacimon")
+//    implementation enforcedPlatform("com.github.shepherdviolet.glacimon:glacimon-bom:$version_glacimon")//强制覆盖手动依赖的版本
+
+    //Log/////////////////////////////////////////////////////////////////////////////////////////////
+
+    //Log, jcl-over-slf4j用于把commons-logging的日志交给slf4j输出
+    implementation "ch.qos.logback:logback-classic:$version_logback"
+    implementation "org.slf4j:jcl-over-slf4j:$version_slf4j"
+
+    //Optional 3rd library/////////////////////////////////////////////////////////////////////////////
+
+    implementation "com.github.shepherdviolet.glacimon:glacijava-misc"
+    implementation "com.github.shepherdviolet.glacimon:glacijava-trace"
+    implementation "com.github.shepherdviolet.glacimon:glacispring-helper"
+    implementation "com.github.shepherdviolet.glacimon:glacispring-httpclient"
+    implementation "com.google.code.gson:gson:$version_gson"
+
+    //Spring///////////////////////////////////////////////////////////////////////////////////////////
+
+    //Common web
+    implementation "org.springframework.boot:spring-boot-starter-web:$version_spring_boot"
+
+    //Common no web
+    //如果是非WEB项目, 注掉上面的spring-boot-starter-web改用下面的依赖, 删除Controller与其他web相关的代码即可
+    //implementation "org.springframework.boot:spring-boot-starter:$version_spring_boot"
+
+    //Web container : Undertow (替换undertow还要把tomcat的依赖排除掉)
+//    implementation "org.springframework.boot:spring-boot-starter-undertow:$version_spring_boot"
+
+    //Spring boot others
+    implementation "org.springframework.boot:spring-boot-starter-aop:$version_spring_boot" //AOP
+    implementation "org.springframework.boot:spring-boot-starter-actuator:$version_spring_boot" //Actuator
+    implementation "org.springframework.boot:spring-boot-starter-validation:$version_spring_boot" //Spring 2.3.3+ required
+    implementation "org.springframework.boot:spring-boot-starter-thymeleaf:$version_spring_boot" //Html template
+    implementation "org.springframework.boot:spring-boot-starter-webflux:$version_spring_boot" //Override version from spring-boot-admin
+
+    //Spring Boot Security: (可选组件) 引入这个依赖后默认会增加登录页面, 届时可以在BootApplication中排除自动配置来禁用
+    //本示例中默认禁用, 如需开启: 在BootApplication中, 注释掉exclude里两个Security相关的自动配置类(默认被排除了), 解除scanBasePackages里一个security包名的注释
+    //启用后, POSTMAN中可以设置Auth-Basic Auth来输入用户名密码, 访问本WEB工程
+    implementation "org.springframework.boot:spring-boot-starter-security:$version_spring_boot"
+
+    //Spring Boot Admin///////////////////////////////////////////////////////////////////////////////
+
+    //Spring Boot Admin server (控制台服务端, http://localhost:8000/admin, 容器需为Tomcat, 改过URL(默认没/admin), 见application.yaml)
+    //特殊情况: 在这里SpringBootAdmin和RocketMQ的netty包有冲突, 要启用这个先把RocketMQ依赖的netty排除掉(错误:java.lang.NoSuchMethodError: io.netty.bootstrap.Bootstrap.config)
+    //其他说明: 示例为client-server直连方式, 如需通过Eureka发现请自行谷歌
+    implementation "de.codecentric:spring-boot-admin-starter-server:$version_spring_boot_admin"
+    //Spring Boot Admin client (控制台客户端)
+    implementation "de.codecentric:spring-boot-admin-starter-client:$version_spring_boot_admin"
+
+    //DB//////////////////////////////////////////////////////////////////////////////////////////////
+
+    implementation "org.springframework.boot:spring-boot-starter-jdbc:$version_spring_boot"
+    implementation ("org.mybatis.spring.boot:mybatis-spring-boot-starter:$version_mybatis_starter") {exclude group: 'org.springframework.boot'}
+    implementation ("com.github.pagehelper:pagehelper-spring-boot-starter:$version_pagehelper_starter") {exclude group: 'org.mybatis.spring.boot'}
+    implementation "com.github.pagehelper:pagehelper:$version_pagehelper"
+
+    // [Datasource 1] H2
+    implementation "com.h2database:h2:$version_h2"//H2
+    // [Datasource 2] Mysql 8
+//    implementation "mysql:mysql-connector-java:$version_mysql8"//mysql
+    // [Datasource 3] Mysql 5
+//    implementation "mysql:mysql-connector-java:$version_mysql5"//mysql
+    // [Datasource 4] Oracle
+//    implementation "com.oracle:ojdbc6:$version_oracle"//oracle, 在jcenter有 (但是jcenter停服了?)
+    // [Datasource 5] Oracle + Tomcat连接池
+//    implementation "com.oracle:ojdbc6:$version_oracle"//oracle, 在jcenter有 (但是jcenter停服了?)
+//    implementation "org.apache.tomcat:tomcat-jdbc:$version_tomcat_jdbc"//tomcat连接池
+    // [Datasource 6] Mysql 8 + Druid连接池
+//    implementation "mysql:mysql-connector-java:$version_mysql8"//mysql
+//    implementation ("com.alibaba:druid-spring-boot-starter:$version_druid_starter") {exclude group: "org.springframework.boot"}//druid连接池, https://github.com/alibaba/druid/tree/master/druid-spring-boot-starter/
+    // [Datasource 7] 多数据源: Mysql 8 + Druid连接池, 参考DruidMultiDataSourceConfiguration
+//    implementation "mysql:mysql-connector-java:$version_mysql8"//mysql
+//    implementation ("com.alibaba:druid-spring-boot-starter:$version_druid_starter") {exclude group: "org.springframework.boot"}//druid连接池, https://github.com/alibaba/druid/tree/master/druid-spring-boot-starter/
+
+    //Cache//////////////////////////////////////////////////////////////////////////////////////////////
+
+    //JetCache (2.5.X, 新版本变动较大 暂不升级)
+    //注意: 依赖了这个如果不设置它(yaml配置或者自定义GlobalCacheConfig), 启动会报错的, 我们这里直接排除了它的自动配置类解决(见BootApplication)
+    implementation ("com.alicp.jetcache:jetcache-starter-redis-lettuce:$version_jetcache_starter") {exclude group: 'org.springframework.boot'}
+    implementation "io.lettuce:lettuce-core:$version_lettuce" // 低版本lettuce有问题, 用新版本
+
+    //MQ//////////////////////////////////////////////////////////////////////////////////////////////
+
+    //RocketMQ
+    //特殊情况: 在这里SpringBootAdmin和RocketMQ的netty包有冲突, 要启用Admin得先把RocketMQ依赖的netty排除掉(错误:java.lang.NoSuchMethodError: io.netty.bootstrap.Bootstrap.config)
+    implementation ("org.apache.rocketmq:rocketmq-client:$version_rocketmq") { exclude group: "io.netty" }
+    implementation ("org.apache.rocketmq:rocketmq-acl:$version_rocketmq") { exclude group: "io.netty" }
+    //官方的工具库, 可选
+//    implementation ("org.apache.rocketmq:rocketmq-spring-boot-starter:$version_rocketmq_spring") { exclude group: "io.netty" }
+
+    //Kafka
+    implementation "org.springframework.kafka:spring-kafka:$version_spring_kafka"
+
+    //Apollo///////////////////////////////////////////////////////////////////////////////////////////
+
+    //Apollo client ( -Denv=dev is required )
+//    implementation ("com.ctrip.framework.apollo:apollo-client:$version_apollo") {
+//        //和Springboot的版本冲突
+//        exclude group: "org.yaml"
+//    }
+
+    //APM//////////////////////////////////////////////////////////////////////////////////////////////
+
+    //MicroMeter
+    implementation "io.micrometer:micrometer-registry-prometheus:$version_micrometer"
+
+    //Flow control, Circuit breaking//////////////////////////////////////////////////////////////////
+
+    //熔断限流, 启用: application.yaml(两个地方解开注释) SentinelController(解开注释) BootApplication(解开注释)
+//    implementation "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel:$version_sentinel_starter"
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    //annotationProcessor//////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:$version_spring_boot"
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    //Test/////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test:$version_spring_boot"
+
+}
+
+// 全局排除依赖
+configurations {
+    // 排除tomcat的依赖
+//    all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+}
+
+// Mybatis Generator
+//apply from: "build-mybatis.gradle"
+
+// 源码集合配置
+//sourceSets {
+//    main {
+//        java {
+//            // 增加一个src/main/java2目录作为Java代码目录, 默认目录仍旧有效
+//            srcDirs 'src/main/java2'
+//        }
+//        resources {
+//            // 增加一个src/main/resources2目录作为资源目录, 默认目录仍旧有效
+//            srcDirs 'src/main/resources2'
+//        }
+//    }
+//}
