@@ -66,7 +66,8 @@ public class JetCacheConfiguration {
      * <br>
      *
      * Sentinel:
-     * redis-sentinel://host1:26379,host2:26379,host3:26379/?sentinelMasterId=masterId
+     * redis-sentinel://host1:26379,host2:26379,host3:26379/?sentinelMasterId=mymaster
+     * redis-sentinel://password@host1:26379,host2:26379,host3:26379/?sentinelMasterId=mymaster
      * <br>
      *
      * Cluster:
@@ -101,13 +102,13 @@ public class JetCacheConfiguration {
         if (uriList.size() == 1) {
             RedisClient client = RedisClient.create(uriList.get(0));
             client.setOptions(ClientOptions.builder()
-                    .disconnectedBehavior(ClientOptions.DisconnectedBehavior.REJECT_COMMANDS) // 快速失败
+//                    .disconnectedBehavior(ClientOptions.DisconnectedBehavior.REJECT_COMMANDS) // 配了这个Sentinel故障转移后不会重连!!!
                     .build());
             return client;
         } else {
             RedisClusterClient client = RedisClusterClient.create(uriList);
             client.setOptions(ClusterClientOptions.builder()
-                    .disconnectedBehavior(ClientOptions.DisconnectedBehavior.REJECT_COMMANDS) // 快速失败
+//                    .disconnectedBehavior(ClientOptions.DisconnectedBehavior.REJECT_COMMANDS) // 配了这个故障转移后不会重连!!!
                     .topologyRefreshOptions(ClusterTopologyRefreshOptions.builder()
                             .enablePeriodicRefresh(Duration.ofSeconds(15)) // 开启定期刷新, 默认关闭; 更新间隔15秒, 默认60秒
                             .enableAllAdaptiveRefreshTriggers() // 启用全部拓扑刷新定时器
@@ -222,22 +223,13 @@ public class JetCacheConfiguration {
     }
 
     /**
-     * Redis手动操作方式的连接管理器
-     */
-    @Bean(name = "redisConnections")
-    @ConditionalOnMissingBean(name = "redisConnections")
-    public RedisConnections redisConnections(@Qualifier("lettuceRedisClient") AbstractRedisClient lettuceRedisClient){
-        return new RedisConnectionsImpl(lettuceRedisClient);
-    }
-
-    /**
-     * Redis手动操作方式 API入口, 里面的命令单例是线程安全的, 直接使用即可
-     * 命令用法请参考Lettuce官方文档
+     * Redis手动操作方式 API入口, 里面的命令实例是线程安全的, 直接使用即可.
+     * 命令用法请参考Lettuce官方文档.
      */
     @Bean(name = "redisCommands")
     @ConditionalOnMissingBean(name = "redisCommands")
-    public RedisCommands redisCommands(@Qualifier("redisConnections") RedisConnections redisConnections){
-        return new RedisCommandsImpl(redisConnections);
+    public RedisCommands redisCommands(@Qualifier("lettuceRedisClient") AbstractRedisClient lettuceRedisClient){
+        return new RedisCommandsImpl(lettuceRedisClient);
     }
 
 }

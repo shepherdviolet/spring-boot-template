@@ -72,7 +72,7 @@
 <!--    <property name="logging.archive" value="${log.archive-path:-${logging.path}/archive}"/>-->
 
     <!-- 在classpath下创建logback-???.properties, 配置以下参数 -->
-    <!--    logging.path=E:/__Temp/tomcat/logs/ -->
+    <!--    logging.path=D:/__Temp/tomcat/logs/ -->
     <!--    logging.level.root=INFO             -->
     <!--    logging.level.console=ON            -->
     <!--    logging.level.basic=DEBUG           -->

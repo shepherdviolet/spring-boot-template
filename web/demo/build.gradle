@@ -88,6 +88,9 @@ dependencies {
     implementation ("com.alicp.jetcache:jetcache-starter-redis-lettuce:$version_jetcache_starter") {exclude group: 'org.springframework.boot'}
     implementation "io.lettuce:lettuce-core:$version_lettuce" // 低版本lettuce有问题, 用新版本
 
+    //Jedis (JDK7时, 用Jedis 2.9.0 + Redis 3.2.13)
+//    implementation "redis.clients:jedis:$version_jedis"
+
     //MQ//////////////////////////////////////////////////////////////////////////////////////////////
 
     //RocketMQ

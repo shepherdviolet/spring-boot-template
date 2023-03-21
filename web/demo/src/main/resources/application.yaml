@@ -300,17 +300,24 @@ glacispring:
 
 ############################################################################################################
 
-## Redis config, optional
+## Redis (Lettuce + JetCache) config, optional
 #redis:
 #  enabled: true
 #  uri: redis://127.0.0.1:6379
 #  #uri: redis://host1:6379,redis://host2:6379,redis://host3:6379
 #  #uri: redis://password@host1:6379,redis://password@host2:6379,redis://password@host3:6379
+#  #uri: redis-sentinel://password@host1:26379,host2:26379,host3:26379/?sentinelMasterId=mymaster
 #  stat-interval-minutes: 15
 #  key-prefix: ${app.id}-
 #  local:
 #    expire-after-write-millis: -1
 #    limit: -1
+
+## Redis (Jedis 2.9.0 + Redis 3.2.13) config, optional
+#jedis:
+#  enabled: true
+#  uri: redis0:26379,redis1:26380,redis2:26381
+#  password: 123456
 
 ############################################################################################################
 

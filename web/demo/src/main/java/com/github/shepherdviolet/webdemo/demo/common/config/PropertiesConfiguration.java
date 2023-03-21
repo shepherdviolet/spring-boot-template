@@ -40,7 +40,7 @@ public class PropertiesConfiguration {
 //        PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
 //        YamlPropertiesFactoryBean yamlPropertiesFactoryBean = new YamlPropertiesFactoryBean();
 //        yamlPropertiesFactoryBean.setResources(new ClassPathResource("config/demo/common/properties/yaml.yml"));
-////        yamlPropertiesFactoryBean.setResources(new FileSystemResource("E:\\__Temp\\config.yml"));
+////        yamlPropertiesFactoryBean.setResources(new FileSystemResource("D:\\__Temp\\config.yml"));
 //        configurer.setProperties(yamlPropertiesFactoryBean.getObject());
 //        return configurer;
 //    }

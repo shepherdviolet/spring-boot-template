@@ -4,7 +4,7 @@
 
 log:
   pattern: '%d %X{_trace_id_:-0000000000000000000000} %-5p %t %c{40} %L: %m%n'
-  path: 'E:/__Temp/tomcat/logs/'
+  path: 'D:/__Temp/tomcat/logs/'
   archive-path: '${log.path}/archive'
   level:
     console: 'ON'
@@ -20,7 +20,7 @@ server:
   address: 0.0.0.0
   tomcat:
     ## TODO [重要]指定tomcat的basedir, 用于临时文件, 该目录需要创建.
-    basedir: E:/__Temp/tomcat/tmp
+    basedir: D:/__Temp/tomcat/tmp
     accept-count: 200
     max-connections: 2000
     max-http-form-post-size: 10485760
