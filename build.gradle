@@ -69,7 +69,7 @@ allprojects {
     // 工程的依赖仓库
     repositories {
         maven { url 'file:C:/m2repository/repository' } // 本地仓库, 可选
-        maven { url 'https://maven.aliyun.com/repository/central'} // 阿里云镜像加速, 别用/nexus/content/groups/public, 可选
+        //maven { url 'https://maven.aliyun.com/repository/central'} // 阿里云镜像加速, 别用/nexus/content/groups/public, 部分依赖会报找不到, 可选
         mavenCentral() // https://repo1.maven.org/maven2/
         //maven { url 'https://jitpack.io' }
         //jcenter()
