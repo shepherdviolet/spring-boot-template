@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Actuator端点示例
+ *
+ * 设置完可以去http://localhost:8000/admin看状态
  */
 @RestController
 @RequestMapping("/actuator")

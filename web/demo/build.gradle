@@ -61,7 +61,6 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-jdbc:$version_spring_boot"
     implementation ("org.mybatis.spring.boot:mybatis-spring-boot-starter:$version_mybatis_starter") {exclude group: 'org.springframework.boot'}
     implementation ("com.github.pagehelper:pagehelper-spring-boot-starter:$version_pagehelper_starter") {exclude group: 'org.mybatis.spring.boot'}
-    implementation "com.github.pagehelper:pagehelper:$version_pagehelper"
 
     // [Datasource 1] H2
     implementation "com.h2database:h2:$version_h2"//H2

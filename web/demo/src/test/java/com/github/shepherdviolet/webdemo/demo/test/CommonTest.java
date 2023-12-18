@@ -2,13 +2,13 @@ package com.github.shepherdviolet.webdemo.demo.test;
 
 import com.github.shepherdviolet.webdemo.TestApplication;
 import com.github.shepherdviolet.webdemo.demo.test.service.InnerService;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Spring boot test 通用示例
@@ -20,8 +20,8 @@ import static org.junit.Assert.*;
 //        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT // 加载WebApplicationContext并提供一个真实的Servlet环境, 监听指定端口(默认8080)
 //        webEnvironment = SpringBootTest.WebEnvironment.NONE // 加载ApplicationContext不提供Servlet环境)
 )
-@RunWith(
-        SpringRunner.class // 测试运行器
+@ExtendWith(
+        SpringExtension.class // 测试运行器
 )
 //@TestExecutionListeners(listeners = {
 //        SpringBootDependencyInjectionTestExecutionListener.class,  // 处理注入

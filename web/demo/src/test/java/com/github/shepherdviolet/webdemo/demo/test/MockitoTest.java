@@ -3,17 +3,17 @@ package com.github.shepherdviolet.webdemo.demo.test;
 import com.github.shepherdviolet.webdemo.TestApplication;
 import com.github.shepherdviolet.webdemo.demo.test.service.InnerService;
 import com.github.shepherdviolet.webdemo.demo.test.service.OuterService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -29,15 +29,16 @@ import static org.mockito.Mockito.*;
  * <p>这种方式侵入Spring上下文, 会对标有@MockBean注解的对象进行代理, 并替换Spring上下文中的对象.
  * 适合测试复杂的情况(用到上下文中很多Bean). </p>
  */
-@SpringBootTest(classes = TestApplication.class) // 多个SpringBootTest类, 如果classes和webEnvironment等参数一致, 则实际上下文是同一个; 如果不一致, 则会启动多个上下文. (不过, 测试类里的配置和MockBean是相互独立的)
-@RunWith(SpringRunner.class)
+@SpringBootTest(classes = TestApplication.class)
+// 多个SpringBootTest类, 如果classes和webEnvironment等参数一致, 则实际上下文是同一个; 如果不一致, 则会启动多个上下文. (不过, 测试类里的配置和MockBean是相互独立的)
+@ExtendWith(SpringExtension.class)
 public class MockitoTest {
 
     /**
      * 启用Mock注解 (对当前Test类中标有@Mock/@InjectMocks注解的对象进行代理, 不会侵入Spring上下文)
      */
-    @Before
-    public void before(){
+    @BeforeAll // 在所有Test方法前运行一次, BeforeEach在每个Test方法前运行
+    public void before() {
         MockitoAnnotations.initMocks(this);
     }
 
@@ -60,7 +61,7 @@ public class MockitoTest {
     private InnerService innerServiceRaw;
 
     @Test
-    public void testMockito(){
+    public void testMockito() {
         /*
          * 模拟innerServiceMocked的返回结果
          */

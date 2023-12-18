@@ -65,9 +65,11 @@ spring:
     url: jdbc:h2:mem:h2db1
     username: sa
     password: sa
-    schema: classpath:config/demo/mybatis/h2init/schema.sql
-    data: classpath:config/demo/mybatis/h2init/data.sql
-    initialization-mode: always
+  sql:
+    init:
+      schema-locations: classpath:config/demo/mybatis/h2init/schema.sql
+      data-locations: classpath:config/demo/mybatis/h2init/data.sql
+      mode: always
   ## [Datasource 2] Mysql 8 (Do not exclude DataSourceAutoConfiguration!)
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver

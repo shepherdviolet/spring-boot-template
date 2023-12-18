@@ -27,9 +27,6 @@ public class ErrorController extends AbstractErrorController {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Value("${server.error.path:${error.path:/error}}")
-    private String errorPath;
-
     @Autowired
     private ErrorHandler errorHandler;
 
@@ -40,10 +37,13 @@ public class ErrorController extends AbstractErrorController {
         this.errorAttributes = errorAttributes;
     }
 
-    @Override
-    public String getErrorPath() {
-        return errorPath;
-    }
+    // springboot 2.3.x 开始弃用该方法
+//    @Value("${server.error.path:${error.path:/error}}")
+//    private String errorPath;
+//    @Override
+//    public String getErrorPath() {
+//        return errorPath;
+//    }
 
     /* ****************************************************************************************************
      * 异常处理

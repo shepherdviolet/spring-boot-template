@@ -19,7 +19,7 @@ configure(subprojects.findAll { it.PROJECT_GROUP == 'web' }) {
     // config of bootJar
     bootJar {
         // main class
-        mainClassName = main_class // 配在web/*/gradle.properties里
+        mainClass = main_class // 配在web/*/gradle.properties里
 
         // 可选: 生成一个Unix可执行文件(在jar包头部有shell脚本), 文档: https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/reference/html/deployment-install.html
         //launchScript {
@@ -78,13 +78,11 @@ allprojects {
 
             force "com.alibaba:fastjson:$version_fastjson" //Fix security issue
             force "org.yaml:snakeyaml:$version_snakeyaml" //Fix security issue
-            force "org.apache.httpcomponents:httpclient:$version_apache_httpclient" //Fix security issue
 
             // 全局指定某个group的依赖版本
             eachDependency { DependencyResolveDetails details ->
 
                 if (details.requested.group == 'org.springframework') { details.useVersion "$version_spring" } //Fix security issue
-                if (details.requested.group == 'io.netty') { details.useVersion "$version_netty" } //Fix security issue
 
             }
 
