@@ -20,13 +20,14 @@
 jasypt:
   encryptor:
     privateKeyFormat: PEM
-    privateKeyLocation: /home/yourname/jasypt_private.pem
+    privateKeyLocation: file:/home/yourname/jasypt_private.pem
+    #privateKeyLocation: file:D:/__Temp/tomcat/jasypt_private.pem
 ```
 
 * 编辑文件: /home/yourname/jasypt_private.pem
 
 ```
------BEGIN RSA PRIVATE KEY-----
+-----BEGIN PRIVATE KEY-----
 MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAIvU736phSWBmZZk
 pIajqbE/PgTsk/Hi5i5B0+nAPIaoaTyhHhlohKmfboYHCUObPSIJSPj7FBrQrlKH
 j8h73vDYLg2IKQk046qt+mAhtEucCU0fkrzc0G5bpQPSEQCmpCROuftmkeumbJKw
@@ -41,5 +42,7 @@ VzAwjljy5Xd9mf7UbhNAWxMK3KfOfQJALIM4gtFdAN0Bri/mWmyyO9xrKf/1Uros
 /5R+zyzX2HYtLtJ//dRSrd/E+Z59oxmT6kYfhL1RkgbF6j0Y6YT6AQJAR/HHgWG2
 9Clwx+bwIvsJLKckYYmZudTMKNrCnwUbUt8b5DVpKtXYyUc5hRVWNTI58ns82N2A
 YrAwXqqgIZ5fXQ==
------END RSA PRIVATE KEY-----
+-----END PRIVATE KEY-----
 ```
+
+* `注意! PEM格式的头部必须是BEGIN PRIVATE KEY, 尾部必须是END PRIVATE KEY. 不能是BEGIN/END RSA PRIVATE KEY`

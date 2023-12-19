@@ -340,10 +340,11 @@ jasypt:
 #jasypt:
 #  encryptor:
 #    privateKeyFormat: PEM
-#    privateKeyLocation: classpath:jasypt_private.pem
-#    privateKeyLocation: D:/__Temp/tomcat/jasypt_private.pem
+#    privateKeyLocation: classpath:config/demo/jasypt/jasypt_private.pem
+##    privateKeyLocation: file:D:/__Temp/tomcat/jasypt_private.pem
+##    privateKeyLocation: file:/home/yourname/jasypt_private.pem
 #  ## Test params
-#  test-param1: ENC(X5GjSlvt2i2jIIqPkf34F02hs+EMMhfwLQ9oSYfRaIah7ME0bVb6Zo/xJikL0n2yEE6QH2dclj/6DtmdcPSZVAhJsdQi+99xKw/yU3ykFgA=)
+#  test-param1: ENC(BVk8JaQnzd52Locu50vxJy1xtu31UMWfgaZCCeqKRQ81k9zJVW+1E/CSe3pY2KOF5WjtMN6wGFqrYtc6+N7s+KjfNn2ez8BoXdU2JgVjbIo566KiNFpxp65ohQ9K/8UsQrsjSxqRKjqje2Ate3dxYXE9AjgX8s0WR4QSIsLAZHQ=)
 
 ## symmetric mode
 

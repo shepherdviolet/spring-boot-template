@@ -37,30 +37,41 @@ public class JasyptController {
     }
 
     /* ****************************************************************************************************************
-     * 非对称加密方案
+     * 非对称加密方案: 生成密钥/加密信息
      **************************************************************************************************************** */
 
     public static void main(String[] args) throws InvalidKeySpecException {
         /*
-         * 生成RSA公私钥, 私钥配置在运行环境的启动参数/环境变量中, 公钥提供给开发人员.
-         * 对密码强度要求不高的情况下可以考虑用1024位的密钥, 短一些. 要求高的用2048.
+         * 生成RSA公私钥.
+         * 对强度要求不高的可以用1024位密钥, 私钥短一些. 要求高的用2048.
+         *
+         * PEM格式注意事项 ---------------------------------------------------------------------------------------
+         *
+         * 如果使用PEM格式的私钥(默认DER格式), 头部必须是"-----BEGIN PRIVATE KEY-----"尾部必须是"-----END PRIVATE KEY-----"
+         *
+         * 公钥 -------------------------------------------------------------------------------------------------
          *
          * 公钥提供给开发使用, 可以直接写在工具程序里, 供开发加密信息.
          *
+         * 私钥 -------------------------------------------------------------------------------------------------
+         *
          * 私钥配置在启动参数或环境变量中:
          * -Djasypt.encryptor.privateKeyString=......
+         *
          * 也可以将私钥放置在文件中:
-         * jasypt.encryptor.privateKeyLocation=/home/yourname/privatekey.pem
-         * 可以设置私钥格式, 默认DER, 可以设置成PEM
-         * jasypt.encryptor.privateKeyFormat=DER
-         * (本示例工程中, 配在了application.yaml里, 为了测试方便, 生产环境不要这么做)
+         * jasypt.encryptor.privateKeyLocation=file:/home/yourname/privatekey.pem
+         *
+         * 如果私钥是PEM格式的, 请配置如下参数 (该参数默认DER):
+         * jasypt.encryptor.privateKeyFormat=PEM
+         *
+         * (本示例工程中, 私钥配在了application.yaml里, 为了测试方便, 生产环境不要这么做)
          */
 //        RSAKeyGenerator.RSAKeyPair keyPair = RSAKeyGenerator.generateKeyPair(1024);
 //        String publicKeyDer = Base64Utils.encodeToString(keyPair.getX509EncodedPublicKey()); //DER格式公钥 (jasypt也支持PEM)
 //        String privateKeyDer = Base64Utils.encodeToString(keyPair.getPKCS8EncodedPrivateKey()); //DER格式私钥 (jasypt也支持PEM)
 //        System.out.println("\nPUBLIC: \n" + publicKeyDer);
 //        System.out.println("\nPRIVATE: \n" + privateKeyDer);
-//        System.out.println("\nPRIVATE PEM: \n" + PEMEncodeUtils.rsaPrivateKeyToPEMEncoded(privateKeyDer));
+//        System.out.println("\nPRIVATE PEM: \n" + PEMEncodeUtils.toPEMEncoded(privateKeyDer, "PRIVATE KEY")); //注意PEM头尾不能是RSA PRIVATE KEY
 
         /*
          * 用公钥加密信息
@@ -69,12 +80,12 @@ public class JasyptController {
         config.setPublicKey("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCL1O9+qYUlgZmWZKSGo6mxPz4E7JPx4uYuQdPpwDyGqGk8oR4ZaISpn26GBwlDmz0iCUj4+xQa0K5Sh4/Ie97w2C4NiCkJNOOqrfpgIbRLnAlNH5K83NBuW6UD0hEApqQkTrn7ZpHrpmySsGTbzQ5cJyyM+MMkQaPtnFsOjpS2YwIDAQAB");
 
 //        config.setKeyFormat(AsymmetricCryptography.KeyFormat.PEM);
-//        config.setPublicKey("-----BEGIN RSA PUBLIC KEY-----\n" +
+//        config.setPublicKey("-----BEGIN PUBLIC KEY-----\n" +
 //                "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCL1O9+qYUlgZmWZKSGo6mxPz4E\n" +
 //                "7JPx4uYuQdPpwDyGqGk8oR4ZaISpn26GBwlDmz0iCUj4+xQa0K5Sh4/Ie97w2C4N\n" +
 //                "iCkJNOOqrfpgIbRLnAlNH5K83NBuW6UD0hEApqQkTrn7ZpHrpmySsGTbzQ5cJyyM\n" +
 //                "+MMkQaPtnFsOjpS2YwIDAQAB\n" +
-//                "-----END RSA PUBLIC KEY-----");
+//                "-----END PUBLIC KEY-----");
 
         StringEncryptor encryptor = new SimpleAsymmetricStringEncryptor(config);
         String message = "The parameter that need to be protected";
@@ -87,7 +98,7 @@ public class JasyptController {
     }
 
     /* ****************************************************************************************************************
-     * 对称加密方案
+     * 对称加密方案: 生成密钥/加密信息
      **************************************************************************************************************** */
 
     /**
@@ -99,7 +110,7 @@ public class JasyptController {
 //         * 生成和保管密码:
 //         * 建议用工具生成一个密码(例如https://www.sexauth.com/)
 //         * 注意!!! 这个密码不要直接放在程序配置文件里, 应该通过启动参数/环境变量等方式在运行环境设置.
-//         * (本示例工程中, 配在了application.yaml里, 为了测试方便, 生产环境不要这么做)
+//         * (本示例工程中, 密钥配在了application.yaml里, 为了测试方便, 生产环境不要这么做)
 //         *
 //         * 例如在启动参数里:
 //         * -Djasypt.encryptor.password=PRGkutx3FfsCYtyvgL9OjHyHQ7SkxGL
