@@ -323,6 +323,24 @@ glacispring:
 
 ############################################################################################################
 
+## jasypt-spring-boot-starter Test
+## https://github.com/ulisesbocchio/jasypt-spring-boot
+
+## symmetric mode
+
+jasypt:
+  encryptor:
+    ## WARNING: The encryptor password should not be stored in a property file, it should rather be passed as system property, command line argument, or environment variable and as far as its name is jasypt.encryptor.password it'll work.
+    password: IPRGkutx3FfsCYtyvgL9OjHyHQ7SkxGL
+
+## test params
+jasypt-test:
+  param1: ENC(X5GjSlvt2i2jIIqPkf34F02hs+EMMhfwLQ9oSYfRaIah7ME0bVb6Zo/xJikL0n2yEE6QH2dclj/6DtmdcPSZVAhJsdQi+99xKw/yU3ykFgA=)
+
+## asymmetric mode
+
+############################################################################################################
+
 ## Log config
 ## Logback指定日志配置文件 (自定义的配置文件不要叫logback-test.xml/logback.xml, 它们会用默认方式初始化, 对Spring支持不好)
 #logging:
