@@ -9,9 +9,7 @@
        http://www.springframework.org/schema/context/spring-context.xsd">
 
     <!-- XML加载properties示例 -->
-<!--    <context:property-placeholder location="classpath*:config/demo/common/properties/foo.properties"  />-->
+<!--    <context:property-placeholder location="classpath*:config/demo/common/properties/foo.properties" />-->
 <!--    <context:property-placeholder location="classpath*:config/demo/common/properties/*.properties" />-->
-
-
 
 </beans>

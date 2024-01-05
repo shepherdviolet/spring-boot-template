@@ -33,7 +33,7 @@ import org.springframework.core.io.ClassPathResource;
 public class PropertiesConfiguration {
 
 //    /**
-//     * 加载自定义配置文件, PropertySourcesPlaceholderConfigurer在上下文中只有一个有效, 建议用PropertySource
+//     * 自定义Spring Environment加载的配置文件, 注意, PropertySourcesPlaceholderConfigurer在上下文中只有一个有效
 //     */
 //    @Bean
 //    public static PropertySourcesPlaceholderConfigurer properties() {
@@ -46,10 +46,11 @@ public class PropertiesConfiguration {
 //    }
 
     /**
-     * 把指定properties文件加载为"Properties"实例
+     * 把指定properties文件加载为"Properties"实例中
+     * 注意: 文件中的属性不会加载到Spring Environment中去
      */
     @Bean(name = "myProperties")
-    public static PropertiesFactoryBean artifactMapping() {
+    public static PropertiesFactoryBean myProperties() {
         PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
         propertiesFactoryBean.setLocations(new ClassPathResource("config/demo/common/properties/general.properties"));
         propertiesFactoryBean.setIgnoreResourceNotFound(true);
