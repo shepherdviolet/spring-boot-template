@@ -26,15 +26,27 @@ public class JasyptController {
 
     private static final Logger logger = LoggerFactory.getLogger(JasyptController.class);
 
+    /**
+     * 适用于springboot2.0+
+     */
     @Value("${jasypt.test-param1}")
     private String param1;
+
+    /**
+     * 适用于非springboot或springboot1.X
+     * 不用jasypt-spring-boot-starter, 只依赖jasypt-spring-boot, 且不配置jasypt, 就用工具类+SpEL解密, 在XML中也可以, 支持Apollo动态配置
+     */
+    @Value("#{T(glacimon.AsymParamEnc).decrypt('${jasypt.test-param2}', '${jasypt.encryptor.privateKeyString}')}")
+    private String param2;
+    @Value("#{T(glacimon.AsymParamEnc).decrypt('${jasypt.test-param2}', 'classpath:config/demo/jasypt/jasypt_private.pem')}")
+    private String param2ByFile;
 
     /**
      * http://localhost:8000/jasypt
      */
     @RequestMapping("")
     public String test() {
-        return param1;
+        return param1 + "<br>" + param2 + "<br>" + param2ByFile;
     }
 
     /* ****************************************************************************************************************
@@ -79,7 +91,7 @@ public class JasyptController {
          */
         SimpleAsymmetricConfig config = new SimpleAsymmetricConfig();
         config.setPublicKey("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCL1O9+qYUlgZmWZKSGo6mxPz4E7JPx4uYuQdPpwDyGqGk8oR4ZaISpn26GBwlDmz0iCUj4+xQa0K5Sh4/Ie97w2C4NiCkJNOOqrfpgIbRLnAlNH5K83NBuW6UD0hEApqQkTrn7ZpHrpmySsGTbzQ5cJyyM+MMkQaPtnFsOjpS2YwIDAQAB");
-
+        // PEM格式公钥
 //        config.setKeyFormat(AsymmetricCryptography.KeyFormat.PEM);
 //        config.setPublicKey("-----BEGIN PUBLIC KEY-----\n" +
 //                "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCL1O9+qYUlgZmWZKSGo6mxPz4E\n" +
@@ -95,7 +107,23 @@ public class JasyptController {
         /*
          * 密文加上前缀后缀, 就可以作为参数设置到Spring配置/启动参数里了
          */
-        System.out.println("ENC(" + encrypted + ")");
+        System.out.println("\nEncrypted: \nENC(" + encrypted + ")");
+
+        /* *****************************************************************************
+         * 解密示例 (此处仅为示例, 实际开发环境请勿留存私钥)
+         */
+
+        config = new SimpleAsymmetricConfig();
+        config.setPrivateKey("MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAIvU736phSWBmZZkpIajqbE/PgTsk/Hi5i5B0+nAPIaoaTyhHhlohKmfboYHCUObPSIJSPj7FBrQrlKHj8h73vDYLg2IKQk046qt+mAhtEucCU0fkrzc0G5bpQPSEQCmpCROuftmkeumbJKwZNvNDlwnLIz4wyRBo+2cWw6OlLZjAgMBAAECgYAw2o9mMHHtXa88ZSM6SxnxbEgNzl4OB5kmFiekpl4/Kb3CygPLGsImxSYHO5QYA7fDGX1eR9KJX9lXyjcI84Y7E4w0XcGQdSuCILMFcjUlhNtJJEnnzledEKrbysYajVwy7jY0EM6RWs0PVpOygLeqP+Vvwnns2Q3ypQ8IhHb5EQJBAPwX6ssy3VYn5bOTiAqRNmPd6CyVcNebU6mPpwdJKb3SuaVcqhlHLsonqwfWQlh8gHGSsISPa6le7TeC2w5ifmsCQQCN/6nxxJVcb67LL08U+PrsPrEgcAqZtqA4pEQ7jz15ZVqUVR6CPzV13L7rtOzhL70OrfqNhKoPdLwGaufCKrXpAkEAuSa/1fpHwi2PcbMbqdc5gWPMUGJ5/IEik1jkrl83/yk0HJXQgLxdSzCTVzAwjljy5Xd9mf7UbhNAWxMK3KfOfQJALIM4gtFdAN0Bri/mWmyyO9xrKf/1Uros/5R+zyzX2HYtLtJ//dRSrd/E+Z59oxmT6kYfhL1RkgbF6j0Y6YT6AQJAR/HHgWG29Clwx+bwIvsJLKckYYmZudTMKNrCnwUbUt8b5DVpKtXYyUc5hRVWNTI58ns82N2AYrAwXqqgIZ5fXQ==");
+        // PEM格式私钥文件
+//        config.setKeyFormat(AsymmetricCryptography.KeyFormat.PEM);
+//        config.setPrivateKeyLocation("classpath:config/demo/jasypt/jasypt_private.pem");
+//        config.setPrivateKeyLocation("file:/home/yourname/jasypt_private.pem");
+
+        encryptor = new SimpleAsymmetricStringEncryptor(config);
+
+        System.out.println("\nDecrypted: \n" + encryptor.decrypt(encrypted));
+
     }
 
     /* ****************************************************************************************************************
