@@ -33,13 +33,21 @@ public class JasyptController {
     private String param1;
 
     /**
-     * 适用于非springboot或springboot1.X
+     * 非对称方式手工解密, 适用于非springboot或springboot1.X
      * 不用jasypt-spring-boot-starter, 只依赖jasypt-spring-boot, 且不配置jasypt, 就用工具类+SpEL解密, 在XML中也可以, 支持Apollo动态配置
      */
     @Value("#{T(glacimon.AsymParamEnc).decrypt('${jasypt.test-param2}', '${jasypt.encryptor.privateKeyString}')}")
     private String param2;
     @Value("#{T(glacimon.AsymParamEnc).decrypt('${jasypt.test-param2}', 'classpath:config/demo/jasypt/jasypt_private.pem')}")
     private String param2ByFile;
+
+    /**
+     * 对称方式手工解密, 适用于非springboot或springboot1.X
+     * 不用jasypt-spring-boot-starter, 只依赖jasypt-spring-boot, 且不配置jasypt, 就用工具类+SpEL解密, 在XML中也可以, 支持Apollo动态配置
+     */
+//    @Value("#{T(glacimon.ParamEnc).decrypt('${jasypt.test-param2}', '${jasypt.encryptor.password}')}")
+//    private String param2;
+//    private String param2ByFile = "symmetric mode: pem key is not supported";
 
     /**
      * http://localhost:8000/jasypt
