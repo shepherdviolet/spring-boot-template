@@ -28,6 +28,8 @@ public class JasyptController {
 
     /**
      * 适用于springboot2.0+
+     * 所有属性都是明文(`非ENC(...)`)时, jasypt私钥/密钥可以不配置
+     * 只要有一个属性是密文(`ENC(...)`), jasypt私钥/密钥必须配置, 否则项目启动报错
      */
     @Value("${jasypt.test-param1}")
     private String param1;
@@ -35,8 +37,9 @@ public class JasyptController {
     /**
      * 非对称方式手工解密, 适用于非springboot或springboot1.X
      * 不用jasypt-spring-boot-starter, 只依赖jasypt-spring-boot, 且不配置jasypt, 就用工具类+SpEL解密, 在XML中也可以, 支持Apollo动态配置
+     * TIPS: 注意decrypt方法的第二个参数'密钥', 建议设置个默认值空(就是key:), 这样密钥没配置也不会报错 (只是不解密保持原文)
      */
-    @Value("#{T(glacimon.AsymParamEnc).decrypt('${jasypt.test-param2}', '${jasypt.encryptor.privateKeyString}')}")
+    @Value("#{T(glacimon.AsymParamEnc).decrypt('${jasypt.test-param2}', '${jasypt.encryptor.privateKeyString:}')}")
     private String param2;
     @Value("#{T(glacimon.AsymParamEnc).decrypt('${jasypt.test-param2}', 'classpath:config/demo/jasypt/jasypt_private.pem')}")
     private String param2ByFile;
