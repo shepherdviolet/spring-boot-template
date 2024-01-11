@@ -353,10 +353,12 @@ jasypt:
 #jasypt:
 #  encryptor:
 #    ## WARNING: The encryptor password should not be stored in a property file, it should rather be passed as system property, command line argument, or environment variable and as far as its name is jasypt.encryptor.password it'll work.
-#    password: IPRGkutx3FfsCYtyvgL9OjHyHQ7SkxGL
+#    password: IPRGkutx3FfsCYty
+#    ## algorithm PBEWITHHMACSHA512ANDAES_128 -> PBEWITHHMACSHA512ANDAES_256. Adapt to lower versions of JDK.
+#    algorithm: PBEWITHHMACSHA512ANDAES_128
 #  ## Test params
-#  test-param1: ENC(X5GjSlvt2i2jIIqPkf34F02hs+EMMhfwLQ9oSYfRaIah7ME0bVb6Zo/xJikL0n2yEE6QH2dclj/6DtmdcPSZVAhJsdQi+99xKw/yU3ykFgA=)
-#  test-param2: ENC[X5GjSlvt2i2jIIqPkf34F02hs+EMMhfwLQ9oSYfRaIah7ME0bVb6Zo/xJikL0n2yEE6QH2dclj/6DtmdcPSZVAhJsdQi+99xKw/yU3ykFgA=]
+#  test-param1: ENC(c9sxKuXkIy0pbfr5rtM6keKeeR3whcyEwpRi8qkmKquXcH3N82p2xT61UnagwJ1R5BjG5RqTji0KqdCDzcnO24Qyl8JNFaDTl4uiXmmRIB4=)
+#  test-param2: ENC[c9sxKuXkIy0pbfr5rtM6keKeeR3whcyEwpRi8qkmKquXcH3N82p2xT61UnagwJ1R5BjG5RqTji0KqdCDzcnO24Qyl8JNFaDTl4uiXmmRIB4=]
 
 ############################################################################################################
 

@@ -145,14 +145,17 @@ public class JasyptController {
 //    public static void main(String[] args) {
 //        /*
 //         * 生成和保管密码:
-//         * 建议用工具生成一个密码(例如https://www.sexauth.com/)
+//         * 建议用工具生成一个128位(16字节)密码, 例如:https://www.sexauth.com/
 //         * 注意!!! 这个密码不要直接放在程序配置文件里, 应该通过启动参数/环境变量等方式在运行环境设置.
 //         * (本示例工程中, 密钥配在了application.yaml里, 为了测试方便, 生产环境不要这么做)
 //         *
 //         * 例如在启动参数里:
-//         * -Djasypt.encryptor.password=PRGkutx3FfsCYtyvgL9OjHyHQ7SkxGL
+//         * -Djasypt.encryptor.password=IPRGkutx3FfsCYty
+//         *
+//         * 关于密钥长度和算法:
+//         * 默认算法是PBEWITHHMACSHA512ANDAES_256, 老版本JDK不支持AES256. 为了便于在老系统中推广, 我们将算法降级为128位.
 //         */
-//        String password = "IPRGkutx3FfsCYtyvgL9OjHyHQ7SkxGL";
+//        String password = "IPRGkutx3FfsCYty";
 //        /*
 //         * 在这里填入需要用密码保护的参数原文
 //         */
@@ -172,10 +175,10 @@ public class JasyptController {
 //         * 密文加上前缀后缀, 就可以作为参数设置到Spring配置/启动参数里了
 //         *
 //         * 例如在application.properties里:
-//         * param-key=ENC(cABV59oATrHNGVZ33GBDHIBb4LdC7naVuExv9rdJ2dtnYSS6WhK/88KRunZavB1M)
+//         * param-key=ENC(c9sxKuXkIy0pbfr5rtM6keKeeR3whcyEwpRi8qkmKquXcH3N82p2xT61UnagwJ1R5BjG5RqTji0KqdCDzcnO24Qyl8JNFaDTl4uiXmmRIB4=)
 //         *
 //         * 例如在启动参数里:
-//         * -Dparam-key=ENC(cABV59oATrHNGVZ33GBDHIBb4LdC7naVuExv9rdJ2dtnYSS6WhK/88KRunZavB1M)
+//         * -Dparam-key=ENC(c9sxKuXkIy0pbfr5rtM6keKeeR3whcyEwpRi8qkmKquXcH3N82p2xT61UnagwJ1R5BjG5RqTji0KqdCDzcnO24Qyl8JNFaDTl4uiXmmRIB4=)
 //         */
 //        System.out.println("ENC(" + messageEncrypted + ")");
 //    }
@@ -188,7 +191,9 @@ public class JasyptController {
 //        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
 //        SimpleStringPBEConfig config = new SimpleStringPBEConfig();
 //        config.setPassword(password);
-//        config.setAlgorithm("PBEWITHHMACSHA512ANDAES_256");
+//        // algorithm PBEWITHHMACSHA512ANDAES_128 -> PBEWITHHMACSHA512ANDAES_256. Adapt to lower versions of JDK.
+//        // 默认是PBEWITHHMACSHA512ANDAES_256, 为了兼容老版本JDK改为128
+//        config.setAlgorithm("PBEWITHHMACSHA512ANDAES_128");
 //        config.setKeyObtentionIterations("1000");
 //        config.setPoolSize("1");
 //        config.setProviderName(null);
