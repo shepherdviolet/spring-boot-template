@@ -32,19 +32,6 @@ import org.springframework.core.io.ClassPathResource;
 })
 public class PropertiesConfiguration {
 
-//    /**
-//     * 自定义Spring Environment加载的配置文件, 注意, PropertySourcesPlaceholderConfigurer在上下文中只有一个有效
-//     */
-//    @Bean
-//    public static PropertySourcesPlaceholderConfigurer properties() {
-//        PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
-//        YamlPropertiesFactoryBean yamlPropertiesFactoryBean = new YamlPropertiesFactoryBean();
-//        yamlPropertiesFactoryBean.setResources(new ClassPathResource("config/demo/common/properties/yaml.yml"));
-////        yamlPropertiesFactoryBean.setResources(new FileSystemResource("D:\\__Temp\\config.yml"));
-//        configurer.setProperties(yamlPropertiesFactoryBean.getObject());
-//        return configurer;
-//    }
-
     /**
      * 把指定properties文件加载为"Properties"实例中
      * 注意: 文件中的属性不会加载到Spring Environment中去
@@ -57,5 +44,19 @@ public class PropertiesConfiguration {
         propertiesFactoryBean.setFileEncoding("UTF-8");
         return propertiesFactoryBean;
     }
+
+    /**
+     * [不推荐这么干]
+     * 自定义Spring Environment加载的配置文件, 注意, PropertySourcesPlaceholderConfigurer在上下文中只有一个有效
+     */
+//    @Bean
+//    public static PropertySourcesPlaceholderConfigurer properties() {
+//        PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
+//        YamlPropertiesFactoryBean yamlPropertiesFactoryBean = new YamlPropertiesFactoryBean();
+//        yamlPropertiesFactoryBean.setResources(new ClassPathResource("config/demo/common/properties/yaml.yml"));
+////        yamlPropertiesFactoryBean.setResources(new FileSystemResource("D:\\__Temp\\config.yml"));
+//        configurer.setProperties(yamlPropertiesFactoryBean.getObject());
+//        return configurer;
+//    }
 
 }
