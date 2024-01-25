@@ -14,7 +14,7 @@ import java.util.Map;
 //可以扫包, 也可以在Configuration中声明Bean
 @Component
 //绑定到Bean上
-@ConfigurationProperties(prefix="demo.properties.yaml")
+@ConfigurationProperties(prefix="prop.yaml")
 public class YamlProperties {
 
     private List<String> list;

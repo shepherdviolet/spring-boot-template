@@ -15,7 +15,7 @@ import java.util.Map;
 //配置路径(不能用通配符), 当文件不存在时不报错
 @PropertySource(value = "classpath:config/demo/common/properties/bind.properties", ignoreResourceNotFound = true)
 //绑定到Bean上
-@ConfigurationProperties(prefix="demo.properties.bind")
+@ConfigurationProperties(prefix="prop.bind")
 public class BindProperties {
 
     private String currentVersion;

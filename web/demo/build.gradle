@@ -22,7 +22,6 @@ dependencies {
     implementation "com.github.shepherdviolet.glacimon:glacispring-helper"
     implementation "com.github.shepherdviolet.glacimon:glacispring-httpclient"
     implementation "com.google.code.gson:gson:$version_gson"
-    implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:$version_jasypt"
 
     //Spring///////////////////////////////////////////////////////////////////////////////////////////
 

@@ -1,16 +1,17 @@
 
 # yml加载示例
 
-demo:
-  properties:
-    yaml:
-      list:
-        - http://localhost:8001
-        - http://localhost:8002
-      map:
-        item1:
-          url: /service1
-          version: 1.0.0
-        item2:
-          url: /service2
-          version: 1.0.1
+prop:
+  yaml:
+    list:
+      - http://localhost:8001
+      - http://localhost:8002
+    map:
+      item1:
+        url: /service1
+        version: 1.0.0
+        comment: hello
+      item2:
+        url: /service2
+        version: 1.0.1
+        comment: CIPHER(aJFGs5fI0eMIu70RpMtTcS70jhHa06X2/Qlc2u5hgHN1nUEhfwJidXrQY8zRPtuAqYdw1xE6q+tBYBnS/lecXCyDEVNnaZNKsR/kD0sumzuwh7Kx1xknLq2MdfIJQV28kHEKlDMTQ+rZkt1ULWVqbEOs9mTr2DzPHXg301zwen8=)

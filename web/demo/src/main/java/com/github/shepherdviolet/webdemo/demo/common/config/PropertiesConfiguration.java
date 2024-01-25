@@ -1,6 +1,7 @@
 package com.github.shepherdviolet.webdemo.demo.common.config;
 
 import com.github.shepherdviolet.glacimon.spring.config.property.OptionalYamlPropertySourceFactory;
+import com.github.shepherdviolet.glacimon.spring.x.crypto.cryptoprop.EnableCryptoProp;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -30,33 +31,21 @@ import org.springframework.core.io.ClassPathResource;
 @PropertySource(factory = OptionalYamlPropertySourceFactory.class, value = {
         "classpath:config/demo/common/properties/yaml.yml",
 })
+//启用属性解密
+@EnableCryptoProp
 public class PropertiesConfiguration {
 
     /**
      * 把指定properties文件加载为"Properties"实例中
      * 注意: 文件中的属性不会加载到Spring Environment中去
      */
-    @Bean(name = "myProperties")
+    @Bean(name = "myStandaloneProperties")
     public static PropertiesFactoryBean myProperties() {
         PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
-        propertiesFactoryBean.setLocations(new ClassPathResource("config/demo/common/properties/general.properties"));
+        propertiesFactoryBean.setLocations(new ClassPathResource("config/demo/common/properties/standalone.properties"));
         propertiesFactoryBean.setIgnoreResourceNotFound(true);
         propertiesFactoryBean.setFileEncoding("UTF-8");
         return propertiesFactoryBean;
     }
-
-    /**
-     * [不推荐这么干]
-     * 自定义Spring Environment加载的配置文件, 注意, PropertySourcesPlaceholderConfigurer在上下文中只有一个有效
-     */
-//    @Bean
-//    public static PropertySourcesPlaceholderConfigurer properties() {
-//        PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
-//        YamlPropertiesFactoryBean yamlPropertiesFactoryBean = new YamlPropertiesFactoryBean();
-//        yamlPropertiesFactoryBean.setResources(new ClassPathResource("config/demo/common/properties/yaml.yml"));
-////        yamlPropertiesFactoryBean.setResources(new FileSystemResource("D:\\__Temp\\config.yml"));
-//        configurer.setProperties(yamlPropertiesFactoryBean.getObject());
-//        return configurer;
-//    }
 
 }

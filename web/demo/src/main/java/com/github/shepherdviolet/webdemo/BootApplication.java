@@ -43,7 +43,6 @@ import org.springframework.context.annotation.Bean;
                 "com.github.shepherdviolet.webdemo.demo.shorturl.config",
                 "com.github.shepherdviolet.webdemo.demo.resttemplate.config",
                 "com.github.shepherdviolet.webdemo.demo.actuator.config",
-                "com.github.shepherdviolet.webdemo.demo.jasypt.config",
 //                "com.github.shepherdviolet.webdemo.demo.jedis.config",
 //                "com.github.shepherdviolet.webdemo.demo.security.config",
 //                "com.github.shepherdviolet.webdemo.demo.sentinel.config",

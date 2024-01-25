@@ -269,6 +269,15 @@ info:
 glacispring:
   common:
     servlet-context-listener-enabled: true
+  ## Crypto property
+  crypto-prop:
+    key: rsa:classpath:config/demo/common/cryptoprop/cryptoprop-private-key.pem
+#    key: aes:file:D:/__Temp/cryptoprop/cryptoprop-key.txt
+#    key: aes:KrIjtliPM3MIlHPh+l3ylA==
+    mode: ENHANCED
+#    enhanced:
+#      intercept-by-proxy: true
+  ## Helpers
 #  helper:
 #    rocketmq:
 #      namesrv: host1:9876;host2:9876
@@ -277,6 +286,7 @@ glacispring:
 #      default-charset: UTF-8
 #    ez-sentinel:
 #      rule-data: classpath:config/demo/sentinel/rules.json
+  ## Http client
 #  httpclient:
 #    enabled: true
 #    apollo-support: true
@@ -320,45 +330,6 @@ glacispring:
 #  enabled: true
 #  uri: redis0:26379,redis1:26380,redis2:26381
 #  password: 123456
-
-############################################################################################################
-
-## jasypt-spring-boot-starter Test
-## https://github.com/ulisesbocchio/jasypt-spring-boot
-
-## asymmetric mode (der)
-
-jasypt:
-  encryptor:
-    ## WARNING: The encryptor password should not be stored in a property file, it should rather be passed as system property, command line argument, or environment variable and as far as its name is jasypt.encryptor.privateKeyString it'll work.
-    privateKeyString: MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAIvU736phSWBmZZkpIajqbE/PgTsk/Hi5i5B0+nAPIaoaTyhHhlohKmfboYHCUObPSIJSPj7FBrQrlKHj8h73vDYLg2IKQk046qt+mAhtEucCU0fkrzc0G5bpQPSEQCmpCROuftmkeumbJKwZNvNDlwnLIz4wyRBo+2cWw6OlLZjAgMBAAECgYAw2o9mMHHtXa88ZSM6SxnxbEgNzl4OB5kmFiekpl4/Kb3CygPLGsImxSYHO5QYA7fDGX1eR9KJX9lXyjcI84Y7E4w0XcGQdSuCILMFcjUlhNtJJEnnzledEKrbysYajVwy7jY0EM6RWs0PVpOygLeqP+Vvwnns2Q3ypQ8IhHb5EQJBAPwX6ssy3VYn5bOTiAqRNmPd6CyVcNebU6mPpwdJKb3SuaVcqhlHLsonqwfWQlh8gHGSsISPa6le7TeC2w5ifmsCQQCN/6nxxJVcb67LL08U+PrsPrEgcAqZtqA4pEQ7jz15ZVqUVR6CPzV13L7rtOzhL70OrfqNhKoPdLwGaufCKrXpAkEAuSa/1fpHwi2PcbMbqdc5gWPMUGJ5/IEik1jkrl83/yk0HJXQgLxdSzCTVzAwjljy5Xd9mf7UbhNAWxMK3KfOfQJALIM4gtFdAN0Bri/mWmyyO9xrKf/1Uros/5R+zyzX2HYtLtJ//dRSrd/E+Z59oxmT6kYfhL1RkgbF6j0Y6YT6AQJAR/HHgWG29Clwx+bwIvsJLKckYYmZudTMKNrCnwUbUt8b5DVpKtXYyUc5hRVWNTI58ns82N2AYrAwXqqgIZ5fXQ==
-  ## Test params
-  test-param1: ENC(BVk8JaQnzd52Locu50vxJy1xtu31UMWfgaZCCeqKRQ81k9zJVW+1E/CSe3pY2KOF5WjtMN6wGFqrYtc6+N7s+KjfNn2ez8BoXdU2JgVjbIo566KiNFpxp65ohQ9K/8UsQrsjSxqRKjqje2Ate3dxYXE9AjgX8s0WR4QSIsLAZHQ=)
-  test-param2: ENC[BVk8JaQnzd52Locu50vxJy1xtu31UMWfgaZCCeqKRQ81k9zJVW+1E/CSe3pY2KOF5WjtMN6wGFqrYtc6+N7s+KjfNn2ez8BoXdU2JgVjbIo566KiNFpxp65ohQ9K/8UsQrsjSxqRKjqje2Ate3dxYXE9AjgX8s0WR4QSIsLAZHQ=]
-
-## asymmetric mode (pem file)
-
-#jasypt:
-#  encryptor:
-#    privateKeyFormat: PEM
-#    privateKeyLocation: classpath:config/demo/jasypt/jasypt_private.pem
-##    privateKeyLocation: file:D:/__Temp/tomcat/jasypt_private.pem
-##    privateKeyLocation: file:/home/yourname/jasypt_private.pem
-#  ## Test params
-#  test-param1: ENC(BVk8JaQnzd52Locu50vxJy1xtu31UMWfgaZCCeqKRQ81k9zJVW+1E/CSe3pY2KOF5WjtMN6wGFqrYtc6+N7s+KjfNn2ez8BoXdU2JgVjbIo566KiNFpxp65ohQ9K/8UsQrsjSxqRKjqje2Ate3dxYXE9AjgX8s0WR4QSIsLAZHQ=)
-#  test-param2: ENC[BVk8JaQnzd52Locu50vxJy1xtu31UMWfgaZCCeqKRQ81k9zJVW+1E/CSe3pY2KOF5WjtMN6wGFqrYtc6+N7s+KjfNn2ez8BoXdU2JgVjbIo566KiNFpxp65ohQ9K/8UsQrsjSxqRKjqje2Ate3dxYXE9AjgX8s0WR4QSIsLAZHQ=]
-
-## symmetric mode
-
-#jasypt:
-#  encryptor:
-#    ## WARNING: The encryptor password should not be stored in a property file, it should rather be passed as system property, command line argument, or environment variable and as far as its name is jasypt.encryptor.password it'll work.
-#    password: IPRGkutx3FfsCYty
-#    ## algorithm PBEWITHHMACSHA512ANDAES_128 -> PBEWITHHMACSHA512ANDAES_256. Adapt to lower versions of JDK.
-#    algorithm: PBEWITHHMACSHA512ANDAES_128
-#  ## Test params
-#  test-param1: ENC(c9sxKuXkIy0pbfr5rtM6keKeeR3whcyEwpRi8qkmKquXcH3N82p2xT61UnagwJ1R5BjG5RqTji0KqdCDzcnO24Qyl8JNFaDTl4uiXmmRIB4=)
-#  test-param2: ENC[c9sxKuXkIy0pbfr5rtM6keKeeR3whcyEwpRi8qkmKquXcH3N82p2xT61UnagwJ1R5BjG5RqTji0KqdCDzcnO24Qyl8JNFaDTl4uiXmmRIB4=]
 
 ############################################################################################################
 
