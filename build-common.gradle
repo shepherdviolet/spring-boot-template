@@ -16,6 +16,12 @@ configure(subprojects.findAll { it.PROJECT_GROUP == 'web' }) {
     // encoding
     [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
 
+    test {
+        // For JUnit5: Avoid IDEA reporting "No tests found for given includes" error when executing tests individually
+        // NOTICE: All subprojects configured with 'useJUnitPlatform()' must depend on Junit5! (Avoid error "Cannot create Launcher without at least one TestEngine")
+        useJUnitPlatform()
+    }
+
     // config of bootJar
     bootJar {
         // main class
@@ -35,7 +41,7 @@ configure(subprojects.findAll { it.PROJECT_GROUP == 'web' }) {
 //        implementation enforcedPlatform("com.github.shepherdviolet.glacimon:glacimon-bom:$version_glacimon") // 强制覆盖手动依赖的版本
 
         // Common dependencies
-//        implementation "ch.qos.logback:logback-classic:$version_logback"
+        testImplementation "org.springframework.boot:spring-boot-starter-test:$version_spring_boot" // NOTICE: All subprojects configured with 'useJUnitPlatform()' must depend on Junit5! (Avoid error "Cannot create Launcher without at least one TestEngine")
     }
 
 }
@@ -52,6 +58,12 @@ configure(subprojects.findAll { it.PROJECT_GROUP in ['module'] }) {
     // encoding
     [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
 
+    test {
+        // For JUnit5: Avoid IDEA reporting "No tests found for given includes" error when executing tests individually
+        // NOTICE: All subprojects configured with 'useJUnitPlatform()' must depend on Junit5! (Avoid error "Cannot create Launcher without at least one TestEngine")
+        useJUnitPlatform()
+    }
+
     // 库工程通用依赖
     dependencies {
 //        // Import BOMs
@@ -60,7 +72,7 @@ configure(subprojects.findAll { it.PROJECT_GROUP in ['module'] }) {
 //        api enforcedPlatform("com.github.shepherdviolet.glacimon:glacimon-bom:$version_glacimon") // 强制覆盖手动依赖的版本
 
         // Common dependencies
-//        api "ch.qos.logback:logback-classic:$version_logback"
+        testImplementation "org.springframework.boot:spring-boot-starter-test:$version_spring_boot" // NOTICE: All subprojects configured with 'useJUnitPlatform()' must depend on Junit5! (Avoid error "Cannot create Launcher without at least one TestEngine")
     }
 
 }

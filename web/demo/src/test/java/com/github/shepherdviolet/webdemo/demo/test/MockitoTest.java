@@ -3,7 +3,7 @@ package com.github.shepherdviolet.webdemo.demo.test;
 import com.github.shepherdviolet.webdemo.TestApplication;
 import com.github.shepherdviolet.webdemo.demo.test.service.InnerService;
 import com.github.shepherdviolet.webdemo.demo.test.service.OuterService;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,7 +37,7 @@ public class MockitoTest {
     /**
      * 启用Mock注解 (对当前Test类中标有@Mock/@InjectMocks注解的对象进行代理, 不会侵入Spring上下文)
      */
-    @BeforeAll // 在所有Test方法前运行一次, BeforeEach在每个Test方法前运行
+    @BeforeEach // BeforeAll在所有Test方法前运行一次(方法必须是static!), BeforeEach在每个Test方法前运行
     public void before() {
         MockitoAnnotations.initMocks(this);
     }
