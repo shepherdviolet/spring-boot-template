@@ -274,9 +274,7 @@ glacispring:
     key: rsa:classpath:config/demo/common/cryptoprop/cryptoprop-private-key.pem
 #    key: aes:file:D:/__Temp/cryptoprop/cryptoprop-key.txt
 #    key: aes:KrIjtliPM3MIlHPh+l3ylA==
-    mode: ENHANCED
-#    enhanced:
-#      intercept-by-proxy: true
+#    intercept-by-proxy: true
   ## Helpers
 #  helper:
 #    rocketmq:
