@@ -7,7 +7,7 @@
 
 | 目录 | 子工程名 | 说明 |
 | ------ | ----- | ----- |
-| web/demo | spring-boot-demo | 大量的SpringBoot使用示例 |
+| web/springboot-demo | springboot-demo | 大量的SpringBoot使用示例 |
 | web/archetype | web-archetype | WEB子工程原型(Spring Boot) |
 | module/archetype | module-archetype | 模块子工程原型(Java Library) |
 

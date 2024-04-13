@@ -31,8 +31,8 @@ public class RedisController {
      */
     @RequestMapping("/lettuce")
     public String lettuce() {
-        String ret = redisCommands.stringCommands().get("spring-boot-demo-lettuce-1");
-        redisCommands.stringCommands().set("spring-boot-demo-lettuce-1", DateTimeUtils.currentDateTimeString());
+        String ret = redisCommands.stringCommands().get("springboot-demo-lettuce-1");
+        redisCommands.stringCommands().set("springboot-demo-lettuce-1", DateTimeUtils.currentDateTimeString());
         return ret;
     }
 

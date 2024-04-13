@@ -29,8 +29,8 @@
 //    @RequestMapping("/test")
 //    public String lettuce() {
 //        try (Jedis jedis = jedisPool.getResource()) {
-//            String ret = jedis.get("spring-boot-demo-jedis-1");
-//            jedis.set("spring-boot-demo-jedis-1", DateTimeUtils.currentDateTimeString());
+//            String ret = jedis.get("springboot-demo-jedis-1");
+//            jedis.set("springboot-demo-jedis-1", DateTimeUtils.currentDateTimeString());
 //            return ret;
 //        }
 //    }

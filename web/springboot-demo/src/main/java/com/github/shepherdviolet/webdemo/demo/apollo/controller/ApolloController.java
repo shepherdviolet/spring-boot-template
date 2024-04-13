@@ -26,7 +26,7 @@ public class ApolloController {
     /**
      * http://localhost:8000/apollo/refreshable?key=key1
      *
-     * 1.在Apollo上新建一个应用, app.id为: spring-boot-demo
+     * 1.在Apollo上新建一个应用, app.id为: springboot-demo
      * 2.然后在application配置里, 添加前缀为"prefix1."的参数, 例如: prefix1.aaa
      * 3.请求: http://localhost:8000/apollo/refreshable?key=aaa
      */

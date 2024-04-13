@@ -3,7 +3,7 @@
 
 ## Application name & apollo app id & logback context name
 app:
-  id: spring-boot-demo
+  id: springboot-demo
 
 ## Apollo
 #apollo:
