@@ -1,10 +1,10 @@
 package com.github.shepherdviolet.webdemo.basic.controller;
 
-import com.github.shepherdviolet.webdemo.basic.entity.HttpStatusException;
+import com.github.shepherdviolet.webdemo.basic.error.HttpStatusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-import com.github.shepherdviolet.webdemo.basic.entity.RejectException;
+import com.github.shepherdviolet.webdemo.basic.error.RejectException;
 import com.github.shepherdviolet.webdemo.basic.entity.TestRequest;
 import com.github.shepherdviolet.webdemo.basic.entity.TestResponse;
 

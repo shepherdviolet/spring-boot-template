@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
- * 统一错误处理
+ * 异常处理器
  *
  * @author S.Violet
  */

@@ -1,4 +1,4 @@
-package com.github.shepherdviolet.webdemo.basic.entity;
+package com.github.shepherdviolet.webdemo.basic.error;
 
 /**
  * 给前端返回拒绝报文 (HTTP_CODE == 200)

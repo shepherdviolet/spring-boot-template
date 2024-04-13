@@ -11,8 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MissingServletRequestParameterException;
-import com.github.shepherdviolet.webdemo.basic.entity.RejectException;
-import com.github.shepherdviolet.webdemo.basic.entity.HttpStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 统一错误处理
+ * 异常处理器
  *
  * @author S.Violet
  */
@@ -78,7 +76,7 @@ public class ErrorHandlerImpl implements ErrorHandler {
                 }
             }
         } else if (throwable instanceof MissingServletRequestParameterException) {
-            // 字段缺失的情况
+            // Controller声明的字段缺失的情况
             errorCode = RejectException.ILLEGAL_REQUEST_FIELD;
             errorDescription = "Missing required url parameter '" + ((MissingServletRequestParameterException) throwable).getParameterName() + "'";
         }

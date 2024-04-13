@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.github.shepherdviolet.webdemo.basic.entity.RejectException;
+import com.github.shepherdviolet.webdemo.basic.error.RejectException;
 import com.github.shepherdviolet.webdemo.demo.validate.entity.Request1;
 import com.github.shepherdviolet.webdemo.demo.validate.entity.Request2;
 

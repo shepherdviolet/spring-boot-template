@@ -1,4 +1,4 @@
-package com.github.shepherdviolet.webdemo.basic.entity;
+package com.github.shepherdviolet.webdemo.basic.error;
 
 import org.springframework.http.HttpStatus;
 
