@@ -50,8 +50,8 @@ public class ErrorHandlerImpl implements ErrorHandler {
         logger.error("Error occurred! The request uri is " + request.getAttribute(SERVLET_ERROR_PREFIX + REQUEST_URI), throwable);
 
         //错误信息
-        String errorCode = RejectException.UNDEFINED_ERROR_CODE;
-        String errorDescription = RejectException.UNDEFINED_ERROR_CODE;
+        String errorCode = CommonErrors.UNDEFINED_ERROR;
+        String errorDescription = CommonErrors.UNDEFINED_ERROR;
         Object[] args = null;
 
         if (throwable instanceof HttpStatusException) {
@@ -70,14 +70,14 @@ public class ErrorHandlerImpl implements ErrorHandler {
             if (errors.size() > 0) {
                 ObjectError error = errors.get(0);
                 if (error instanceof FieldError) {
-                    errorCode = RejectException.ILLEGAL_REQUEST_FIELD;
+                    errorCode = CommonErrors.ILLEGAL_REQUEST_FIELD;
                     errorDescription = error.getDefaultMessage();
                     args = new Object[]{((FieldError) error).getField()};
                 }
             }
         } else if (throwable instanceof MissingServletRequestParameterException) {
             // Controller声明的字段缺失的情况
-            errorCode = RejectException.ILLEGAL_REQUEST_FIELD;
+            errorCode = CommonErrors.ILLEGAL_REQUEST_FIELD;
             errorDescription = "Missing required url parameter '" + ((MissingServletRequestParameterException) throwable).getParameterName() + "'";
         }
 
@@ -104,7 +104,7 @@ public class ErrorHandlerImpl implements ErrorHandler {
         logger.error("Error occurred! The request uri is " + request.getAttribute(SERVLET_ERROR_PREFIX + REQUEST_URI) + ", error description: " + errorDescription,
                 new Exception(errorDescription));
 
-        return buildResponse(request, response, RejectException.UNDEFINED_ERROR_CODE, errorDescription, null);
+        return buildResponse(request, response, CommonErrors.UNDEFINED_ERROR, errorDescription, null);
     }
 
     /**

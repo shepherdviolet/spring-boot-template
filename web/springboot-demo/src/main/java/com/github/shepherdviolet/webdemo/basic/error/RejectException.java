@@ -7,9 +7,6 @@ package com.github.shepherdviolet.webdemo.basic.error;
  */
 public class RejectException extends RuntimeException {
 
-    public static final String UNDEFINED_ERROR_CODE = "undefined-error";
-    public static final String ILLEGAL_REQUEST_FIELD = "illegal-request-field";
-
     private String code;
     private String description;
     private Object[] args;

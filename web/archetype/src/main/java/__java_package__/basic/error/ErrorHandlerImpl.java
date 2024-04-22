@@ -13,9 +13,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 
-// <replace-by> import ${java_package}.basic.entity.RejectException;
-import __java_package__.basic.entity.RejectException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -43,8 +40,8 @@ public class ErrorHandlerImpl implements ErrorHandler {
     @Override
     public Map<String, Object> handleThrowable(HttpServletRequest request, HttpServletResponse response, Throwable throwable) {
         //错误信息
-        String errorCode = RejectException.UNDEFINED_ERROR_CODE;
-        String errorDescription = RejectException.UNDEFINED_ERROR_CODE;
+        String errorCode = CommonErrors.UNDEFINED_ERROR;
+        String errorDescription = CommonErrors.UNDEFINED_ERROR;
         Object[] args = null;
 
         if (throwable instanceof RejectException) {
@@ -60,14 +57,14 @@ public class ErrorHandlerImpl implements ErrorHandler {
                 if (errors != null && errors.size() > 0) {
                     ObjectError error = errors.get(0);
                     if (error instanceof FieldError) {
-                        errorCode = RejectException.ILLEGAL_REQUEST_FIELD;
+                        errorCode = CommonErrors.ILLEGAL_REQUEST_FIELD;
                         errorDescription = error.getDefaultMessage();
                         args = new Object[]{((FieldError) error).getField()};
                     }
                 }
             }
         } else if (throwable instanceof MissingServletRequestParameterException) {
-            errorCode = RejectException.ILLEGAL_REQUEST_FIELD;
+            errorCode = CommonErrors.ILLEGAL_REQUEST_FIELD;
             errorDescription = "Missing required url parameter '" + ((MissingServletRequestParameterException) throwable).getParameterName() + "'";
         }
 
@@ -89,7 +86,7 @@ public class ErrorHandlerImpl implements ErrorHandler {
         logger.error("Error occurred! The request uri is " + request.getAttribute(SERVLET_ERROR_PREFIX + REQUEST_URI) + ", error description: " + errorDescription,
                 new Exception(errorDescription));
 
-        return buildResponse(request, RejectException.UNDEFINED_ERROR_CODE, errorDescription, null);
+        return buildResponse(request, CommonErrors.UNDEFINED_ERROR, errorDescription, null);
     }
 
     /**

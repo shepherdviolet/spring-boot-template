@@ -1,5 +1,5 @@
-// <replace-by> package ${java_package}.basic.entity;
-package __java_package__.basic.entity;
+// <replace-by> package ${java_package}.basic.error;
+package __java_package__.basic.error;
 
 /**
  * 拒绝异常
@@ -7,9 +7,6 @@ package __java_package__.basic.entity;
  * @author foo
  */
 public class RejectException extends RuntimeException {
-
-    public static final String UNDEFINED_ERROR_CODE = "undefined-error";
-    public static final String ILLEGAL_REQUEST_FIELD = "illegal-request-field";
 
     private String code;
     private String description;
