@@ -1,5 +1,6 @@
 package com.github.shepherdviolet.webdemo.demo.validate.controller;
 
+import com.github.shepherdviolet.webdemo.basic.error.CommonErrors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,7 +84,7 @@ public class ValidateController {
     private String handleValidateManually(@RequestBody Request1 request) {
         Set<ConstraintViolation<Request1>> validationResult = validator.validate(request, Default.class);
         for (ConstraintViolation<Request1> constraintViolation : validationResult) {
-            throw new RejectException(RejectException.ILLEGAL_REQUEST_FIELD, constraintViolation.getMessage()).withArgs(constraintViolation.getPropertyPath());
+            throw new RejectException(CommonErrors.ILLEGAL_REQUEST_FIELD, constraintViolation.getMessage()).withArgs(constraintViolation.getPropertyPath());
         }
         logger.info("validation:" + request);
         //返回类型也可以是Bean
