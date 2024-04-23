@@ -19,8 +19,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
         "__java_package__.basic.controller",
         // <replace-by>         "${java_package}.basic.interceptor",
         "__java_package__.basic.interceptor",
-        // <replace-by>         "${java_package}.basic.error",
-        "__java_package__.basic.error",
 })
 public class BasicConfiguration {
 

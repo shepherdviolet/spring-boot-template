@@ -17,7 +17,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @ComponentScan({
         "com.github.shepherdviolet.webdemo.basic.controller",
         "com.github.shepherdviolet.webdemo.basic.interceptor",
-        "com.github.shepherdviolet.webdemo.basic.error",
 })
 public class BasicConfiguration {
 

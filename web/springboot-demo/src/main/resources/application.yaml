@@ -34,7 +34,7 @@ spring:
     default-property-inclusion: non_null
   ## i18n message
   messages:
-    basename: msg/messages,msg/errors
+    basename: msg/messages
     encoding: UTF-8
   ## MVC config for web app
   mvc:
@@ -215,6 +215,15 @@ spring:
 #      enable-auto-commit: true
 #    listener:
 #      concurrency: 1 # 默认消费者线程数, 注意Kafka不支持一个Partition被多线程并发消费, 分区数必须大于等于消费者线程数
+
+############################################################################################################
+
+## error translate
+messages:
+  error-code:
+    basename: msg/error-code
+  error-desc:
+    basename: msg/error-desc
 
 ############################################################################################################
 

@@ -18,7 +18,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface BinaryFlagMatch {
 
-    String message() default "field-binary-flag-not-match";
+    String message() default "field_binary_flag_not_match";
 
     Class<?>[] groups() default { };
 

@@ -6,12 +6,12 @@ import javax.validation.constraints.Size;
 
 public class Request1 {
 
-    @NotBlank(message = "field-blank")
-    @Size(max = 20, message = "field-too-long")
+    @NotBlank(message = "field_blank")
+    @Size(max = 20, message = "field_too_long")
     private String name;
 
-    @NotBlank(message = "field-blank")
-    @Pattern(regexp = "^\\d{6}$", message = "field-invalid")
+    @NotBlank(message = "field_blank")
+    @Pattern(regexp = "^\\d{6}$", message = "field_invalid")
     private String number;
 
     public String getName() {
