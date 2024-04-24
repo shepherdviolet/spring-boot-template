@@ -85,7 +85,7 @@ public class ValidateController {
         Set<ConstraintViolation<Request1>> validationResult = validator.validate(request, Default.class);
         for (ConstraintViolation<Request1> constraintViolation : validationResult) {
             throw RejectException.create(CommonErrors.ILLEGAL_REQUEST_FIELD)
-                    .description(constraintViolation.getMessage())
+                    .msg(constraintViolation.getMessage())
                     .args(constraintViolation.getPropertyPath())
                     .build();
         }

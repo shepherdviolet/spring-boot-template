@@ -68,7 +68,7 @@ public class ErrorHandlerImpl implements ErrorHandler {
         } else if (throwable instanceof RejectException) {
             // 从RejectException异常中获取错误信息
             errorCode = ((RejectException) throwable).getCode();
-            errorDescription = ((RejectException) throwable).getDescription();
+            errorDescription = ((RejectException) throwable).getMsg();
             args = ((RejectException) throwable).getArgs();
         } else if (throwable instanceof BindException) {
             // 从Validation结果中获取错误信息
