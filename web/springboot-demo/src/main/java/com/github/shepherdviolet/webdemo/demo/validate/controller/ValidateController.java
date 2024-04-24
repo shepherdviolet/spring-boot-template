@@ -84,7 +84,10 @@ public class ValidateController {
     private String handleValidateManually(@RequestBody Request1 request) {
         Set<ConstraintViolation<Request1>> validationResult = validator.validate(request, Default.class);
         for (ConstraintViolation<Request1> constraintViolation : validationResult) {
-            throw new RejectException(CommonErrors.ILLEGAL_REQUEST_FIELD, constraintViolation.getMessage()).withArgs(constraintViolation.getPropertyPath());
+            throw RejectException.create(CommonErrors.ILLEGAL_REQUEST_FIELD)
+                    .description(constraintViolation.getMessage())
+                    .args(constraintViolation.getPropertyPath())
+                    .build();
         }
         logger.info("validation:" + request);
         //返回类型也可以是Bean

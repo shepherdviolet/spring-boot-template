@@ -109,7 +109,7 @@ public class BasicRestController {
      */
     @RequestMapping("/exception")
     public String exception() {
-        throw new RejectException("exception-test-pass", "Exception test pass");
+        throw RejectException.create("exception-test-pass").description("Exception test pass").build();
     }
 
     /**
