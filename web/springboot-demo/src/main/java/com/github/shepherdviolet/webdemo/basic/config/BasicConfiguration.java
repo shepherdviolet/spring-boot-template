@@ -33,4 +33,13 @@ public class BasicConfiguration {
         };
     }
 
+//    @Bean
+//    public GlaciHttpClient glaciHttpClient() {
+//        return new GlaciHttpClient().setHosts("http://localhost:8000");
+//    }
+//    @Bean
+//    public SimpleOkHttpClient glaciHttpClient() {
+//        return (SimpleOkHttpClient) new SimpleOkHttpClient().setHosts("http://localhost:8000");
+//    }
+
 }
