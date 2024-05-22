@@ -40,7 +40,12 @@ server:
 #  servlet:
 #    encoding:
 #      charset: GBK
-  ## compression
+    ## set dynamic charset for x-www-form-urlencoded, SpEL root object is HttpServletRequest
+#  encoding-filter:
+#    enable: true
+#    rules:
+#      GBK: "'application/x-www-form-urlencoded; charset=gbk'.equalsIgnoreCase(getContentType())"
+    ## compression
 #  compression:
 #    enabled: true
 #    mime-types: application/json,application/xml,text/html,text/xml,text/plain
