@@ -36,6 +36,11 @@ server:
     threads:
       max: 200
       min-spare: 10
+  ## set charset for x-www-form-urlencoded, default: UTF-8
+#  servlet:
+#    encoding:
+#      charset: GBK
+  ## compression
 #  compression:
 #    enabled: true
 #    mime-types: application/json,application/xml,text/html,text/xml,text/plain
