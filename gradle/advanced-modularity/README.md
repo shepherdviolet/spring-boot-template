@@ -134,8 +134,10 @@ configure(subprojects.findAll { it.PROJECT_GROUP == 'web' }) {
     apply plugin: 'java'
     apply plugin: 'org.springframework.boot'
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    java {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 
     [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
 
@@ -157,8 +159,10 @@ configure(subprojects.findAll { it.PROJECT_GROUP in ['module'] }) {
 
     apply plugin: 'java-library'
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    java {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 
     [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
 
