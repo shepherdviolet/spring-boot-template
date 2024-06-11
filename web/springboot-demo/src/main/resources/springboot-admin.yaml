@@ -1,0 +1,44 @@
+
+## Springboot Admin config
+spring:
+  boot:
+    admin:
+      ## Config in server, admin url adjusted from http://localhost:port to http://localhost:port/admin
+      context-path: /admin
+      ## Config in client
+      client:
+        ## The url of admin server, admin url adjusted from http://localhost:port to http://localhost:port/admin
+        url: http://localhost:${server.port:8000}/admin
+        ## The information of client
+        instance:
+          service-base-url: http://localhost:${server.port:8000}/
+          service-path: /
+
+## Actuator config, For Prometheus / Spring Boot Admin, Config in client
+## Endpoints: http://localhost:8000/actuator/{health,prometheus,...}
+management:
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    export:
+      prometheus:
+        enabled: true
+        descriptions: true
+        step: 1m
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  #        exclude: info,shutdown
+  endpoint:
+    health:
+      show-details: always
+    beans:
+      cache:
+        time-to-live: 10s
+    shutdown:
+      enabled: true
+
+## Actuator config: custom information to /actuator/info, optional
+info:
+  comment: "I'm spring boot demo"

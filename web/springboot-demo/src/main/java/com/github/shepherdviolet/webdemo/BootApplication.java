@@ -45,7 +45,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 //                "com.github.shepherdviolet.webdemo.demo.kafka.config",
         }
 )
-//Spring Boot Admin server (控制台服务端, http://localhost:8000/admin, 容器需为Tomcat, 改过URL(默认没/admin), 见application.yaml), 示例为client-server直连方式, 如需通过Eureka发现请自行谷歌
+//Spring Boot Admin server (控制台服务端, http://localhost:8000/admin, 容器需为Tomcat, 改过URL(默认没/admin), 见springboot-admin.yaml), 示例为client-server直连方式, 如需通过Eureka发现请自行谷歌
 @EnableAdminServer
 public class BootApplication {
 
