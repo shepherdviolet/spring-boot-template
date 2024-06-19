@@ -23,7 +23,7 @@ spring:
   ## default profile
   profiles:
     active: win
-  ## import other yaml configs
+  ## import other yaml configs (springboot 2.4+ required)
   config:
     import:
       - classpath:springboot-admin.yaml
