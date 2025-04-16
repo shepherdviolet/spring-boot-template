@@ -1,4 +1,4 @@
-package com.github.shepherdviolet.webdemo.demo.redis.jetcache;
+package com.github.shepherdviolet.webdemo.demo.redis.lettuce;
 
 import com.github.shepherdviolet.glacimon.java.misc.CloseableUtils;
 import io.lettuce.core.AbstractRedisClient;

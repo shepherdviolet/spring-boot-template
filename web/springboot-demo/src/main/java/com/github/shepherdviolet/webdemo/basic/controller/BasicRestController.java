@@ -109,7 +109,10 @@ public class BasicRestController {
      */
     @RequestMapping("/exception")
     public String exception() {
-        throw new RejectException("exception-test-pass", "Exception test pass");
+        throw RejectException.create("exception-test-pass")
+                .msg("{} test pass")
+                .args("Exception")
+                .build();
     }
 
     /**
@@ -130,5 +133,24 @@ public class BasicRestController {
         response.sendRedirect("http://www.baidu.com");
         return null;
     }
+
+//    @Autowired
+//    private GlaciHttpClient httpClient;
+//    @Autowired
+//    private SimpleOkHttpClient httpClient;
+//    @HttpClient("default")
+//    private GlaciHttpClient httpClient;
+//    @HttpClient("default")
+//    private SimpleOkHttpClient httpClient;
+//
+//    /**
+//     * http://localhost:8000/basic/httpClientTest
+//     */
+//    @RequestMapping("/httpClientTest")
+//    public byte[] httpClientTest() throws HttpRejectException, RequestBuildException, IOException, NoHostException {
+//        return httpClient.post("/basic/post/json")
+//                .body("httpClientTest body".getBytes())
+//                .sendForBytes();
+//    }
 
 }

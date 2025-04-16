@@ -12,7 +12,7 @@ spring:
     default-property-inclusion: non_null
   ## i18n message
   messages:
-    basename: msg/messages,msg/errors
+    basename: msg/messages
     encoding: UTF-8
   ## MVC config for web app
   mvc:
@@ -20,4 +20,9 @@ spring:
       prefix: /
       suffix: .html
 
-
+## error translate
+messages:
+  error-code:
+    basename: msg/error-code
+  error-desc:
+    basename: msg/error-desc

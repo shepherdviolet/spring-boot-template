@@ -1,7 +1,7 @@
 // <replace-by> package ${java_package};
 package __java_package__;
 
-import com.github.shepherdviolet.glacimon.java.misc.LambdaBuildable;
+import com.github.shepherdviolet.glacimon.java.collections.LambdaBuildable;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.springframework.boot.SpringApplication;

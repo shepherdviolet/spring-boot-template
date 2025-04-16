@@ -1,6 +1,6 @@
 package com.github.shepherdviolet.webdemo.demo.actuator.component;
 
-import com.github.shepherdviolet.glacimon.java.misc.StreamingBuildable;
+import com.github.shepherdviolet.glacimon.java.collections.StreamingBuildable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
@@ -25,8 +25,8 @@ public class CustomActuatorEndpoint implements StreamingBuildable {
     @ReadOperation
     public Map<String, Object> read() {
         return buildHashMap()
-                .key("author").value("shepherd violet")
-                .key("license").value("APACHE 2.0")
+                .put("author", "shepherd violet")
+                .put("license", "APACHE 2.0")
                 .build();
     }
 

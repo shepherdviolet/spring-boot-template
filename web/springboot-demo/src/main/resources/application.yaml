@@ -23,6 +23,10 @@ spring:
   ## default profile
   profiles:
     active: win
+  ## import other yaml configs (springboot 2.4+ required)
+  config:
+    import:
+      - classpath:springboot-admin.yaml
   ## Misc config
 #  main:
 #    allow-bean-definition-overriding: true
@@ -34,31 +38,21 @@ spring:
     default-property-inclusion: non_null
   ## i18n message
   messages:
-    basename: msg/messages,msg/errors
+    basename: msg/messages
     encoding: UTF-8
   ## MVC config for web app
   mvc:
     view:
       prefix: /
       suffix: .html
+  ## graceful shutdown, set wait timeout
+  lifecycle:
+    timeout-per-shutdown-phase: 60s
   ## Security, Optional, NOTE THAT if the authorization logic is customized (see SecurityConfiguration), this config will be invalid
 #  security:
 #    user:
 #      name: "user"
 #      password: "user"
-  ## Spring Boot Admin config
-  boot:
-    admin:
-      ## Config in server, admin url adjusted from http://localhost:port to http://localhost:port/admin
-      context-path: /admin
-      ## Config in client
-      client:
-        ## The url of admin server, admin url adjusted from http://localhost:port to http://localhost:port/admin
-        url: http://localhost:${server.port:8000}/admin
-        ## The information of client
-        instance:
-          service-base-url: http://localhost:${server.port:8000}/
-          service-path: /
   ## [Datasource 1] H2 (Do not exclude DataSourceAutoConfiguration!)
   datasource:
     driver-class-name: org.h2.Driver
@@ -218,6 +212,15 @@ spring:
 
 ############################################################################################################
 
+## error translate
+messages:
+  error-code:
+    basename: msg/error-code
+  error-desc:
+    basename: msg/error-desc
+
+############################################################################################################
+
 ## Mybatis config
 mybatis:
   mapper-locations: classpath:config/demo/mybatis/mapper/*.xml
@@ -234,37 +237,6 @@ pagehelper:
 
 ############################################################################################################
 
-## Actuator config, For Prometheus / Spring Boot Admin, Config in client
-## Endpoints: http://localhost:8000/actuator/{health,prometheus,...}
-management:
-  metrics:
-    tags:
-      application: ${spring.application.name}
-    export:
-      prometheus:
-        enabled: true
-        descriptions: true
-        step: 1m
-  endpoints:
-    web:
-      exposure:
-        include: '*'
-#        exclude: info,shutdown
-  endpoint:
-    health:
-      show-details: always
-    beans:
-      cache:
-        time-to-live: 10s
-    shutdown:
-      enabled: true
-
-## Actuator config: custom information to /actuator/info, optional
-info:
-  comment: "I'm spring boot demo"
-
-############################################################################################################
-
 ## Glacispring config
 glacispring:
   common:
@@ -275,6 +247,17 @@ glacispring:
 #    key: aes:file:D:/__Temp/cryptoprop/cryptoprop-key.txt
 #    key: aes:KrIjtliPM3MIlHPh+l3ylA==
 #    intercept-by-proxy: true
+  ## Http client
+  httpclient:
+    enabled: true
+    apollo-support: true
+  httpclients:
+    qwen2vl:
+      hosts: http://localhost:9999/v1/chat/completions
+      initiative-inspect-interval: -1
+      connect-timeout: 10000
+      write-timeout: 60000
+      read-timeout: 60000
   ## Helpers
 #  helper:
 #    rocketmq:
@@ -284,14 +267,6 @@ glacispring:
 #      default-charset: UTF-8
 #    ez-sentinel:
 #      rule-data: classpath:config/demo/sentinel/rules.json
-  ## Http client
-#  httpclient:
-#    enabled: true
-#    apollo-support: true
-#  httpclients:
-#    default:
-#      hosts: http://127.0.0.1:8000,http://127.0.0.1:8001
-#      verbose-log: true
 
 ############################################################################################################
 

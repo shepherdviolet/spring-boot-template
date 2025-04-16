@@ -26,18 +26,18 @@ buildscript {
 
     // 构建脚本用的依赖仓库
     repositories {
-        maven { url 'file:C:/m2repository/repository' } // 本地仓库, 可选
-        maven { url 'https://maven.aliyun.com/repository/central'} // 阿里云镜像加速, 别用/nexus/content/groups/public, 可选
-        maven { url 'https://plugins.gradle.org/m2/' }
+        maven { url = 'C:/m2repository/repository' } // 本地仓库, 可选 (Gradle9:URL格式调整:https://docs.gradle.org/8.8/userguide/upgrading_version_8.html#deprecated_invalid_url_decoding)
+        maven { url = 'https://maven.aliyun.com/repository/central'} // 阿里云镜像加速, 别用/nexus/content/groups/public, 可选
+        maven { url = 'https://plugins.gradle.org/m2/' }
         mavenCentral()
-//        maven { url 'https://jitpack.io' }
-//        maven { url 'http://repo.spring.io/plugins-release/'; allowInsecureProtocol true }//Spring插件库, 允许不安全的协议
+//        maven { url = 'https://jitpack.io' }
+//        maven { url = 'http://repo.spring.io/plugins-release/'; allowInsecureProtocol true }//Spring插件库, 允许不安全的协议
 
         // 示例: 某些依赖从指定仓库获取, 可选
 //        exclusiveContent {
 //            forRepository {
 //                maven {
-//                    url "http://localhost:8081/nexus/content/repositories/reponame/"
+//                    url = "http://localhost:8081/nexus/content/repositories/reponame/"
 //                }
 //            }
 //            filter {
@@ -63,22 +63,22 @@ buildscript {
 // 所有工程通用配置
 allprojects {
 
-    group project_group_id
-    version project_version
+    group = project_group_id
+    version = project_version
 
     // 工程的依赖仓库
     repositories {
-        maven { url 'file:C:/m2repository/repository' } // 本地仓库, 可选
-        //maven { url 'https://maven.aliyun.com/repository/central'} // 阿里云镜像加速, 别用/nexus/content/groups/public, 部分依赖会报找不到, 可选
+        maven { url = 'C:/m2repository/repository' } // 本地仓库, 可选 (Gradle9:URL格式调整:https://docs.gradle.org/8.8/userguide/upgrading_version_8.html#deprecated_invalid_url_decoding)
+        //maven { url = 'https://maven.aliyun.com/repository/central'} // 阿里云镜像加速, 别用/nexus/content/groups/public, 部分依赖会报找不到, 可选
         mavenCentral() // https://repo1.maven.org/maven2/
-        //maven { url 'https://jitpack.io' }
+        //maven { url = 'https://jitpack.io' }
         //jcenter()
 
         // 示例: 某些依赖从指定仓库获取, 可选
 //        exclusiveContent {
 //            forRepository {
 //                maven {
-//                    url "http://localhost:8081/nexus/content/repositories/reponame/"
+//                    url = "http://localhost:8081/nexus/content/repositories/reponame/"
 //                }
 //            }
 //            filter {

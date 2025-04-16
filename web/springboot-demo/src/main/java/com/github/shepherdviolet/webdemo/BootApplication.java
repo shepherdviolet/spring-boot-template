@@ -1,17 +1,11 @@
 package com.github.shepherdviolet.webdemo;
 
 import com.alicp.jetcache.autoconfigure.JetCacheAutoConfiguration;
-import com.github.shepherdviolet.glacimon.java.misc.LambdaBuildable;
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
-import org.apache.tomcat.util.descriptor.web.SecurityCollection;
-import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.context.annotation.Bean;
 
 /**
  * 入口
@@ -43,6 +37,7 @@ import org.springframework.context.annotation.Bean;
                 "com.github.shepherdviolet.webdemo.demo.shorturl.config",
                 "com.github.shepherdviolet.webdemo.demo.resttemplate.config",
                 "com.github.shepherdviolet.webdemo.demo.actuator.config",
+                "com.github.shepherdviolet.webdemo.demo.qwen2vl.config",
 //                "com.github.shepherdviolet.webdemo.demo.jedis.config",
 //                "com.github.shepherdviolet.webdemo.demo.security.config",
 //                "com.github.shepherdviolet.webdemo.demo.sentinel.config",
@@ -51,9 +46,9 @@ import org.springframework.context.annotation.Bean;
 //                "com.github.shepherdviolet.webdemo.demo.kafka.config",
         }
 )
-//Spring Boot Admin server (控制台服务端, http://localhost:8000/admin, 容器需为Tomcat, 改过URL(默认没/admin), 见application.yaml), 示例为client-server直连方式, 如需通过Eureka发现请自行谷歌
+//Spring Boot Admin server (控制台服务端, http://localhost:8000/admin, 容器需为Tomcat, 改过URL(默认没/admin), 见springboot-admin.yaml), 示例为client-server直连方式, 如需通过Eureka发现请自行谷歌
 @EnableAdminServer
-public class BootApplication implements LambdaBuildable {
+public class BootApplication {
 
 //    private static volatile boolean shutdown = false;
 //    private static final Logger logger = LoggerFactory.getLogger(BootApplication.class);
@@ -93,88 +88,6 @@ public class BootApplication implements LambdaBuildable {
 //            }
 //        }
     }
-
-//    /**
-//     * 配置Glacispring监听器(可选)
-//     * 依赖了com.github.shepherdviolet.glacimon:glacispring-common后, 无需手动配置
-//     */
-//    @Bean
-//    public ServletContextListener glacispringServletContextListener() {
-//        return new GlacispringServletContextListener();
-//    }
-
-    /**
-     * Tomcat调优
-     */
-    @Bean
-    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> webServerFactoryCustomizer() {
-        return factory -> {
-            //[安全]禁用不安全的HTTP方法, 测试:curl -v -X TRACE http://localhost:8000/
-            factory.addContextCustomizers(context -> {
-                context.addConstraint(buildObject(() -> {
-                    SecurityConstraint securityConstraint = new SecurityConstraint();
-                    securityConstraint.setUserConstraint("CONFIDENTIAL");
-                    securityConstraint.addCollection(buildObject(() -> {
-                        SecurityCollection securities = new SecurityCollection();
-                        securities.addPattern("/*");
-                        securities.addMethod("TRACE");
-                        securities.addMethod("HEAD");
-                        securities.addMethod("DELETE");
-                        securities.addMethod("SEARCH");
-                        securities.addMethod("PROPFIND");
-                        securities.addMethod("COPY");
-                        securities.addMethod("OPTIONS"); // CORS 跨域有用
-                        securities.addMethod("PUT");
-                        return securities;
-                    }));
-                    return securityConstraint;
-                }));
-            });
-            //调整连接参数
-            factory.addConnectorCustomizers(connector -> {
-                connector.setProperty("acceptorThreadCount", "2");
-                connector.setProperty("connectionTimeout", "30000");
-                connector.setProperty("asyncTimeout", "30000");
-                connector.setProperty("enableLookups", "false");
-                connector.setProperty("compression", "on");
-                connector.setProperty("compressionMinSize", "2048");
-                connector.setProperty("redirectPort", "8443");
-            });
-        };
-    }
-
-    /**
-     * Undertow调优
-     */
-//    @Bean
-//    public WebServerFactoryCustomizer<UndertowServletWebServerFactory> webServerFactoryCustomizer() {
-//        return factory -> {
-//            factory.addBuilderCustomizers(builder -> {
-//                //[坑]客户端如果与服务端保持连接, 不断开连接的话, 服务端的XNIO task线程会被挂住, 所有task都挂住后服务端就不会响应任何请求了
-//                //jstack可见task线程RUNNABLE 一直在poll0, 正常应该是WAITING状态
-//                //配置以后, 一旦超时会抛出 org.xnio.channels.ReadTimeoutException org.xnio.channels.WriteTimeoutException 异常
-//                builder.setSocketOption(Options.READ_TIMEOUT, 60000)
-//                        .setSocketOption(Options.WRITE_TIMEOUT, 60000);
-//            });
-//            factory.addDeploymentInfoCustomizers(deploymentInfo -> {
-//                //[安全]禁用不安全的HTTP方法, 测试:curl -v -X TRACE http://localhost:8000/
-//                deploymentInfo.addSecurityConstraint(new SecurityConstraint()
-//                        .addWebResourceCollection(
-//                                new WebResourceCollection()
-//                                        .addUrlPattern("/*")
-//                                        .addHttpMethod("TRACE")
-//                                        .addHttpMethod("HEAD")
-//                                        .addHttpMethod("DELETE")
-//                                        .addHttpMethod("SEARCH")
-//                                        .addHttpMethod("PROPFIND")
-//                                        .addHttpMethod("COPY")
-//                                        .addHttpMethod("OPTIONS") // CORS 跨域有用
-//                                        .addHttpMethod("PUT")
-//                        )
-//                );
-//            });
-//        };
-//    }
 
     private static void sentinelSettings(){
         //将RT最大值从4.9秒改成120秒

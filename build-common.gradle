@@ -9,18 +9,14 @@ configure(subprojects.findAll { it.PROJECT_GROUP == 'web' }) {
     apply plugin: 'java' // JAVA应用(只能用implementation依赖方法)
     apply plugin: 'org.springframework.boot' // 文档: https://docs.spring.io/spring-boot/docs/2.1.0.RELEASE/gradle-plugin/reference/html/
 
-    // jdk version
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    java {
+        //Gradle9:放入java块:https://docs.gradle.org/8.8/userguide/upgrading_version_8.html#java_convention_deprecation
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 
     // encoding
     [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
-
-    test {
-        // For JUnit5: Avoid IDEA reporting "No tests found for given includes" error when executing tests individually
-        // NOTICE: All subprojects configured with 'useJUnitPlatform()' must depend on Junit5! (Avoid error "Cannot create Launcher without at least one TestEngine")
-        useJUnitPlatform()
-    }
 
     // config of bootJar
     bootJar {
@@ -33,6 +29,12 @@ configure(subprojects.findAll { it.PROJECT_GROUP == 'web' }) {
         //}
     }
 
+    test {
+        // For JUnit5: Avoid IDEA reporting "No tests found for given includes" error when executing tests individually
+        // NOTICE: All subprojects configured with 'useJUnitPlatform()' must depend on Junit5! (Avoid error "Cannot create Launcher without at least one TestEngine")
+        useJUnitPlatform()
+    }
+
     // WEB工程通用依赖
     dependencies {
 //        // Import BOMs
@@ -40,8 +42,10 @@ configure(subprojects.findAll { it.PROJECT_GROUP == 'web' }) {
 //        implementation platform(project(':my-bom')) // Project BOM
 //        implementation enforcedPlatform("com.github.shepherdviolet.glacimon:glacimon-bom:$version_glacimon") // 强制覆盖手动依赖的版本
 
-        // Common dependencies
+        // Test dependencies
         testImplementation "org.springframework.boot:spring-boot-starter-test:$version_spring_boot" // NOTICE: All subprojects configured with 'useJUnitPlatform()' must depend on Junit5! (Avoid error "Cannot create Launcher without at least one TestEngine")
+        //Gradle9:Junit5必须显式依赖junit-platform-launcher:https://docs.gradle.org/8.8/userguide/upgrading_version_8.html#test_framework_implementation_dependencies
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 
 }
@@ -51,9 +55,11 @@ configure(subprojects.findAll { it.PROJECT_GROUP in ['module'] }) {
 
     apply plugin: 'java-library' // JAVA库(能用implementation和api依赖方法)
 
-    // jdk version
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    java {
+        //Gradle9:放入java块:https://docs.gradle.org/8.8/userguide/upgrading_version_8.html#java_convention_deprecation
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 
     // encoding
     [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
@@ -71,8 +77,10 @@ configure(subprojects.findAll { it.PROJECT_GROUP in ['module'] }) {
 //        api platform(project(':my-bom')) // Project BOM
 //        api enforcedPlatform("com.github.shepherdviolet.glacimon:glacimon-bom:$version_glacimon") // 强制覆盖手动依赖的版本
 
-        // Common dependencies
+        // Test dependencies
         testImplementation "org.springframework.boot:spring-boot-starter-test:$version_spring_boot" // NOTICE: All subprojects configured with 'useJUnitPlatform()' must depend on Junit5! (Avoid error "Cannot create Launcher without at least one TestEngine")
+        //Gradle9:Junit5必须显式依赖junit-platform-launcher:https://docs.gradle.org/8.8/userguide/upgrading_version_8.html#test_framework_implementation_dependencies
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 
 }

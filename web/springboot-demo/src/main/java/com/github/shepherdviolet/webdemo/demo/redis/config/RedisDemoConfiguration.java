@@ -2,6 +2,7 @@ package com.github.shepherdviolet.webdemo.demo.redis.config;
 
 import com.alicp.jetcache.anno.config.EnableMethodCache;
 import com.github.shepherdviolet.webdemo.demo.redis.jetcache.JetCacheConfiguration;
+import com.github.shepherdviolet.webdemo.demo.redis.lettuce.LettuceConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,7 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @ConditionalOnProperty(name = "redis.enabled", havingValue = "true")
 @Import({
+        LettuceConfiguration.class,
         JetCacheConfiguration.class,
 })
 @ComponentScan({

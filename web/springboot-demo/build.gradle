@@ -49,7 +49,7 @@ dependencies {
 
     //Spring Boot Admin///////////////////////////////////////////////////////////////////////////////
 
-    //Spring Boot Admin server (控制台服务端, http://localhost:8000/admin, 容器需为Tomcat, 改过URL(默认没/admin), 见application.yaml)
+    //Spring Boot Admin server (控制台服务端, http://localhost:8000/admin, 容器需为Tomcat, 改过URL(默认没/admin), 见springboot-admin.yaml)
     //特殊情况: 在这里SpringBootAdmin和RocketMQ的netty包有冲突, 要启用这个先把RocketMQ依赖的netty排除掉(错误:java.lang.NoSuchMethodError: io.netty.bootstrap.Bootstrap.config)
     //其他说明: 示例为client-server直连方式, 如需通过Eureka发现请自行谷歌
     implementation "de.codecentric:spring-boot-admin-starter-server:$version_spring_boot_admin"
@@ -125,12 +125,6 @@ dependencies {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:$version_spring_boot"
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    //Test/////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-    testImplementation "org.springframework.boot:spring-boot-starter-test:$version_spring_boot"
 
 }
 

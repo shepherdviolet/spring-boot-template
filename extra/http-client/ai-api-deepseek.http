@@ -1,0 +1,23 @@
+
+# '<apikey>'替换成APIKey
+
+POST https://api.deepseek.com/chat/completions
+Authorization: Bearer <apikey>
+Content-Type: application/json
+
+{
+  "model": "deepseek-reasoner",
+  "messages": [
+    {
+      "role": "system",
+      "content": "你是AI助理"
+    },
+    {
+      "role": "user",
+      "content": "deepseek一个会话最多能有多少字?(或者说token)"
+    }
+  ],
+  "stream": false
+}
+
+###

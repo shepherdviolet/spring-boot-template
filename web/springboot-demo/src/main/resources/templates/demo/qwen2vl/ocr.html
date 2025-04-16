@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OCR Demo (qwen2vl)</title>
+    <meta name="keywords" content="OCR,qwen2vl"/>
+    <meta name="description" content="OCR Demo (qwen2vl)"/>
+    <meta name="content-type" content="text/html; charset=UTF-8"/>
+</head>
+
+<body>
+<form enctype="multipart/form-data" method="post" action="/qwen2vl/upload">
+          <textarea
+                  name="prompt"
+                  style="width:800px;height:600px"
+                  id="prompt"
+                  placeholder="请输入提示词">
+任务描述：
+请仔细分析以下房产证图片内容，准确识别并提取以下关键信息（中英对照）：
+
+必填字段：
+0. IsValid (是否是房产证)
+1. Homeowner（房屋所有权人）
+2. IDNumber（身份证号）
+3. Address（房屋坐落）
+4. RegistrationDate（登记时间）
+5. RealEstateCertificateNumber（不动产权证号）
+6. GrossFloorArea（建筑面积）
+7. ExclusiveFloorArea（专有建筑面积）
+8. SharedFloorArea（分摊建筑面积）
+9. UsageType（房屋用途）
+10. OwnershipType（共有情况）
+
+格式要求：
+请以JSON格式输出，字段名保持英文
+
+注意事项：
+0. IsValid值: 是 / 否
+1. 注意识别手写体签名（对应字段：Homeowner）
+2. 忽略红色印章覆盖区域文字（可能影响Address/RealEstateCertificateNumber识别）
+3. 区分&quot;座落&quot;与&quot;坐落&quot;的正确写法（对应字段：Address）
+4. 面积单位需保留&quot;平方米&quot;（对应字段：GrossFloorArea/ExclusiveFloorArea/SharedFloorArea）
+5. 注意数字中的点号（如123.45㎡）
+          </textarea><br/>
+    <input type="file" name="file"/><br/>
+    <input type="submit" value="识别"/>
+</form>
+</body>
+</html>

@@ -1,0 +1,38 @@
+
+# '<host>'替换成模型地址, 后面的uri根据实际情况调整
+# '<apiKey>'替换成APIKey
+# '<imgBase64>'替换成图片数据BASE64, 前面的'data:image,'为简化格式, 标准格式为'data:image/png;base64,' 'data:image/jpeg;base64,' 'data:image/gif;base64,'
+
+POST http://<host>:8086/v1/chat/completions
+Authorization: Bearer <apiKey>
+Content-Type: application/json
+Accept: application/json
+
+{
+  "model": "qwen2vl",
+  "messages": [
+    {
+      "role": "system",
+      "content": "你是OCR识别器"
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "这是驾驶证, 帮我读取上面的驾驶证号"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "detail": "high",
+            "url": "data:image,<imgBase64>"
+          }
+        }
+      ]
+    }
+  ],
+  "stream": false
+}
+
+###

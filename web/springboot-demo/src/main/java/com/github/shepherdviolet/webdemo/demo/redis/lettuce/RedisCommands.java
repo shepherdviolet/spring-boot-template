@@ -1,4 +1,4 @@
-package com.github.shepherdviolet.webdemo.demo.redis.jetcache;
+package com.github.shepherdviolet.webdemo.demo.redis.lettuce;
 
 import io.lettuce.core.cluster.api.async.RedisClusterAsyncCommands;
 import io.lettuce.core.cluster.api.sync.RedisClusterCommands;

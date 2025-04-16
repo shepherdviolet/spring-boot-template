@@ -36,6 +36,18 @@ server:
     threads:
       max: 200
       min-spare: 10
+  ## shutdown graceful (springboot2.3+)
+#  shutdown: graceful
+  ## set charset for x-www-form-urlencoded, default: UTF-8
+#  servlet:
+#    encoding:
+#      charset: GBK
+    ## set dynamic charset for x-www-form-urlencoded, SpEL root object is HttpServletRequest
+#  encoding-filter:
+#    enable: true
+#    rules:
+#      GBK: "'application/x-www-form-urlencoded; charset=gbk'.equalsIgnoreCase(getContentType())"
+    ## compression
 #  compression:
 #    enabled: true
 #    mime-types: application/json,application/xml,text/html,text/xml,text/plain
@@ -86,21 +98,29 @@ server:
 ## 颁发根证书: openssl x509 -req -days 3650 -in root_cert_req.csr -signkey root_private_key.pem -out root_cert.crt
 ## 颁发CA/应用证书: openssl ca -days 3650 -in cert_req.csr -out cert.crt -cert root_cert.crt -keyfile root_private_key.pem
 ## CA/应用证书转PEM: openssl x509 -in cert.crt -out cert.pem -outform PEM
-## PEM证书链+私钥转PKCS12: cat app-cert.pem ca-cert.pem root-cert.pem > cert-chain.pem
-##                      openssl pkcs12 -export -out keystore.pfx -inkey app-private-key.pem -in cert-chain.pem
+## PEM证书链+私钥转PKCS12: cat app_cert.pem ca_cert.pem root_cert.pem > cert_chain.pem
+##                      openssl pkcs12 -export -out keystore.pfx -inkey app_private_key.pem -in cert_chain.pem
 ## PEM证书存入JKS: 可反复执行存入多张: keytool -importcert -noprompt -alias 1 -file ca_cert.pem -keystore truststore.jks -storepass 123456
 ##                                  keytool -importcert -noprompt -alias 2 -file root_cert.pem -keystore truststore.jks -storepass 123456
+## 问题1:
+## 如果启动时PKCS12解析报错: parseAlgParameters failed: ObjectIdentifier() -- data isn't an object ID (tag = 48)
+## 问题1解决办法:
+## 升级JDK到8u301以上, 或者使用老版本openssl生成pkcs12文件.
+## 问题2:
+## 双向SSL配置测试未成功(使用curl --cert --key访问报错), 可能是truststore格式问题? 也可能是curl版本问题?
 #############################################################################################################
 #server:
 #  ssl:
     ## 开启单向SSL: 配置服务端证书链, key-store推荐PKCS12格式, openssl生成PEM格式后转成PKCS12. 另外, key-store-type还支持JKS格式.
-#    key-store: classpath:certs/server_keystore.pfx
+#    key-store: classpath:config/demo/ssl/server_keystore.pfx
 #    key-store-password: 123456
 #    key-alias: 1
 #    key-store-type: PKCS12
     ## 开启双向SSL(验证客户端证书): need必须/want可验/none不验, 配置信任链, trust-store必须用JKS格式, openssl生成PEM格式后要用keytool存入JKS(支持多张)
 #    client-auth: need
-#    trust-store: classpath:certs/client_truststore.jks
+#    trust-store: classpath:config/demo/ssl/truststore.jks
 #    trust-store-password: 123456
 #    trust-store-type: JKS
-
+    ## 其他参数(可选)
+#    #enabled-protocols: TLSv1.2,TLSv1.3
+#    #ciphers: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384

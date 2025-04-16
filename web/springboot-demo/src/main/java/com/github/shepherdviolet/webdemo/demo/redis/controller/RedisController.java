@@ -2,7 +2,7 @@ package com.github.shepherdviolet.webdemo.demo.redis.controller;
 
 import com.github.shepherdviolet.glacimon.java.misc.DateTimeUtils;
 import com.github.shepherdviolet.webdemo.demo.redis.cache.UserCache;
-import com.github.shepherdviolet.webdemo.demo.redis.jetcache.RedisCommands;
+import com.github.shepherdviolet.webdemo.demo.redis.lettuce.RedisCommands;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

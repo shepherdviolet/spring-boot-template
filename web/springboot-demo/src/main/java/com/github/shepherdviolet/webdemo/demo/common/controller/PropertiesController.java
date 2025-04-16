@@ -53,6 +53,9 @@ public class PropertiesController {
     @Qualifier("myStandaloneProperties")
     private Properties myStandaloneProperties;
 
+    @Value("${byxml.encrypted}")
+    private String byXml;
+
     /**
      * http://localhost:8000/common/properties/
      */
@@ -71,6 +74,7 @@ public class PropertiesController {
                 "\n\n<br><br>from environment=\n<br>" + environment.resolvePlaceholders("${prop.general.encrypted}") +
                 "\n\n<br><br>bindProperties=\n<br>" + bindProperties +
                 "\n\n<br><br>yamlProperties=\n<br>" + yamlProperties +
-                "\n\n<br><br>myStandaloneProperties=\n<br>" + myStandaloneProperties;
+                "\n\n<br><br>myStandaloneProperties=\n<br>" + myStandaloneProperties +
+                "\n\n<br><br>byXml=\n<br>" + byXml;
     }
 }
