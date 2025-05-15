@@ -1,5 +1,6 @@
 package com.github.shepherdviolet.webdemo.demo.common.controller;
 
+import com.github.shepherdviolet.glacimon.java.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -79,7 +80,9 @@ public class FileUploadController {
 
         try {
             logger.info("File transfer to " + targetFile.getAbsolutePath());
-            file.transferTo(targetFile);
+            // 别直接用transferTo, 有时候会出现缓存文件不存在的异常. 用输入流比较稳定
+//            file.transferTo(targetFile);
+            FileUtils.writeInputStream(targetFile, file.getInputStream(), false, true);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
