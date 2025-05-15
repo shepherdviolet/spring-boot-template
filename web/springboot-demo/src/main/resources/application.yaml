@@ -45,6 +45,11 @@ spring:
     view:
       prefix: /
       suffix: .html
+  ## Multipart size
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   ## graceful shutdown, set wait timeout
   lifecycle:
     timeout-per-shutdown-phase: 60s
