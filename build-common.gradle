@@ -109,6 +109,13 @@ allprojects {
         }
     }
 
+    // 忽略编译日志中的警告信息
+    tasks.withType(JavaCompile) {
+        options.compilerArgs += [
+                '-Xlint:-options',     // 忽略关于过时选项的警告
+        ]
+    }
+
 }
 
 
