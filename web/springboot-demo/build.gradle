@@ -21,6 +21,7 @@ dependencies {
     implementation "com.github.shepherdviolet.glacimon:glacijava-trace"
     implementation "com.github.shepherdviolet.glacimon:glacispring-helper"
     implementation "com.github.shepherdviolet.glacimon:glacispring-httpclient"
+    implementation "com.github.shepherdviolet.glacimon:glacispring-txtimer"
     implementation "com.google.code.gson:gson:$version_gson"
 
     //Spring///////////////////////////////////////////////////////////////////////////////////////////
