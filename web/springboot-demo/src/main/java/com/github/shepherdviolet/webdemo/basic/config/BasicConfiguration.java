@@ -6,6 +6,7 @@ import com.github.shepherdviolet.webdemo.basic.filter.EnhancedCharacterEncodingF
 import com.github.shepherdviolet.webdemo.basic.interceptor.BasicHandlerInterceptor;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -15,6 +16,7 @@ import org.springframework.boot.web.servlet.server.Encoding;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -32,9 +34,21 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class BasicConfiguration implements LambdaBuildable {
 
     /**
+     * 修复spring-web 5.3.39 的安全漏洞 CVE-2016-1000027
+     * 1.修复该漏洞需要升级spring 6.0, 但必须要JDK17
+     * 2.只要不用HttpInvokerServiceExporter就不会触发该漏洞 (不使用Spring的RemoteInvocation特性（HttpInvoker、RMI、Hessian、Burlap...）
+     */
+    @SuppressWarnings("deprecation")
+    public Runnable checkCve20161000027(ObjectProvider<HttpInvokerServiceExporter> httpInvokerServiceExporters) {
+        if (httpInvokerServiceExporters.stream().findAny().isPresent()) {
+            throw new IllegalStateException("Detected usage of HttpInvokerServiceExporter, which is prohibited due to known security vulnerabilities (CVE-2016-1000027).");
+        }
+        return null;
+    }
+
+    /**
      * Tomcat调优
      */
-
     @Bean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> webServerFactoryCustomizer() {
         return factory -> {
@@ -87,7 +101,6 @@ public class BasicConfiguration implements LambdaBuildable {
      *     rules:
      *       GBK: "'application/x-www-form-urlencoded; charset=gbk'.equalsIgnoreCase(getContentType())"
      */
-
     @Bean
     @ConditionalOnProperty("server.encoding-filter.enable")
     @ConfigurationProperties("server.encoding-filter")
@@ -103,7 +116,6 @@ public class BasicConfiguration implements LambdaBuildable {
     /**
      * Undertow调优
      */
-
 //    @Bean
 //    public WebServerFactoryCustomizer<UndertowServletWebServerFactory> webServerFactoryCustomizer() {
 //        return factory -> {
@@ -137,7 +149,6 @@ public class BasicConfiguration implements LambdaBuildable {
     /**
      * 添加MVC拦截器
      */
-
     @Bean
     public WebMvcConfigurer webMvcConfigurer(BasicHandlerInterceptor basicHandlerInterceptor){
         return new WebMvcConfigurer() {
@@ -151,7 +162,6 @@ public class BasicConfiguration implements LambdaBuildable {
     /**
      * GlaciHttpClient
      */
-
 //    @Bean
 //    public GlaciHttpClient glaciHttpClient() {
 //        return new GlaciHttpClient().setHosts("http://localhost:8000");
