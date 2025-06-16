@@ -96,6 +96,12 @@ allprojects {
 
 }
 
+// print all dependencies
+tasks.register('allDependencies') {
+    group = 'help'
+    dependsOn subprojects.collect { it.path + ':dependencies' }
+}
+
 // 子工程通用配置
 apply from: 'build-common.gradle'
 
