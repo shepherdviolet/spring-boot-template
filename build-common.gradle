@@ -98,12 +98,17 @@ allprojects {
 
             force "com.alibaba:fastjson:$version_fastjson" //Fix security issue
             force "org.yaml:snakeyaml:$version_snakeyaml" //Fix security issue
+            force "net.minidev:json-smart:$version_jsonsmart" //Fix security issue
+            force "org.xerial.snappy:snappy-java:$version_snappy" //Fix security issue
 
             // 全局指定某个group的依赖版本
             eachDependency { DependencyResolveDetails details ->
 
                 if (details.requested.group == 'org.springframework') { details.useVersion "$version_spring" } //Fix security issue
+                if (details.requested.group == 'org.springframework.security') { details.useVersion "$version_spring_security" } //Fix security issue
                 if (details.requested.group == 'org.apache.tomcat.embed') { details.useVersion "$version_tomcat" } //Fix security issue
+                if (details.requested.group == 'ch.qos.logback') { details.useVersion "$version_logback" } //Fix security issue
+                if (details.requested.group == 'io.netty') { details.useVersion "$version_netty" } //Fix security issue
 
             }
 
