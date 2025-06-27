@@ -1,9 +1,9 @@
-GET {{host}}/basic/get/json?name={{username}}&key={{password}}
+GET {{host}}/core/get/json?name={{username}}&key={{password}}
 Accept: application/json
 
 ###
 
-POST {{host}}/basic/post/json
+POST {{host}}/core/post/json
 Content-Type: application/json
 
 {

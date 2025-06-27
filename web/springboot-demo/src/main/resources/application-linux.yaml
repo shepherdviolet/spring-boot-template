@@ -10,7 +10,8 @@ log:
   level:
     console: 'OFF'
     root: INFO
-    basic: INFO
+    infra: INFO
+    core: INFO
     demos: INFO
     sviolet: INFO
     txtimer: INFO

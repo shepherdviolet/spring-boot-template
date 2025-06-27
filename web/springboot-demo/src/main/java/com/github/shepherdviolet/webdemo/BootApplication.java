@@ -24,7 +24,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
         //P.S. @SpringBootApplication 约等于 @EnableAutoConfiguration + @ComponentScan
         //P.S. 如果不设置scanBasePackages, Spring会扫描当前类(启动类)所在包路径下所有的组件(包括子包)
         scanBasePackages = {
-                "com.github.shepherdviolet.webdemo.basic.config",
+                "com.github.shepherdviolet.webdemo.infra.config",
+                "com.github.shepherdviolet.webdemo.core.config",
                 "com.github.shepherdviolet.webdemo.demo.common.config",
                 "com.github.shepherdviolet.webdemo.demo.validate.config",
                 "com.github.shepherdviolet.webdemo.demo.wechatpush.config",

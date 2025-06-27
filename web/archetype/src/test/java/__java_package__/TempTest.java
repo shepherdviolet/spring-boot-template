@@ -17,6 +17,7 @@
  * Email: shepherdviolet@163.com
  */
 
+// <replace-by> package ${java_package};
 package __java_package__;
 
 import org.junit.jupiter.api.Test;

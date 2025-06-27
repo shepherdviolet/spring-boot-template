@@ -47,7 +47,8 @@
     <!-- levels (注意在yaml中配置级别时, ON/OFF必须加上单引号, 否则会变成true/false导致级别设置无效) -->
     <springProperty name="logging.level.root" scope="context" source="log.level.root"/>
     <springProperty name="logging.level.console" scope="context" source="log.level.console"/>
-    <springProperty name="logging.level.basic" scope="context" source="log.level.basic"/>
+    <springProperty name="logging.level.intra" scope="context" source="log.level.intra"/>
+    <springProperty name="logging.level.core" scope="context" source="log.level.core"/>
     <springProperty name="logging.level.demos" scope="context" source="log.level.demos"/>
     <springProperty name="logging.level.sviolet" scope="context" source="log.level.sviolet"/>
     <springProperty name="logging.level.txtimer" scope="context" source="log.level.txtimer"/>
@@ -75,7 +76,8 @@
     <!--    logging.path=D:/__Temp/tomcat/logs/ -->
     <!--    logging.level.root=INFO             -->
     <!--    logging.level.console=ON            -->
-    <!--    logging.level.basic=DEBUG           -->
+    <!--    logging.level.infra=DEBUG           -->
+    <!--    logging.level.core=DEBUG           -->
     <!--    logging.level.demos=DEBUG           -->
     <!--    logging.level.sviolet=INFO          -->
     <!--    logging.level.txtimer=INFO          -->
@@ -157,7 +159,8 @@
 
 
 
-    <logger name="com.github.shepherdviolet.webdemo.basic" level="${logging.level.basic:-INFO}" />
+    <logger name="com.github.shepherdviolet.webdemo.infra" level="${logging.level.infra:-INFO}" />
+    <logger name="com.github.shepherdviolet.webdemo.core" level="${logging.level.core:-INFO}" />
     <logger name="com.github.shepherdviolet.webdemo.demo" level="${logging.level.demos:-INFO}" />
 
     <logger name="com.github.shepherdviolet.glacimon" level="${logging.level.sviolet:-INFO}" />

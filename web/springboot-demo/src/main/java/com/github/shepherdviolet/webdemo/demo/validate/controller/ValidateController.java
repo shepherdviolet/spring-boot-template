@@ -1,11 +1,11 @@
 package com.github.shepherdviolet.webdemo.demo.validate.controller;
 
-import com.github.shepherdviolet.webdemo.basic.error.CommonErrors;
+import com.github.shepherdviolet.webdemo.infra.error.CommonErrors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.github.shepherdviolet.webdemo.basic.error.RejectException;
+import com.github.shepherdviolet.webdemo.infra.error.RejectException;
 import com.github.shepherdviolet.webdemo.demo.validate.entity.Request1;
 import com.github.shepherdviolet.webdemo.demo.validate.entity.Request2;
 
