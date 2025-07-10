@@ -264,6 +264,8 @@ glacispring:
       connect-timeout: 10000
       write-timeout: 60000
       read-timeout: 60000
+      ## 最大闲置连接数, 默认16. 注意! 如果需要动态域名解析(即每次请求都重新解析域名), 请将该参数设置为0. (性能有一定的下降)
+      #max-idle-connections: 0
   ## Helpers
 #  helper:
 #    rocketmq:
