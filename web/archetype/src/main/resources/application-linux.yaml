@@ -7,7 +7,7 @@ log:
   path: './logs/'
   archive-path: '${log.path}/archive'
   level:
-    console: 'OFF'
+    console: OFF
     root: INFO
     sviolet: INFO
 

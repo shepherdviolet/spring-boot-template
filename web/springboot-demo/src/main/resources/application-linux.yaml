@@ -8,7 +8,7 @@ log:
   path: './logs/'
   archive-path: '${log.path}/archive'
   level:
-    console: 'OFF'
+    console: OFF
     root: INFO
     infra: INFO
     core: INFO

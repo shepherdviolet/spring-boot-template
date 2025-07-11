@@ -54,7 +54,7 @@ public class CoreRestController {
     @RequestMapping("/httpclient")
     public String httpclient() throws HttpRejectException, RequestBuildException, IOException, NoHostException {
         logger.info("httpclient");
-        return "RESULT: " + new String(baiduClient.get("").sendForBytes());
+        return "<br><br><br>QUERY RESULT: <br><br><br>" + new String(baiduClient.get("").sendForBytes());
     }
 
     /**

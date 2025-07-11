@@ -7,7 +7,7 @@ log:
   path: 'D:/__Temp/tomcat/logs/'
   archive-path: '${log.path}/archive'
   level:
-    console: 'ON'
+    console: TRACE
     root: INFO
     sviolet: INFO
 

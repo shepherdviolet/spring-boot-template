@@ -164,6 +164,7 @@
     <logger name="com.github.shepherdviolet.webdemo.demo" level="${logging.level.demos:-INFO}" />
 
     <logger name="com.github.shepherdviolet.glacimon" level="${logging.level.sviolet:-INFO}" />
+    <logger name="com.github.shepherdviolet.glacimon.spring.x.net.loadbalance.inspector" level="${logging.level.httpinspect:-INFO}"/>
 
     <!-- 关闭Controller抛出的异常日志, 如果已经用ErrorController统一处理并打印异常了, 则可以选择关闭 -->
 <!--    <logger name="org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/].[dispatcherServlet]" level="OFF"/>-->
@@ -175,7 +176,7 @@
         <appender-ref ref="StatFileAppender" />
     </logger>
 
-    <logger name="com.github.shepherdviolet.glacimon.spring.x.net.loadbalance.LoadBalancedInspectManager" level="${logging.level.httpinspect:-DEBUG}" additivity="false">
+    <logger name="com.github.shepherdviolet.glacimon.spring.x.net.loadbalance.LoadBalancedInspectManager" level="${logging.level.httpinspect:-INFO}" additivity="false">
         <appender-ref ref="ConsoleAppender" />
         <appender-ref ref="TimingFileAppender" />
     </logger>

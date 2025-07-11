@@ -8,14 +8,14 @@ log:
   path: 'D:/__Temp/tomcat/logs/'
   archive-path: '${log.path}/archive'
   level:
-    console: 'ON'
+    console: TRACE
     root: INFO
     infra: DEBUG
     core: DEBUG
     demos: DEBUG
     sviolet: INFO
     txtimer: INFO
-    httpinspect: DEBUG
+    httpinspect: TRACE
 
 
 ## Web Container ####################################################################################################
