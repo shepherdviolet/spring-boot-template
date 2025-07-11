@@ -23,6 +23,7 @@ dependencies {
     implementation "com.github.shepherdviolet.glacimon:glacispring-httpclient"
     implementation "com.github.shepherdviolet.glacimon:glacispring-txtimer"
     implementation "com.google.code.gson:gson:$version_gson"
+    implementation "dnsjava:dnsjava:$version_dnsjava"
 
     //Spring///////////////////////////////////////////////////////////////////////////////////////////
 

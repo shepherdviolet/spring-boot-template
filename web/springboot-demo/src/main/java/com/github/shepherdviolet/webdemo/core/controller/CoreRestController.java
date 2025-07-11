@@ -1,5 +1,10 @@
 package com.github.shepherdviolet.webdemo.core.controller;
 
+import com.github.shepherdviolet.glacimon.spring.x.net.loadbalance.classic.GlaciHttpClient;
+import com.github.shepherdviolet.glacimon.spring.x.net.loadbalance.classic.HttpRejectException;
+import com.github.shepherdviolet.glacimon.spring.x.net.loadbalance.classic.NoHostException;
+import com.github.shepherdviolet.glacimon.spring.x.net.loadbalance.classic.RequestBuildException;
+import com.github.shepherdviolet.glacimon.spring.x.net.loadbalance.springboot.autowired.HttpClient;
 import com.github.shepherdviolet.webdemo.core.entity.TestRequest;
 import com.github.shepherdviolet.webdemo.core.entity.TestResponse;
 import com.github.shepherdviolet.webdemo.infra.error.HttpStatusException;
@@ -29,6 +34,9 @@ public class CoreRestController {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
+    @HttpClient("baidu")
+    private GlaciHttpClient baiduClient;
+
     /**
      * index
      */
@@ -37,6 +45,16 @@ public class CoreRestController {
     public String index() {
         logger.info("index");
         return "hello spring boot template web-demo";
+    }
+
+    /**
+     * httpclient
+     * http://localhost:8000/core/httpclient
+     */
+    @RequestMapping("/httpclient")
+    public String httpclient() throws HttpRejectException, RequestBuildException, IOException, NoHostException {
+        logger.info("httpclient");
+        return "RESULT: " + new String(baiduClient.get("").sendForBytes());
     }
 
     /**
