@@ -13,9 +13,10 @@ log:
     infra: DEBUG
     core: DEBUG
     demos: DEBUG
-    sviolet: INFO
+    sviolet: TRACE
     txtimer: INFO
     httpinspect: TRACE
+    httpdns: TRACE
 
 
 ## Web Container ####################################################################################################

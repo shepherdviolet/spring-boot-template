@@ -268,8 +268,10 @@ glacispring:
       max-idle-connections: 16
     baidu:
       hosts: http://www.baidu.com
-      http-get-inspector-url-suffix: /
-      dns-description: ip=8.8.8.8,resolveTimeoutSeconds=10,preferIpv6=false,maxTtlSeconds=300
+#      http-get-inspector-url-suffix: /
+      dns-description: ip=8.8.8.8|114.114.114.114,resolveTimeoutSeconds=5,preferIpv6=false,maxTtlSeconds=300
+      # DNS后台更新器打印DNS缓存报告的间隔, 单位ms, 默认3600000ms (仅当配置自定义DNS`dns-description`后有效) (仅当配置自定义DNS`dns-description`后有效)
+      dns-report-interval: 60000
       # 最大闲置连接数. 若设置为0(默认), 每次重新解析域名+重新建立连接, 性能差, 但支持动态域名解析. 若设置为正整数(例如16), 会复用连接池中的连接, 性能强, 但若DNS域名解析记录更新, 可能会向原IP发送请求.
       max-idle-connections: 0
   ## Helpers

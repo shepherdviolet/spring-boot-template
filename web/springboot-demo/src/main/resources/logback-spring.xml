@@ -53,6 +53,7 @@
     <springProperty name="logging.level.sviolet" scope="context" source="log.level.sviolet"/>
     <springProperty name="logging.level.txtimer" scope="context" source="log.level.txtimer"/>
     <springProperty name="logging.level.httpinspect" scope="context" source="log.level.httpinspect"/>
+    <springProperty name="logging.level.httpdns" scope="context" source="log.level.httpdns"/>
 
 
     <!-- =============================== 载入配置参数(properties方式) =============================== -->
@@ -165,6 +166,7 @@
 
     <logger name="com.github.shepherdviolet.glacimon" level="${logging.level.sviolet:-INFO}" />
     <logger name="com.github.shepherdviolet.glacimon.spring.x.net.loadbalance.inspector" level="${logging.level.httpinspect:-INFO}"/>
+    <logger name="com.github.shepherdviolet.glacimon.spring.x.net.loadbalance.classic.dns" level="${logging.level.httpdns:-INFO}"/>
 
     <!-- 关闭Controller抛出的异常日志, 如果已经用ErrorController统一处理并打印异常了, 则可以选择关闭 -->
 <!--    <logger name="org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/].[dispatcherServlet]" level="OFF"/>-->

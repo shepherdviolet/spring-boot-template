@@ -16,6 +16,7 @@ log:
     sviolet: INFO
     txtimer: INFO
     httpinspect: INFO
+    httpdns: INFO
 
 
 ## Web Container ####################################################################################################
