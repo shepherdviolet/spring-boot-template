@@ -86,7 +86,7 @@ public class Qwen2vlController implements StreamingBuildable {
                                                 .put("type", "image_url")
                                                 .put("image_url", buildHashMap()
                                                         .put("detail", "hign")
-                                                        .put("url", "data:image," + imgBase64)
+                                                        .put("url", "data:image/png;base64," + imgBase64)
                                                         .build()
                                                 )
                                                 .build()
