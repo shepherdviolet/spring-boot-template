@@ -22,6 +22,20 @@ import javax.sql.DataSource;
 })
 public class SecurityConfiguration {
 
+    /*
+     * [特殊情况: 手动配置JdbcUserDetailsManager]
+     * 一般情况下AuthenticationManagerBuilder.jdbcAuthentication()...会在内部new一个JdbcUserDetailsManager管理数据库操作, 不需要手动配置成Bean.
+     * 如果其他地方需要用到JdbcUserDetailsManager实例操作用户信息的话, 那就得手动配置一个JdbcUserDetailsManager, 并绑定到AuthenticationManagerBuilder了.
+     */
+//    @Bean
+//    public JdbcUserDetailsManager jdbcUserDetailsManager(DataSource dataSource) {
+//        JdbcUserDetailsManager manager = new JdbcUserDetailsManager();
+//        manager.setDataSource(dataSource);
+//        manager.setUsersByUsernameQuery("select username, password, enabled from users where username=?");
+//        manager.setAuthoritiesByUsernameQuery("select username, authority from user_auth where username=?");
+//        return manager;
+//    }
+
     /**
      * 自定义安全配置
      */
@@ -30,6 +44,16 @@ public class SecurityConfiguration {
 
         @Autowired
         private DataSource dataSource;
+
+        /*
+         * [特殊情况: 手动配置JdbcUserDetailsManager]
+         * 一般情况下AuthenticationManagerBuilder.jdbcAuthentication()...会在内部new一个JdbcUserDetailsManager管理数据库操作, 不需要手动配置成Bean.
+         * 如果其他地方需要用到JdbcUserDetailsManager实例操作用户信息的话, 那就得手动配置一个JdbcUserDetailsManager, 并绑定到AuthenticationManagerBuilder了.
+         */
+//        private JdbcUserDetailsManager jdbcUserDetailsManager;
+//        public CustomWebSecurityConfigurerAdapter(JdbcUserDetailsManager jdbcUserDetailsManager) {
+//            this.jdbcUserDetailsManager = jdbcUserDetailsManager;
+//        }
 
         /**
          * 用户认证配置 (这里配置后, application.yaml里默认的用户名密码设置就没用了)
@@ -52,6 +76,12 @@ public class SecurityConfiguration {
                     .usersByUsernameQuery("select username, password, enabled from users where username=?")
                     .authoritiesByUsernameQuery("select username, authority from user_auth where username=?")
                     .passwordEncoder(passwordEncoder);
+
+            // [特殊情况: 手动配置JdbcUserDetailsManager]
+            // 一般情况下AuthenticationManagerBuilder.jdbcAuthentication()...会在内部new一个JdbcUserDetailsManager管理数据库操作, 不需要手动配置成Bean.
+            // 如果其他地方需要用到JdbcUserDetailsManager实例操作用户信息的话, 那就得手动配置一个JdbcUserDetailsManager, 并绑定到AuthenticationManagerBuilder了.
+//            auth.userDetailsService(jdbcUserDetailsManager)
+//                    .passwordEncoder(passwordEncoder);
         }
 
         @Override
