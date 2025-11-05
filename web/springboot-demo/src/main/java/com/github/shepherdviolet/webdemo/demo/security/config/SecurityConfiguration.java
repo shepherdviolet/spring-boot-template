@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 /**
  * SpringSecurity示例
  */
-@Configuration
+@Configuration("MySecurityConfiguration")
 @EnableGlobalMethodSecurity(prePostEnabled = true) // 允许@PreAuthorize
 @ComponentScan({
         "com.github.shepherdviolet.webdemo.demo.security.controller",
