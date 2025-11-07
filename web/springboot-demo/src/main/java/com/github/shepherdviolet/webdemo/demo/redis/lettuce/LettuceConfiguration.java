@@ -86,13 +86,13 @@ public class LettuceConfiguration {
      */
     private List<RedisURI> parseUri(String uri){
         if (uri == null || (uri = uri.trim()).length() == 0) {
-            throw new RuntimeException("JetCache | property '" + PROPERTY_PREFIX + "uri' is required");
+            throw new RuntimeException("Lettuce | property '" + PROPERTY_PREFIX + "uri' is required");
         }
-        logger.info("JetCache | URIs: " + uri);
+        logger.info("Lettuce | URIs: " + uri);
 
         // sentinel
         if (uri.startsWith("redis-sentinel://")) {
-            logger.info("JetCache | URI: " + uri + "  (sentinel-mode)");
+            logger.info("Lettuce | URI: " + uri + "  (sentinel-mode)");
             return Collections.singletonList(RedisURI.create(uri));
         }
 
@@ -103,11 +103,11 @@ public class LettuceConfiguration {
             u = u.trim();
             if (u.length() > 0) {
                 uriList.add(u);
-                logger.info("JetCache | URI: " + u);
+                logger.info("Lettuce | URI: " + u);
             }
         }
         if (uriList.size() == 0) {
-            throw new RuntimeException("JetCache | property '" + PROPERTY_PREFIX + "uri' is invalid, no valid uri contains");
+            throw new RuntimeException("Lettuce | property '" + PROPERTY_PREFIX + "uri' is invalid, no valid uri contains");
         }
         return uriList.stream()
                 .map(RedisURI::create)

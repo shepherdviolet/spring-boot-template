@@ -1,5 +1,5 @@
 /**
- * Redis使用示例(JetCache+Lettuce)
+ * Redis使用示例(Lettuce)
  *
  * @author S.Violet
  */

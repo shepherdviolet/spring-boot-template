@@ -84,10 +84,8 @@ dependencies {
 
     //Cache//////////////////////////////////////////////////////////////////////////////////////////////
 
-    //JetCache (2.5.X, 新版本变动较大 暂不升级)
-    //注意: 依赖了这个如果不设置它(yaml配置或者自定义GlobalCacheConfig), 启动会报错的, 我们这里直接排除了它的自动配置类解决(见BootApplication)
-    implementation ("com.alicp.jetcache:jetcache-starter-redis-lettuce:$version_jetcache_starter") {exclude group: 'org.springframework.boot'}
-    implementation "io.lettuce:lettuce-core:$version_lettuce" // 低版本lettuce有问题, 用新版本
+    //Lettuce
+    implementation "io.lettuce:lettuce-core:$version_lettuce"
 
     //Jedis (JDK7时, 用Jedis 2.9.0 + Redis 3.2.13)
 //    implementation "redis.clients:jedis:$version_jedis"

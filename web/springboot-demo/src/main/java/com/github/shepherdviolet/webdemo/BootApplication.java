@@ -1,6 +1,5 @@
 package com.github.shepherdviolet.webdemo;
 
-import com.alicp.jetcache.autoconfigure.JetCacheAutoConfiguration;
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration;
@@ -15,7 +14,6 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 @SpringBootApplication(
         //这个方法只能排除spring.factories里声明的自动配置类, 对@Import导入或者@Enable注解启用的无效!
         exclude = {
-                JetCacheAutoConfiguration.class, // 排除JetCache自动配置 (依赖了JetCache却不设置它, 启动会报错, 我们自定义了GlobalCacheConfig用不上它)
                 SecurityAutoConfiguration.class, // 排除(禁用)SpringSecurity (未依赖spring-boot-starter-security则无需禁用)
                 ManagementWebSecurityAutoConfiguration.class, // 排除(禁用)SpringSecurity (未依赖spring-boot-starter-security则无需禁用)
 //                DataSourceAutoConfiguration.class, // 排除数据库自动配置 (如果不需要连接数据库的话)
