@@ -13,8 +13,8 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +27,7 @@ import java.util.Map;
 @Component
 public class ErrorHandlerImpl implements ErrorHandler {
 
-    private static final String SERVLET_ERROR_PREFIX = "javax.servlet.error.";
+    private static final String SERVLET_ERROR_PREFIX = "jakarta.servlet.error.";
     private static final String STATUS_CODE = "status_code";
     private static final String MESSAGE = "message";
     private static final String REQUEST_URI = "request_uri";

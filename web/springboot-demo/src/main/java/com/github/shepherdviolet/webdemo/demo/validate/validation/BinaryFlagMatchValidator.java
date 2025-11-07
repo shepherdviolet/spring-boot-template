@@ -2,8 +2,8 @@ package com.github.shepherdviolet.webdemo.demo.validate.validation;
 
 import com.github.shepherdviolet.glacimon.java.misc.CheckUtils;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 /**
  * 自定义检查: 判断指定二进制位是否为1

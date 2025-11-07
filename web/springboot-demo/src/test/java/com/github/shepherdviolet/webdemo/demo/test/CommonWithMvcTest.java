@@ -45,6 +45,7 @@ public class CommonWithMvcTest {
      * 对上下文中的InnerService做代理; 会替换上下文中的Bean, 因此下面用@Autowired注入的innerServiceRaw也是代理对象
      * (如果不用when/thenReturn的话, 方法返回都是null)
      */
+    @SuppressWarnings("removal")
     @MockBean
     private InnerService innerServiceMock;
 

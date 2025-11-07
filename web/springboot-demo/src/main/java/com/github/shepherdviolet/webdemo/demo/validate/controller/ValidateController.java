@@ -9,11 +9,11 @@ import com.github.shepherdviolet.webdemo.infra.error.RejectException;
 import com.github.shepherdviolet.webdemo.demo.validate.entity.Request1;
 import com.github.shepherdviolet.webdemo.demo.validate.entity.Request2;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolation;
-import javax.validation.Valid;
-import javax.validation.Validator;
-import javax.validation.groups.Default;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Valid;
+import jakarta.validation.Validator;
+import jakarta.validation.groups.Default;
 import java.util.Set;
 
 /**

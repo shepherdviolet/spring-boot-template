@@ -60,7 +60,7 @@ public class JetCacheConfiguration {
     @Value("${" + LettuceConfiguration.PROPERTY_PREFIX + "key-prefix:}")
     private String keyPrefix;
 
-    @Bean(name = "springConfigProvider")
+    @Bean
     public SpringConfigProvider springConfigProvider() {
         return new SpringConfigProvider();
     }
@@ -103,7 +103,6 @@ public class JetCacheConfiguration {
 
     @Bean(name = "globalCacheConfig")
     public GlobalCacheConfig globalCacheConfig(
-            @Qualifier("springConfigProvider") SpringConfigProvider springConfigProvider,
             @Qualifier("jetCacheLocalBuilder") AbstractCacheBuilder jetCacheLocalBuilder,
             @Qualifier("jetCacheRemoteBuilder") AbstractCacheBuilder jetCacheRemoteBuilder,
             ObjectProvider<GlobalCacheConfigCustomizer[]> configCustomizers){
@@ -115,7 +114,6 @@ public class JetCacheConfiguration {
         remoteBuilders.put(CacheConsts.DEFAULT_AREA, jetCacheRemoteBuilder);
 
         GlobalCacheConfig globalCacheConfig = new GlobalCacheConfig();
-        globalCacheConfig.setConfigProvider(springConfigProvider);
         globalCacheConfig.setLocalCacheBuilders(localBuilders);
         globalCacheConfig.setRemoteCacheBuilders(remoteBuilders);
         globalCacheConfig.setStatIntervalMinutes(statIntervalMinutes);

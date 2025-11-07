@@ -53,6 +53,7 @@ public class MvcTest {
     /**
      * 对上下文中的InnerService做代理; 会替换上下文中的Bean
      */
+    @SuppressWarnings("removal")
     @MockBean
     private InnerService innerServiceMock;
 

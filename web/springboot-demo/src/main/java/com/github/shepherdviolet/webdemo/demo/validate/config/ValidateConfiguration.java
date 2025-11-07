@@ -3,8 +3,8 @@ package com.github.shepherdviolet.webdemo.demo.validate.config;
 import org.hibernate.validator.HibernateValidator;
 import org.springframework.context.annotation.*;
 
-import javax.validation.Validation;
-import javax.validation.Validator;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 
 /**
  *

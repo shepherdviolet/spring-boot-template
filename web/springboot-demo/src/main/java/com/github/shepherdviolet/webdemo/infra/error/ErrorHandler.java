@@ -1,7 +1,7 @@
 package com.github.shepherdviolet.webdemo.infra.error;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -25,9 +25,9 @@ public interface ErrorHandler {
      * 处理Servlet错误
      *
      * 需要自己从request中获取:
-     * request.getAttribute("javax.servlet.error.status_code")
-     * request.getAttribute("javax.servlet.error.message")
-     * request.getAttribute("javax.servlet.error.request_uri")
+     * request.getAttribute("jakarta.servlet.error.status_code")
+     * request.getAttribute("jakarta.servlet.error.message")
+     * request.getAttribute("jakarta.servlet.error.request_uri")
      *
      * @param request HttpServletRequest
      * @param response HttpServletResponse

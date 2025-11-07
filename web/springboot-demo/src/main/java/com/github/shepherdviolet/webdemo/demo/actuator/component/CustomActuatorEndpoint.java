@@ -12,6 +12,7 @@ import java.util.Map;
 /**
  * 自定义端点示例: /actuator/custom
  */
+@SuppressWarnings("removal")
 @Component
 @Endpoint(id = "custom", enableByDefault = true)
 public class CustomActuatorEndpoint implements StreamingBuildable {
