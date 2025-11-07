@@ -1,4 +1,4 @@
-# Spring Boot Gradle 工程模板
+# SpringBoot 3.X Gradle工程模板
 
 * 用于快速创建一个SpringBoot工程
 * [Github Home](https://github.com/shepherdviolet/spring-boot-template)
