@@ -37,7 +37,6 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
                 "com.github.shepherdviolet.webdemo.demo.resttemplate.config",
                 "com.github.shepherdviolet.webdemo.demo.actuator.config",
                 "com.github.shepherdviolet.webdemo.demo.qwen2vl.config",
-//                "com.github.shepherdviolet.webdemo.demo.jedis.config",
 //                "com.github.shepherdviolet.webdemo.demo.security.config",
 //                "com.github.shepherdviolet.webdemo.demo.sentinel.config",
 //                "com.github.shepherdviolet.webdemo.demo.apollo.config",

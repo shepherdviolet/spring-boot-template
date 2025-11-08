@@ -87,9 +87,6 @@ dependencies {
     //Lettuce
     implementation "io.lettuce:lettuce-core:$version_lettuce"
 
-    //Jedis (JDK7时, 用Jedis 2.9.0 + Redis 3.2.13)
-//    implementation "redis.clients:jedis:$version_jedis"
-
     //MQ//////////////////////////////////////////////////////////////////////////////////////////////
 
     //RocketMQ
