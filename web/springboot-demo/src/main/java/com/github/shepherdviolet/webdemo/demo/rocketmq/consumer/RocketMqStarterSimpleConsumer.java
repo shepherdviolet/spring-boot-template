@@ -17,7 +17,7 @@
 //@RocketMQMessageListener(
 //        topic = "starterSimple",
 //        consumerGroup = "starterConsumer",
-//        // 这个设置了没用, 只有consumeThreadMin有效, 但这里不能设置, 见https://github.com/apache/rocketmq/issues/281和https://github.com/apache/rocketmq-spring/issues/184
+//        consumeThreadNumber = 5,
 //        consumeThreadMax = 5
 //)
 //public class RocketMqStarterSimpleConsumer implements RocketMQListener<String> {

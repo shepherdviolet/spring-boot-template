@@ -10,7 +10,6 @@ import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.github.shepherdviolet.webdemo.demo.rocketmq.producer.RocketMqTransactionalProducer;
@@ -35,7 +34,7 @@ public class RocketMqController {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    @Qualifier("defaultProducer")
+//    @Qualifier("defaultProducer") // 如果用rocketmq-starter得注释掉这个, 因为starter的Producer不叫这个
     private DefaultMQProducer defaultProducer;
 
     @Autowired
@@ -284,6 +283,7 @@ public class RocketMqController {
 //     * GET
 //     * http://localhost:8000/rocketmq/starter/simple
 //     * 注意: 要用rocketmq-spring-boot-starter的话, 就不要自己创建DefaultMQProducer了, 要创建也不要start()
+//     * 注意: 这个Controller上面的DefaultMQProducer defaultProducer;的@Qualifier注解也要去掉(因为starter默认的Producer不叫这个)
 //     */
 //    @RequestMapping(value = "/starter/simple")
 //    public String starterSimple(){

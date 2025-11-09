@@ -10,6 +10,7 @@ import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PostConstruct;
@@ -24,6 +25,9 @@ import jakarta.annotation.PreDestroy;
 public class RocketMqTransactionalProducer {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Value("${glacispring.helper.rocketmq.namesrv}")
+    private String nameServer;
 
     private TransactionMQProducer producer;
 
@@ -62,6 +66,7 @@ public class RocketMqTransactionalProducer {
 //                return LocalTransactionState.UNKNOW;
             }
         });
+        producer.setNamesrvAddr(nameServer);
         producer.start();
     }
 
