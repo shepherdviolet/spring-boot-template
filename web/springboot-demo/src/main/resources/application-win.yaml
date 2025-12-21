@@ -38,6 +38,8 @@ server:
     threads:
       max: 200
       min-spare: 10
+    ## 启用相对路径重定向 (直接返回相对路径, 例如'Location: /path ', 让浏览器自己拼接协议/域名/端口)
+#    use-relative-redirects: true
   ## shutdown graceful (springboot2.3+)
 #  shutdown: graceful
   ## set charset for x-www-form-urlencoded, default: UTF-8
@@ -55,6 +57,8 @@ server:
 #    enabled: true
 #    mime-types: application/json,application/xml,text/html,text/xml,text/plain
 #    min-response-size: 2048
+  ## (慎用)让Tomcat直接处理(信任)X-Forwarded-*头, 这样sendRedirect自动补全相对路径时, 协议根据X-Forwarded-Proto, 端口根据X-Forwarded-Port
+#  forward-headers-strategy: NATIVE
 
 ## tomcat for springboot 2.2-
 #server:

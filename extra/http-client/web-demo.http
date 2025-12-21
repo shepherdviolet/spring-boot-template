@@ -1,7 +1,9 @@
+### GET测试
+
 GET {{host}}/core/get/json?name={{username}}&key={{password}}
 Accept: application/json
 
-###
+### POST测试
 
 POST {{host}}/core/post/json
 Content-Type: application/json
@@ -11,9 +13,12 @@ Content-Type: application/json
   "id": ID{{$randomInt}}
 }
 
-###
+### 重定向测试 (# @no-redirect 可以禁用重定向,只看Location) 可以开'forward-headers-strategy: NATIVE', 也可以开'use-relative-redirects: true', 参考笔记'spring-MVC-重定向+代理环境协议适配.txt'
 
-GET {{host}}/aspectj
-Accept: application/json
+# @no-redirect
+GET {{host}}/core/redirect-relative
+Host: rawhost
+X-Forwarded-Proto: HTTPS
+X-Forwarded-Port: 1234
 
-###
+

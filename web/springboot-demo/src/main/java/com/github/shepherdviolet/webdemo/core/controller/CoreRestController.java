@@ -152,6 +152,18 @@ public class CoreRestController {
         return null;
     }
 
+    /**
+     * redirect relative (相对路径).
+     * 可以开启'forward-headers-strategy: NATIVE', 也可以不开启, 看需求, 参考笔记'spring-MVC-重定向+代理环境协议适配.txt'
+     * 可以开启'use-relative-redirects: true', 也可以不开启, 看需求, 参考笔记'spring-MVC-重定向+代理环境协议适配.txt'
+     * http://localhost:8000/core/redirect-relative
+     */
+    @RequestMapping("/redirect-relative")
+    public byte[] redirectRelative(HttpServletResponse response) throws IOException {
+        response.sendRedirect("/core/get/wildcard/somepath");
+        return null;
+    }
+
 //    @Autowired
 //    private GlaciHttpClient httpClient;
 //    @Autowired
