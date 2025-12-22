@@ -57,7 +57,7 @@ server:
 #    enabled: true
 #    mime-types: application/json,application/xml,text/html,text/xml,text/plain
 #    min-response-size: 2048
-  ## (慎用)让Tomcat直接处理(信任)X-Forwarded-*头, 这样sendRedirect自动补全相对路径时, 协议根据X-Forwarded-Proto, 端口根据X-Forwarded-Port
+  ## (慎用!!!高风险!!!)让Tomcat直接处理(信任)X-Forwarded-*头, 这样sendRedirect自动补全相对路径时, 协议根据X-Forwarded-Proto, 端口根据X-Forwarded-Port, 参考笔记'spring-MVC-重定向+代理环境协议适配.md'
 #  forward-headers-strategy: NATIVE
 
 ## tomcat for springboot 2.2-
