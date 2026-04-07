@@ -96,6 +96,7 @@ allprojects {
         // 全局指定依赖版本 (解决安全问题)
         resolutionStrategy {
 
+            force "org.apache.commons:commons-lang3:$version_commons_lang" //Fix security issue
 //            force "com.alibaba:fastjson:$version_fastjson" //Fix security issue
 
             // 全局指定某个group的依赖版本
